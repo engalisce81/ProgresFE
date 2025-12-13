@@ -1,6 +1,6 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'https://progres-fe-production-418f.up.railway.app';
+const baseUrl = 'https://tadriscomfe.sliplane.app';
 
 export const environment = {
   production: true,
@@ -10,7 +10,7 @@ export const environment = {
     logoUrl: 'https://i.postimg.cc/1RvZJShw/Whats-App-Image-2025-09-13-at-21-54-29-e593bcc7.jpg',
   },
   oAuthConfig: {
-    issuer: 'https://dev-acadmy-httpapi-production-d927.up.railway.app/',
+    issuer: 'https://engalisce81-dev-acadmy-httpapi.sliplane.app/',
     redirectUri: baseUrl,
     clientId: 'Acadmy_App',
     responseType: 'code',
@@ -19,7 +19,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://dev-acadmy-httpapi-production-d927.up.railway.app',
+      url: 'https://engalisce81-dev-acadmy-httpapi.sliplane.app',
       rootNamespace: 'Dev.Progress',
     },
   },
