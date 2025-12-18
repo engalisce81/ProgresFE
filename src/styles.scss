@@ -9,56 +9,169 @@
   }
 }
 :root {
-  --lpx-logo: url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
-  --lpx-logo-icon: url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
+  --lpx-logo: url('https://i.postimg.cc/1RvZJShw/Whats-App-Image-2025-09-13-at-21-54-29-e593bcc7.jpg');
+  --lpx-logo-icon: url('https://i.postimg.cc/1RvZJShw/Whats-App-Image-2025-09-13-at-21-54-29-e593bcc7.jpg');
 }
 
 :root {
   /* Primary colors */
-  --violet-900: #5E2E91;
-  --purple-600: #8C4CD6;
-  --bell-300: #C7B7F2;
-  --blue-500: #3A7BD5;
-  --sky-300: #6ECFF6;
+  --violet-900: #2A5A75;
+  --purple-600: #4A7A9A;
+  --bell-300: #6494B7;
+  --blue-500: #70B86D;
+  --sky-300: #8DCC89;
 
-    --question-view: var(--sky-300);     /* أزرق فاتح من ألوانك */
-  --question-create: var(--success);  
+  --question-view: var(--sky-300);
+  --question-create: var(--success);
+
   /* Backgrounds */
-  --bg: #f9fafb;
-  --bg-user: linear-gradient(135deg, var(--card) 0%, color-mix(in oklab, var(--card) 90%, white) 100%);
+  --bg: #0B1418;               /* body background */
+  --surface: #151F24;          /* main surface */
+  --card: #1A272D;             /* cards */
+  --surface-variant: #1F2C32;  /* variant surfaces */
+  --surface-tint: #1A262C;
+  --dialog: #1F2D34;
+
+  --bg-user: linear-gradient(
+    135deg,
+    var(--card) 0%,
+    color-mix(in oklab, var(--card) 85%, #ffffff10) 100%
+  );
+
   --bg-btn: linear-gradient(
     135deg,
-    color-mix(in oklab, var(--purple-600) 70%, #fff),
-    color-mix(in oklab, var(--bell-300) 60%, var(--purple-600))
+    var(--purple-600),
+    var(--bell-300)
   );
-  --surface: #ffffff;
-  --card: #f3f4f6;
+
   --bg-body: linear-gradient(
     180deg,
     var(--bg),
-    color-mix(in oklab, var(--bg) 95%, #fff) 60%,
-    color-mix(in oklab, var(--bg) 90%, #fff)
+    color-mix(in oklab, var(--bg) 92%, #000) 60%,
+    color-mix(in oklab, var(--bg) 85%, #000)
   );
 
   /* Text */
-  --text: #1f2937;
-  --muted: #4b5563;
+  --text: #E8EDF2;
+  --muted: #B8C5CF;
 
   /* Status colors */
-  --success: #16a34a;
-  --warning: #eab308;
+  --success: #56A653;
+  --warning: #EAB308;
 
   /* Effects */
   --radius: 18px;
-  --shadow-1: 0 8px 18px rgba(119, 73, 166, 0.15);
-  --shadow-2: 0 18px 40px rgba(55, 21, 89, 0.15);
-  --ring: 0 0 0 4px color-mix(in oklab, var(--purple-600) 20%, transparent);
+  --shadow-1: 0 8px 18px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 18px 40px rgba(0, 0, 0, 0.45);
+  --ring: 0 0 0 4px color-mix(in oklab, var(--purple-600) 30%, transparent);
 
   /* Accent animation color */
-  --an-color: linear-gradient(to left, #FF7F37, #2563EB);
+  --an-color: linear-gradient(
+    to left,
+    var(--blue-500),
+    var(--purple-600)
+  );
+}
+
+/* Body & main backgrounds */
+body {
+  background: var(--bg-body);
+  color: var(--text);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 
+/* Sidebar background */
+.lpx-sidebar {
+  background-color: var(--violet-900) !important;
+  color: var(--bell-300) !important;
+}
+
+/* Sidebar items */
+.lpx-sidebar .menu-item {
+  color: var(--bell-300) !important;
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.lpx-sidebar .menu-item:hover {
+  background-color: var(--purple-600) !important;
+  color: white !important;
+  border-left-color: var(--sky-300);
+}
+
+.lpx-sidebar .menu-item.active {
+  background-color: var(--blue-500) !important;
+  color: white !important;
+  border-left-color: var(--sky-300);
+}
+
+/* Sidebar header & logo */
+.lpx-sidebar .sidebar-header,
+.lpx-logo-container,
+.lpx-mobile-navbar,
+.lpx-mobile-nav-items,
+.lpx-nav-menu {
+  background-color: var(--violet-900) !important;
+  color: var(--bell-300) !important;
+}
+
+/* Selected / expanded nav menu links */
+.lpx-nav-menu .lpx-menu-item-link.selected, 
+.lpx-nav-menu .lpx-menu-item-link.expanded {
+  background-color: var(--purple-600) !important;
+  color: white !important;
+}
+
+/* Sidebar icons */
+.lpx-sidebar .menu-item i,
+.lpx-sidebar .lpx-menu-item-icon,
+.lpx-sidebar .menu-item .lpx-icon {
+  color: var(--bell-300) !important;
+  transition: color 0.3s ease !important;
+}
+
+.lpx-sidebar .menu-item:hover i,
+.lpx-sidebar .menu-item:hover .lpx-menu-item-icon,
+.lpx-sidebar .menu-item:hover .lpx-icon,
+.lpx-nav-menu .lpx-menu-item-link:hover .lpx-menu-item-icon,
+.lpx-nav-menu .lpx-menu-item-link:hover i,
+.lpx-sidebar .menu-item.active i,
+.lpx-sidebar .menu-item.active .lpx-menu-item-icon,
+.lpx-sidebar .menu-item.active .lpx-icon,
+.lpx-sidebar .lpx-icon:hover {
+  color: white !important;
+  background-color: transparent !important;
+}
+
+/* Buttons hover */
+.btn-create:hover {
+  background-color: var(--blue-500) !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .lpx-sidebar .menu-item i,
+  .lpx-sidebar .lpx-menu-item-icon,
+  .lpx-sidebar .menu-item .lpx-icon {
+    color: var(--bell-300) !important;
+  }
+
+  .lpx-sidebar .menu-item:hover i,
+  .lpx-sidebar .menu-item:hover .lpx-menu-item-icon,
+  .lpx-sidebar .menu-item:hover .lpx-icon,
+  .lpx-sidebar .menu-item.active i,
+  .lpx-sidebar .menu-item.active .lpx-menu-item-icon,
+  .lpx-sidebar .menu-item.active .lpx-icon {
+    color: white !important;
+  }
+}
+
+/* Logo container overflow fix */
+.lpx-logo-container {
+  overflow: hidden;
+}
 
 .donut {
   display: inline-block;
@@ -81,31 +194,16 @@
   background-repeat: no-repeat;
 }
 
-.abp-support {
-  width: 178px;
-  height: 30px;
-  background-image: url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
-}
 
-.abp-community {
-  width: 215px;
-  height: 30px;
-  background-image: url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
-}
 
-.abp-blog {
-  width: 142px;
-  height: 30px;
-  background-image: url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
-}
 
 .logo-x {
   width: 20px;
   height: 20px;
-  background-image: url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
+  background-image: url('https://i.postimg.cc/1RvZJShw/Whats-App-Image-2025-09-13-at-21-54-29-e593bcc7.jpg');
 }
 
-@import url('https://i.postimg.cc/G24yXvg7/Tadriscom.jpg');
+@import url('https://i.postimg.cc/1RvZJShw/Whats-App-Image-2025-09-13-at-21-54-29-e593bcc7.jpg');
 
 
 
