@@ -1,122 +1,128 @@
-<div class="list-container" style="width: 100%;">
-
-  <!-- Delete confirmation -->
-  @if (showDeleteConfirm){
-    <div class="delete-confirm-card">
-      <p>Are you sure you want to delete <strong>{{ courseToDelete.name }}</strong>?</p>
-      <div class="delete-confirm-actions">
-        <button class="btn btn-secondary" (click)="cancelDelete()">No</button>
-        <button class="btn btn-danger" (click)="deleteCourse()">Yes</button>
+<div class="list-container">
+  
+  @if (showDeleteConfirm) {
+    <div class="modal-overlay">
+      <div class="delete-card">
+        <i class="bi bi-exclamation-triangle text-warning"></i>
+        <h3>Delete Course?</h3>
+        <p>Are you sure you want to delete <strong>{{ courseToDelete.name }}</strong>?</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="cancelDelete()">No, Cancel</button>
+          <button class="btn-confirm" (click)="deleteCourse()">Yes, Delete</button>
+        </div>
       </div>
     </div>
   }
 
-  <!-- Search and Create -->
   <div class="toolbar">
-    <input type="text" [(ngModel)]="search" placeholder="Search courses..." class="search-input"
-           (keyup.enter)="onSearchChange()" />
-    <button class="btn btn-search" (click)="onSearchChange()" title="Search">
-      <i class="bi bi-search"></i>
-    </button>
-
-    <button routerLink="/courses/create" class="btn btn-create" title="Create">
-      <i class="bi bi-plus-circle me-1"></i> Create
+    <div class="search-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input 
+        type="text" 
+        [ngModel]="search" 
+        (keyup)="onSearchKeyup($event)"
+        placeholder="Search courses by name or title..." 
+        class="search-input-modern"
+      />
+    </div>
+    
+    <button routerLink="/courses/create" class="btn-create-modern">
+      <i class="bi bi-plus-lg"></i> <span>Create New Course</span>
     </button>
   </div>
 
-  <!-- Loading -->
-  @if (loading){
-     <div class="loading-container">
-  <div class="spinner"></div>
-  <p class="loading-text">Loading...</p>
-</div>
-
+  @if (loading) {
+    <div class="loading-overlay">
+      <div class="spinner-modern"></div>
+    </div>
   }
 
-  <!-- Table -->
   @if (!loading) {
-    @if (courses.length > 0){
-      <table class="table" style="width: 100%;">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Title</th>
-            <th>Introduction</th>
-            <th>Pdf</th>
-            <th>College</th>
-            <th>Subject</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (course of courses; track course.id; let i = $index){
-            <tr>
-              <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-              <td class="student-cell">
-                <img 
-                  [src]="course.logoUrl || '/assets/default-avatar.png'" 
-                  class="student-avatar" 
-                  alt="Student Image"
-                />
-
-  {{ course.name }}
-</td>
-              <td>{{ course.title }}</td>
-              <td>
-  <a [href]="course.introductionVideoUrl" target="_blank" class="icon-link youtube">
-    <i class="bi bi-youtube"></i>
-  </a>
-</td>
-<td>
-  @if(course.isPdf){
-  <a [href]="course.pdfUrl" target="_blank" class="icon-link pdf">
-          <i class="bi bi-file-earmark-pdf"></i> {{ $index + 1 }}
-        </a>}@else {no pdfs}
-</td>
-              <td>{{ course.collegeName }}</td>
-              <td>{{ course.subjectName }}</td>
-              <td class="actions">
-                <button  (click)="dublicate(course.id)" class="btn btn-subscriber" title="Dublicate">
-                  <i class="bi bi-arrow-repeat"></i>
-                </button>
-                <button [routerLink]="['/courses/subscriber', course.id]" class="btn btn-subscriber" title="Subscriber">
-                  <i class="bi bi-people"></i>
-                </button>
-               
-               @if(hasRole("admin")){
-                <button [routerLink]="['/courses/requestjoin', course.id]" class="btn btn-subscriber" title="RequestJoin">
-                  <i class="bi bi-person-dash"></i>
-                </button>
+    <div class="cards-grid">
+      @for (course of courses; track course.id) {
+        <div class="course-card">
+          <div class="card-header">
+            <img [src]="course.logoUrl || '/assets/default-course.png'" class="course-logo" />
+            
+            <div class="dropdown-actions">
+              <button class="dots-btn" (click)="$event.stopPropagation(); course.showMenu = !course.showMenu">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              
+              @if (course.showMenu) {
+                <div class="actions-menu" (mouseleave)="course.showMenu = false">
+                  <button (click)="dublicate(course.id)"><i class="bi bi-copy"></i> Duplicate</button>
+                  <button [routerLink]="['/courses/subscriber', course.id]"><i class="bi bi-people"></i> Subscribers</button>
+                  @if(hasRole("admin")){
+                    <button [routerLink]="['/courses/requestjoin', course.id]"><i class="bi bi-person-check"></i> Requests</button>
+                  }
+                  <button [routerLink]="['/courses/update', course.id]"><i class="bi bi-pencil-square"></i> Edit</button>
+                  <button class="text-danger" (click)="confirmDelete(course)"><i class="bi bi-trash3"></i> Delete</button>
+                </div>
               }
-               
+            </div>
+          </div>
 
-                <button [routerLink]="['/courses/update', course.id]" class="btn btn-edit" title="Edit">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button (click)="confirmDelete(course)" class="btn btn-delete" title="Delete">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          <div class="card-body">
+            <div class="badge-group">
+              <span class="custom-badge college">{{ course.collegeName }}</span>
+              <span class="custom-badge subject">{{ course.subjectName }}</span>
+            </div>
 
-      <!-- Pagination -->
-      @if (totalCount > pageSize) {
-        <div class="pagination">
-          <button class="btn btn-previous" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">Previous</button>
-          
-          <button class="btn btn-next" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">Next</button>
+            <h3 class="course-name" [title]="course.name">{{ course.name }}</h3>
+            <p class="course-title">{{ course.title }}</p>
+
+            <div class="details-grid">
+              <div class="detail-item"><i class="bi bi-person-circle"></i> {{ course.userName }}</div>
+              <div class="detail-item"><i class="bi bi-tag-fill"></i> {{ course.price }} EGP</div>
+              <div class="detail-item"><i class="bi bi-star-fill text-warning"></i> {{ course.rating }}</div>
+              <div class="detail-item">
+                <i class="bi bi-circle-fill" [style.color]="course.isActive ? 'var(--success)' : '#666'"></i>
+                {{ course.isActive ? 'Active' : 'Hidden' }}
+              </div>
+            </div>
+
+            <div class="footer-actions">
+              <a [href]="course.introductionVideoUrl" target="_blank" class="btn-action-outline">
+                <i class="bi bi-youtube"></i> Intro
+              </a>
+              @if(course.isPdf) {
+                <a [href]="course.pdfUrl" target="_blank" class="btn-action-primary">
+                  <i class="bi bi-file-earmark-pdf"></i> PDF
+                </a>
+              }
+            </div>
+          </div>
         </div>
       }
+    </div>
+
+    @if (courses.length === 0) {
+      <div class="no-data">
+        <i class="bi bi-inbox"></i>
+        <p>No courses found matching your search.</p>
+      </div>
     }
-    @else {
-      <div class="no-data-message">
-        <p>No courses found.</p>
+
+    @if (totalCount > pageSize) {
+      <div class="pagination-modern">
+        <button class="page-nav" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+
+        @for (p of pages; track p) {
+          <button 
+            class="page-num" 
+            [class.active]="p === pageIndex" 
+            (click)="onPageChange(p)">
+            {{ p }}
+          </button>
+        }
+
+        <button class="page-nav" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">
+          <i class="bi bi-chevron-right"></i>
+        </button>
       </div>
     }
   }
-
 </div>

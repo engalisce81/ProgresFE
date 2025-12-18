@@ -74,16 +74,26 @@
 }
 
 /* Body & main backgrounds */
-body {
-  background: var(--bg-body);
+body ,.lpx-content ,.lpx-content-container {
+  background: var(--bg-body) !important;
   color: var(--text);
   font-family: 'Segoe UI', sans-serif;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+.lpx-topbar {
+    display: none !important;
+}
+
+/* تعويض المساحة الفارغة في الأعلى لكي لا يختفي جزء من المحتوى */
+.lpx-content-container {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
 
 /* Sidebar background */
-.lpx-sidebar {
+.lpx-sidebar , .lpx-topbar {
   background-color: var(--violet-900) !important;
   color: var(--bell-300) !important;
 }

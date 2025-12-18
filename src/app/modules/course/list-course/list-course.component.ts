@@ -1,49 +1,68 @@
 import { ConfigStateService } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CourseDto, CourseService } from '@proxy/dev/acadmy/courses';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-list-course',
-  imports: [RouterLink,FormsModule],
+  standalone: true,
+  imports: [RouterLink, FormsModule],
   templateUrl: './list-course.component.html',
   styleUrl: './list-course.component.scss'
 })
-export class ListCourseComponent {
- courses: CourseDto[] = [];
+export class ListCourseComponent implements OnInit {
+  // تعريف المصفوفة مع إضافة خاصية إظهار القائمة يدوياً
+  courses: (CourseDto & { showMenu?: boolean })[] = [];
   loading = false;
   search = '';
+  
+  // خاص للبحث بالحرف (Debounce)
+  private searchSubject = new Subject<string>();
 
   totalCount = 0;
-  pageSize = 10;
+  pageSize = 12; // يفضل رقم يقبل القسمة على 2 و 3 و 4 لشكل الكروت
   pageIndex = 1;
-roles:string []  =[] ;
+  roles: string[] = [];
+  
   showDeleteConfirm = false;
   courseToDelete!: CourseDto;
 
   constructor(
     private courseService: CourseService,
-    private router: Router,
-private config: ConfigStateService  ) {}
+    private config: ConfigStateService
+  ) {}
 
   ngOnInit(): void {
-    this.loadCourses();
-      const user = this.config.getOne("currentUser");
-  console.log('Current user:', user);
-  this.roles = user?.roles ?? [];
+    // إعداد مراقب البحث: ينتظر 400 ملي ثانية بعد التوقف عن الكتابة
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(searchValue => {
+      this.search = searchValue;
+      this.pageIndex = 1;
+      this.loadCourses();
+    });
 
+    this.loadCourses();
+    
+    // جلب أدوار المستخدم الحالي
+    const user = this.config.getOne("currentUser");
+    this.roles = user?.roles ?? [];
   }
-  hasRole(role: string): boolean {
-  return this.roles.includes(role);
-}
+
+  // تُستدعى عند الكتابة في حقل البحث
+  onSearchKeyup(event: any): void {
+    this.searchSubject.next(event.target.value);
+  }
 
   loadCourses(): void {
     this.loading = true;
-
     this.courseService.getList(this.pageIndex, this.pageSize, this.search).subscribe({
       next: (res) => {
-        this.courses = res.items;
+        // نضبط showMenu لكل كورس عند التحميل
+        this.courses = res.items.map(course => ({ ...course, showMenu: false }));
         this.totalCount = res.totalCount;
         this.loading = false;
       },
@@ -51,14 +70,35 @@ private config: ConfigStateService  ) {}
     });
   }
 
-  onSearchChange(): void {
-    this.pageIndex = 1;
-    this.loadCourses();
+  // --- نظام الترقيم (Pagination) ---
+  
+  get totalPages(): number {
+    return Math.ceil(this.totalCount / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const total = this.totalPages;
+    const current = this.pageIndex;
+    let pages: number[] = [];
+    
+    // إظهار صفحتين قبل وبعد الصفحة الحالية
+    for (let i = Math.max(1, current - 2); i <= Math.min(total, current + 2); i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   onPageChange(page: number): void {
-    this.pageIndex = page;
-    this.loadCourses();
+    if (page >= 1 && page <= this.totalPages) {
+      this.pageIndex = page;
+      this.loadCourses();
+    }
+  }
+
+  // --- العمليات (Actions) ---
+
+  hasRole(role: string): boolean {
+    return this.roles.includes(role);
   }
 
   confirmDelete(course: CourseDto): void {
@@ -73,29 +113,17 @@ private config: ConfigStateService  ) {}
 
   deleteCourse(): void {
     if (!this.courseToDelete) return;
-
     this.courseService.delete(this.courseToDelete.id).subscribe({
       next: () => {
+        this.showDeleteConfirm = false;
         this.loadCourses();
-        this.showDeleteConfirm = false;
-        this.courseToDelete = null!;
-      },
-      error: (error) => {
-        console.error('Failed to delete course:', error);
-        this.showDeleteConfirm = false;
-        this.courseToDelete = null!;
       }
     });
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.totalCount / this.pageSize);
-  }
-
-  dublicate(id :string):void{
-    this.courseService.duplicateCourse(id).subscribe({
-      next:(next)=>  this.loadCourses(),
+  dublicate(id: string): void {
+    this.courseService.duplicateCourse(id).subscribe(() => {
+      this.loadCourses();
     });
-   
   }
 }
