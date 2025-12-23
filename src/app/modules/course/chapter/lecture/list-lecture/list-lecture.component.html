@@ -136,7 +136,7 @@
 
                     @if (lecture.showMenu) {
                     <div class="actions-menu" (mouseleave)="lecture.showMenu = false">
-                        <button [routerLink]="['/lectures/questions', lecture.id]" title="View Questions">
+                        <button [routerLink]="[ lecture.id ,'quizies']" title="View Questions">
                             <i class="bi bi-card-list"></i> Questions
                         </button>
                         <button (click)="openEditForm(lecture)">

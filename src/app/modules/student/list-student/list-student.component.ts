@@ -1,111 +1,162 @@
-import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { StudentDto, StudentService, CreateUpdateStudentDto } from '@proxy/dev/acadmy/students';
+import { UniversityService, CollegeService } from '@proxy/dev/acadmy/universites';
 import { AccountcustomService } from '@proxy/dev/acadmy/account-customs';
 import { CourseStudentService } from '@proxy/dev/acadmy/courses';
-import {  CreateUpdateStudentCoursesDto } from '@proxy/dev/acadmy/courses/models';
+import { CreateUpdateStudentCoursesDto } from '@proxy/dev/acadmy/courses/models';
 import { CourseLookupDto } from '@proxy/dev/acadmy/entities/courses/entities/models';
-import { StudentDto, StudentService } from '@proxy/dev/acadmy/students';
-
+import { LookupDto } from '@proxy/dev/acadmy/look-up';
+import { NgClass } from '@angular/common';
+import { ShowPasswordDirective } from "@abp/ng.core";
 
 @Component({
   selector: 'app-list-student',
-  imports: [FormsModule,RouterLink ,NgClass ,ReactiveFormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, FormsModule, NgClass, ShowPasswordDirective],
   templateUrl: './list-student.component.html',
   styleUrl: './list-student.component.scss'
 })
-export class ListStudentComponent {
-students: StudentDto[] = [];
+export class ListStudentComponent implements OnInit {
+  // Data Properties
+  students: any[] = [];
   loading = false;
   search = '';
-
+  
+  // Pagination
   totalCount = 0;
   pageSize = 10;
   pageIndex = 1;
 
-  // Delete confirmation
-  showDeleteConfirm = false;
-  studentToDelete!: StudentDto;
+  // Lookups
+  universities: LookupDto[] = [];
+  colleges: LookupDto[] = [];
+  gradeLevels: LookupDto[] = [];
 
-  // Password reset modal
+  // Form & Modals
+  studentForm: FormGroup;
+  showFormModal = false;
+  isEditMode = false;
+  selectedStudentId: string | null = null;
+
+  // Password Reset Modal
   showPasswordModal = false;
-  selectedStudent!: StudentDto;
+  selectedStudent: any = null;
   newPassword = '';
   confirmPassword = '';
   passwordError = '';
+
+  // Assign Courses Modal
   showAssignCoursesModal = false;
-courses: CourseLookupDto[] = [];
-courseSearch = '';
-coursePageSize = 10;
-coursePageIndex = 1;
-courseTotalCount = 0;
+  courses: CourseLookupDto[] = [];
+  courseSearch = '';
+
   constructor(
+    private fb: FormBuilder,
     private studentService: StudentService,
-    private accountcustomService: AccountcustomService,
-    private router: Router,
-    private courseStudentService:CourseStudentService
-  ) {}
-
-  ngOnInit(): void {
-    this.loadStudents();
-  }
-
-  loadStudents(): void {
-    this.loading = true;
-    this.studentService
-      .getStudentList(this.pageIndex, this.pageSize, this.search)
-      .subscribe({
-        next: (res) => {
-          this.students = res.items;
-          this.totalCount = res.totalCount;
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error loading students:', err);
-          this.loading = false;
-        }
-      });
-  }
-
-  onSearchChange(): void {
-    this.pageIndex = 1;
-    this.loadStudents();
-  }
-
-  onPageChange(page: number): void {
-    this.pageIndex = page;
-    this.loadStudents();
-  }
-
-  confirmDelete(student: StudentDto): void {
-    this.studentToDelete = student;
-    this.showDeleteConfirm = true;
-  }
-
-  cancelDelete(): void {
-    this.showDeleteConfirm = false;
-    this.studentToDelete = null!;
-  }
-
-  deleteStudent(): void {
-    if (!this.studentToDelete) return;
-    this.studentService.delete(this.studentToDelete.id!).subscribe({
-      next: () => {
-        this.loadStudents();
-        this.showDeleteConfirm = false;
-        this.studentToDelete = null!;
-      },
-      error: (err) => {
-        console.error('Failed to delete student:', err);
-        this.showDeleteConfirm = false;
-        this.studentToDelete = null!;
-      }
+    private universityService: UniversityService,
+    private collegeService: CollegeService,
+    private accountService: AccountcustomService,
+    private courseStudentService: CourseStudentService
+  ) {
+    this.studentForm = this.fb.group({
+      fullName: ['', Validators.required],
+      userName: ['', Validators.required],
+      password: [''],
+      gender: ['', Validators.required],
+      universityId: ['', Validators.required],
+      collegeId: ['', Validators.required],
+      gradeLevelId: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
+      accountTypeKey: [3],
+      studentMobileIP: ['']
     });
   }
 
-  // ✅ Open password reset modal
-  openPasswordModal(student: StudentDto): void {
+  ngOnInit(): void {
+    this.loadStudents();
+    this.loadInitialData();
+    this.setupFormListeners();
+  }
+
+  loadInitialData() {
+    this.universityService.getUniversitysList().subscribe(res => this.universities = res.items);
+  }
+
+  setupFormListeners() {
+    this.studentForm.get('universityId')?.valueChanges.subscribe(id => {
+      this.colleges = [];
+      this.gradeLevels = [];
+      this.studentForm.patchValue({ collegeId: '', gradeLevelId: '' }, { emitEvent: false });
+      if (id) this.collegeService.getCollegesList(id).subscribe(res => this.colleges = res.items);
+    });
+
+    this.studentForm.get('collegeId')?.valueChanges.subscribe(id => {
+      this.gradeLevels = [];
+      this.studentForm.patchValue({ gradeLevelId: '' }, { emitEvent: false });
+      if (id) this.collegeService.getGradeLevelList(id).subscribe(res => this.gradeLevels = res.items);
+    });
+  }
+
+  loadStudents() {
+    this.loading = true;
+    this.studentService.getStudentList(this.pageIndex, this.pageSize, this.search).subscribe({
+      next: (res) => {
+        this.students = res.items.map(s => ({ ...s, showMenu: false }));
+        this.totalCount = res.totalCount;
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
+  }
+
+  // Pagination Logic
+  get totalPages(): number { return Math.ceil(this.totalCount / this.pageSize); }
+  onPageChange(page: number) { this.pageIndex = page; this.loadStudents(); }
+  onSearchChange() { this.pageIndex = 1; this.loadStudents(); }
+
+  // Modal Actions
+  openCreateModal() {
+    this.isEditMode = false;
+    this.studentForm.reset({ universityId: '', collegeId: '', gradeLevelId: '', gender: '', accountTypeKey: 3 });
+    this.studentForm.get('password')?.setValidators([Validators.required]);
+    this.showFormModal = true;
+  }
+
+  openEditModal(student: any) {
+    this.isEditMode = true;
+    this.selectedStudentId = student.id;
+    this.studentForm.get('password')?.clearValidators();
+    
+    this.collegeService.getCollegesList(student.universityId).subscribe(cRes => {
+      this.colleges = cRes.items;
+      this.collegeService.getGradeLevelList(student.collegeId).subscribe(gRes => {
+        this.gradeLevels = gRes.items;
+        this.studentForm.patchValue(student);
+        this.showFormModal = true;
+      });
+    });
+  }
+
+  closeFormModal() { this.showFormModal = false; }
+
+  submitForm() {
+    if (this.studentForm.invalid) return;
+    this.loading = true;
+    const dto = this.studentForm.value;
+
+    const request = this.isEditMode 
+      ? this.studentService.update(this.selectedStudentId!, dto)
+      : this.studentService.create(dto);
+
+    request.subscribe({
+      next: () => { this.loadStudents(); this.closeFormModal(); },
+      error: (err) => { this.loading = false; alert(err.message); }
+    });
+  }
+
+  // Password Reset
+  openPasswordModal(student: any) {
     this.selectedStudent = student;
     this.newPassword = '';
     this.confirmPassword = '';
@@ -113,116 +164,41 @@ courseTotalCount = 0;
     this.showPasswordModal = true;
   }
 
-  // ✅ Close modal
-  closePasswordModal(): void {
-    this.showPasswordModal = false;
-  }
-
-  // ✅ Reset password
-  resetPassword(): void {
-    if (!this.newPassword || !this.confirmPassword) {
-      this.passwordError = 'Please fill in both fields.';
+  resetPassword() {
+    if (!this.newPassword || this.newPassword !== this.confirmPassword) {
+      this.passwordError = "Passwords do not match";
       return;
     }
-    if (this.newPassword !== this.confirmPassword) {
-      this.passwordError = 'Passwords do not match.';
-      return;
-    }
-
-    this.passwordError = '';
     this.loading = true;
-
-    this.accountcustomService
-      .resetPassword(this.selectedStudent.id!, this.newPassword)
-      .subscribe({
-        next: () => {
-          this.loading = false;
-          alert('Password changed successfully!');
-          this.showPasswordModal = false;
-        },
-        error: (err) => {
-          this.loading = false;
-          alert('Error changing password: ' + err.message);
-        }
-      });
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.totalCount / this.pageSize);
-  }
-
-  showNewPassword = false;
-showConfirmPassword = false;
-
-toggleNewPassword() {
-  this.showNewPassword = !this.showNewPassword;
-}
-
-toggleConfirmPassword() {
-  this.showConfirmPassword = !this.showConfirmPassword;
-}
-
-
-
-// فتح Modal
-openAssignCoursesModal(student: StudentDto) {
-  this.selectedStudent = student;
-  this.courseSearch = '';
-  this.coursePageIndex = 1;
-  this.loadCourses();
-  this.showAssignCoursesModal = true;
-}
-
-// إغلاق Modal
-closeAssignCoursesModal() {
-  this.showAssignCoursesModal = false;
-}
-
-// جلب الكورسات من السيرفر
-loadCourses() {
-  this.loading = true;
-  this.courseStudentService
-    .getListCoursesToAssginToStudent(this.courseSearch, this.coursePageIndex, this.coursePageSize, this.selectedStudent.id!)
-    .subscribe({
-      next: (res) => {
-        this.courses = res.items;
-        this.courseTotalCount = res.totalCount;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error loading courses:', err);
-        this.loading = false;
-      }
+    this.accountService.resetPassword(this.selectedStudent.id, this.newPassword).subscribe({
+      next: () => { alert('Success!'); this.showPasswordModal = false; this.loading = false; },
+      error: (err) => { this.loading = false; alert(err.message); }
     });
-}
+  }
 
-// Pagination
-get courseTotalPages() {
-  return Math.ceil(this.courseTotalCount / this.coursePageSize);
-}
-onCoursePageChange(page: number) {
-  this.coursePageIndex = page;
-  this.loadCourses();
-}
+  // Assign Courses
+  openAssignCoursesModal(student: any) {
+    this.selectedStudent = student;
+    this.courseStudentService.getListCoursesToAssginToStudent('', 1, 100, student.id).subscribe(res => {
+      this.courses = res.items;
+      this.showAssignCoursesModal = true;
+    });
+  }
 
-// Assign الكورسات للطالب
-assignCoursesToStudent() {
-  const input: CreateUpdateStudentCoursesDto = {
-    userId: this.selectedStudent.id!,
-    courseIds: this.courses.filter(c => c.isSelect).map(c => c.courseId!)
-  };
-  this.loading = true;
-  this.courseStudentService.assignStudentToCoursesByInput(input).subscribe({
-    next: () => {
-      this.loading = false;
+  assignCourses() {
+    const input: CreateUpdateStudentCoursesDto = {
+      userId: this.selectedStudent.id,
+      courseIds: this.courses.filter(c => c.isSelect).map(c => c.courseId!)
+    };
+    this.courseStudentService.assignStudentToCoursesByInput(input).subscribe(() => {
       this.showAssignCoursesModal = false;
-      this.loadStudents();
-    },
-    error: (err) => {
-      this.loading = false;
-      alert('Error assigning courses: ' + err.message);
-    }
-  });
-}
+      alert('Courses assigned successfully');
+    });
+  }
 
+  confirmDelete(student: any) {
+    if (confirm(`Are you sure you want to delete ${student.fullName}?`)) {
+      this.studentService.delete(student.id).subscribe(() => this.loadStudents());
+    }
+  }
 }

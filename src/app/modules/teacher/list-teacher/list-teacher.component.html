@@ -1,153 +1,151 @@
-<div class="list-container" style="width: 100%;">
+<div class="list-container">
 
-    <!-- Delete confirmation -->
-    @if (showDeleteConfirm) {
-    <div class="delete-confirm-card">
-        <p>Are you sure you want to delete <strong>{{ teacherToDelete.fullName }}</strong>?</p>
-        <div class="delete-confirm-actions">
-            <button class="btn btn-secondary" (click)="cancelDelete()">No</button>
-            <button class="btn btn-danger" (click)="deleteTeacher()">Yes</button>
+  @if (showFormModal) {
+  <div class="modal-overlay">
+    <div class="form-card" style="max-width: 600px;">
+      <h3>{{ isEditMode ? 'Edit Teacher' : 'Create New Teacher' }}</h3>
+      <form [formGroup]="teacherForm" (ngSubmit)="submitForm()">
+        <div class="row-grid">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" formControlName="fullName" placeholder="Enter full name" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Username *</label>
+            <input type="text" formControlName="userName" placeholder="Enter username" class="form-control">
+          </div>
         </div>
+
+        <div class="row-grid">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="text" formControlName="phoneNumber" placeholder="01xxxxxxxxx" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Gender *</label>
+            <select formControlName="gender" class="form-control">
+              <option [value]="true">Male</option>
+              <option [value]="false">Female</option>
+            </select>
+          </div>
+        </div>
+
+        @if (!isEditMode) {
+        <div class="form-group">
+          <label>Password *</label>
+          <input type="password" formControlName="password" placeholder="Enter password" class="form-control">
+        </div>
+        }
+
+        <div class="form-group">
+          <label>University *</label>
+          <select formControlName="universityId" class="form-control">
+            <option value="" disabled selected>-- Select University --</option>
+            @for (u of universities; track u.id) { <option [value]="u.id">{{u.name}}</option> }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>College *</label>
+          <select formControlName="collegeId" class="form-control">
+            <option value="" disabled selected>-- Select College --</option>
+            @for (c of colleges; track c.id) { <option [value]="c.id">{{c.name}}</option> }
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeFormModal()">Cancel</button>
+          <button type="submit" class="btn-confirm" [disabled]="teacherForm.invalid || loading">
+            @if (loading) { <span class="loader-inner"></span> }
+            @else { Save Teacher }
+          </button>
+        </div>
+      </form>
     </div>
-    }
-<!-- 🔹 Password Reset Modal -->
-@if (showPasswordModal) {
-  <div class="modal-backdrop">
-    <div class="modal">
-      <h3>Reset Password for {{ selectedteacher.fullName }}</h3>
+  </div>
+  }
 
-      <!-- 🟣 New Password -->
-      <div class="form-group password-group">
+  @if (showPasswordModal) {
+  <div class="modal-overlay">
+    <div class="form-card">
+      <h3>Reset Password</h3>
+      <p class="text-muted">For: <b>{{selectedTeacher?.fullName}}</b></p>
+      <div class="form-group">
         <label>New Password</label>
-        <div class="password-wrapper">
-          <input
-            [type]="showNewPassword ? 'text' : 'password'"
-            [(ngModel)]="newPassword"
-            class="form-control"
-          />
-          <i
-            class="bi"
-            [ngClass]="showNewPassword ? 'bi-eye-slash' : 'bi-eye'"
-            (click)="toggleNewPassword()"
-          ></i>
-        </div>
+        <input type="password" [(ngModel)]="newPassword" placeholder="New password" class="form-control">
       </div>
-
-      <!-- 🟣 Confirm Password -->
-      <div class="form-group password-group">
+      <div class="form-group">
         <label>Confirm Password</label>
-        <div class="password-wrapper">
-          <input
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            [(ngModel)]="confirmPassword"
-            class="form-control"
-          />
-          <i
-            class="bi"
-            [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"
-            (click)="toggleConfirmPassword()"
-          ></i>
-        </div>
+        <input type="password" [(ngModel)]="confirmPassword" placeholder="Confirm password" class="form-control">
       </div>
-
-      @if (passwordError) {
-        <p class="text-danger">{{ passwordError }}</p>
-      }
-
+      @if (passwordError) { <small class="text-danger">{{passwordError}}</small> }
       <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="closePasswordModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="resetPassword()" [disabled]="loading">
-          @if (loading) { Processing... } @else { Save }
+        <button class="btn-cancel" (click)="showPasswordModal = false">Cancel</button>
+        <button class="btn-confirm" (click)="resetPassword()" [disabled]="loading">
+          @if (loading) { <span class="loader-inner"></span> }
+          @else { Reset Now }
         </button>
       </div>
     </div>
   </div>
-}
-    <!-- Search and Create -->
-    <div class="toolbar">
-        <input type="text" [(ngModel)]="search" placeholder="Search teachers..." class="search-input"
-            (keyup.enter)="onSearchChange()" />
-        <button class="btn btn-search" (click)="onSearchChange()" title="Search">
-            <i class="bi bi-search"></i>
-        </button>
+  }
 
-        <button routerLink="/teachers/create" class="btn btn-create" title="Create">
-            <i class="bi bi-plus-circle me-1"></i> Create
-        </button>
+  <div class="toolbar">
+    <div class="search-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input type="text" [(ngModel)]="search" (input)="onSearchChange()" placeholder="Search teachers..."
+        class="search-input-modern" />
     </div>
+    <button (click)="openCreateModal()" class="btn-create-modern">
+      <i class="bi bi-person-plus"></i> <span>Add Teacher</span>
+    </button>
+  </div>
 
-    <!-- Loading -->
-    @if (loading) {
-    <div class="loading-container">
-        <div class="spinner"></div>
-        <p class="loading-text">Loading...</p>
-    </div>
-    }
-
-    <!-- Table -->
-    @if (!loading) {
-    @if (teachers.length > 0) {
-    <table class="table" style="width: 100%;">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Full Name</th>
-                <th>Username</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (teacher of teachers; track teacher.id; let i = $index) {
-            <tr>
-                <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-                <td class="student-cell">
-                <img 
-                  [src]="teacher.logoUrl || '/assets/default-avatar.png'" 
-                  class="student-avatar" 
-                  alt="Student Image"
-                />
-
-  {{ teacher.fullName }}
-</td>
-                <td>{{ teacher.userName }}</td>
-                <td>{{ teacher.phoneNumber || '-' }}</td>
-                <td>{{ teacher.gender ? 'Male' : 'Female' }}</td>
-                <td class="actions">
-                    <button [routerLink]="['/teachers/update', teacher.id]" class="btn btn-edit" title="Edit">
-                        <i class="bi bi-pencil"></i>
-                    </button>
-                    <button (click)="confirmDelete(teacher)" class="btn btn-delete" title="Delete">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    <button (click)="openPasswordModal(teacher)" class="btn btn-warning" title="Reset Password">
-                  <i class="bi bi-key"></i>
-                </button>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-
-    <!-- Pagination -->
-    @if (totalCount > pageSize) {
-    <div class="pagination">
-        <button class="btn btn-previous" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
-            Previous
-        </button>
-
-        <button class="btn btn-next" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">
-            Next
-        </button>
+  <div class="cards-grid" [class.content-loading]="loading && teachers.length === 0">
+    @for (teacher of teachers; track teacher.id) {
+    <div class="course-card">
+      <div class="card-header">
+        <div class="chapter-icon-placeholder">
+          <i class="bi bi-person-badge"></i>
+        </div>
+        <div class="dropdown-actions">
+          <button class="dots-btn" (click)="$event.stopPropagation(); teacher['showMenu'] = !teacher['showMenu']">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          @if (teacher['showMenu']) {
+          <div class="actions-menu" (mouseleave)="teacher['showMenu'] = false">
+            <button (click)="openEditModal(teacher)"><i class="bi bi-pencil"></i> Edit</button>
+            <button (click)="openPasswordModal(teacher)"><i class="bi bi-key"></i> Password</button>
+            <button class="text-danger" (click)="confirmDelete(teacher)"><i class="bi bi-trash"></i> Delete</button>
+          </div>
+          }
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="badge-group">
+          <span class="custom-badge">{{ teacher.userName }}</span>
+        </div>
+        <h3 class="course-name">{{ teacher.fullName }}</h3>
+        <p class="course-title">{{ teacher.collegeName }}</p>
+        <p class="course-title" style="font-size: 0.8rem;"><i class="bi bi-telephone"></i> {{ teacher.phoneNumber }}</p>
+      </div>
     </div>
     }
-    }
-    @else {
-    <div class="no-data-message">
-        <p>No teachers found.</p>
-    </div>
-    }
-    }
+  </div>
 
+  @if (totalCount > pageSize) {
+  <div class="pagination-modern">
+    <button class="page-nav" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    @for (p of [].constructor(totalPages); track $index) {
+    <button class="page-num" [class.active]="pageIndex === ($index + 1)" (click)="onPageChange($index + 1)">
+      {{ $index + 1 }}
+    </button>
+    }
+    <button class="page-nav" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+  }
 </div>

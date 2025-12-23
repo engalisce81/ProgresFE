@@ -1,68 +1,104 @@
-@if (!loading && profile) {
-<div class="profile-card">
-
-  <div class="avatar-wrapper">
-    <img 
-      [src]="profile.profilePictureUrl || '/assets/default-avatar.png'" 
-      class="avatar"
-      alt="Profile Picture"
-    />
-
-    <!-- زر رفع الصورة -->
-    <label class="upload-btn">
-      <i class="bi bi-camera-fill"></i>
-      <input type="file" accept="image/*" hidden (change)="onImageSelected($event)">
-    </label>
-  </div>
-
-  <h2 class="username">{{ profile.name }}</h2>
-  <p class="muted">{{ profile.userName }}</p>
-
-  <div class="info-list">
-
-    @if (profile.universityName) {
-      <div class="info-item">
-        <i class="bi bi-building"></i>
-        <span>{{ profile.universityName }}</span>
-      </div>
-    }
-
-    @if (profile.collegeName) {
-      <div class="info-item">
-        <i class="bi bi-mortarboard"></i>
-        <span>{{ profile.collegeName }}</span>
-      </div>
-    }
-
-    @if (profile.gradeLevelName) {
-      <div class="info-item">
-        <i class="bi bi-layers"></i>
-        <span>{{ profile.gradeLevelName }}</span>
-      </div>
-    }
-
-    @if (profile.termName) {
-      <div class="info-item">
-        <i class="bi bi-calendar-event"></i>
-        <span>{{ profile.termName }}</span>
-      </div>
-    }
-
-    <div class="counter-box">
-      <div>
-        <strong>{{ profile.lectureCount }}</strong>
-        <span>Lectures</span>
-      </div>
-      <div>
-        <strong>{{ profile.chapterCount }}</strong>
-        <span>Chapters</span>
-      </div>
-      <div>
-        <strong>{{ profile.courseJoinCount }}</strong>
-        <span>Courses</span>
-      </div>
+<div class="list-container profile-container">
+  
+  @if (loading) {
+    <div class="global-loader">
+      <div class="spinner"></div>
+      <p>Loading Profile...</p>
     </div>
+  }
 
-  </div>
+  @if (!loading && profile) {
+    <div class="profile-layout">
+      
+      <div class="profile-card-modern">
+        <div class="card-header-bg"></div>
+        
+        <div class="avatar-wrapper">
+          <div class="image-container" [class.uploading]="uploading">
+            <img 
+              [src]="profile.profilePictureUrl || 'https://picsum.photos/200/200'" 
+              class="avatar-img"
+              alt="Profile Picture"
+            />
+            @if (uploading) {
+              <div class="upload-overlay">
+                <span class="loader-inner"></span>
+              </div>
+            }
+          </div>
+
+          <label class="edit-avatar-btn">
+            <i class="bi bi-camera-fill"></i>
+            <input type="file" accept="image/*" hidden (change)="onImageSelected($event)">
+          </label>        </div>
+
+        <div class="user-main-info">
+          <h2 class="username">{{ profile.name }}</h2>
+          <span class="badge-username">{{ profile.userName }}</span>
+        </div>
+
+        <div class="counters-grid">
+          <div class="counter-item">
+            <span class="count-num">{{ profile.lectureCount || 0 }}</span>
+            <span class="count-label">Lectures</span>
+          </div>
+          <div class="counter-item">
+            <span class="count-num">{{ profile.chapterCount || 0 }}</span>
+            <span class="count-label">Chapters</span>
+          </div>
+          <div class="counter-item">
+            <span class="count-num">{{ profile.courseJoinCount || 0 }}</span>
+            <span class="count-label">Courses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h3 class="section-title">Academic Information</h3>
+        
+        <div class="info-grid">
+          @if (profile.universityName) {
+            <div class="detail-item">
+              <div class="icon-box"><i class="bi bi-building"></i></div>
+              <div class="text-group">
+                <label>University</label>
+                <p>{{ profile.universityName }}</p>
+              </div>
+            </div>
+                    }          
+
+          @if (profile.collegeName) {
+            <div class="detail-item">
+              <div class="icon-box"><i class="bi bi-mortarboard"></i></div>
+              <div class="text-group">
+                <label>College</label>
+                <p>{{ profile.collegeName }}</p>
+              </div>
+            </div>
+          }
+
+          @if (profile.gradeLevelName) {
+            <div class="detail-item">
+              <div class="icon-box"><i class="bi bi-layers"></i></div>
+              <div class="text-group">
+                <label>Grade Level</label>
+                <p>{{ profile.gradeLevelName }}</p>
+              </div>
+            </div>
+          }
+
+          @if (profile.termName) {
+            <div class="detail-item">
+              <div class="icon-box"><i class="bi bi-calendar-event"></i></div>
+              <div class="text-group">
+                <label>Term</label>
+                <p>{{ profile.termName }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  }
 </div>
-}

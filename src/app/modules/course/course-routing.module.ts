@@ -10,6 +10,7 @@ import { ListFeedbackComponent } from './list-feedback/list-feedback.component';
 import { ListChapterComponent } from './chapter/list-chapter/list-chapter.component';
 import { ListLectureComponent } from './chapter/lecture/list-lecture/list-lecture.component';
 import { ListExamComponent } from './exam/list-exam/list-exam.component';
+import { ListQuizComponent } from './chapter/lecture/quiz/list-quiz/list-quiz.component';
 
 const routes: Routes = [
   {path:'',pathMatch:'full',component:ListCourseComponent},
@@ -21,7 +22,9 @@ const routes: Routes = [
    {path:':id/feedbacks',pathMatch:'full',component:ListFeedbackComponent},
    {path:':id/chapters',pathMatch:'full',component:ListChapterComponent},
    {path:':id/chapters/:chapterId/lectures',pathMatch:'full',component:ListLectureComponent},
+   {path:':id/chapters/:chapterId/lectures/:lectureId/quizies',pathMatch:'full',component:ListQuizComponent},
    {path:':id/exams',pathMatch:'full',component:ListExamComponent},
+
 
 
 

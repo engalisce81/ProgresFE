@@ -8,7 +8,6 @@ export interface CreateUpdateQuestionAnswerDto {
 
 export interface CreateUpdateQuestionBankDto {
   name?: string;
-  courseId?: string;
 }
 
 export interface CreateUpdateQuestionDto {
@@ -36,8 +35,8 @@ export interface QuestionAnswerPanelDto {
 
 export interface QuestionBankDto extends EntityDto<string> {
   name?: string;
-  courseId?: string;
-  courseName?: string;
+  userId?: string;
+  userName?: string;
 }
 
 export interface QuestionDto extends EntityDto<string> {

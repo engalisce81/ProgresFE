@@ -2,6 +2,7 @@ import type { CourseDto, CourseInfoHomeDto, CreateUpdateCourseDto } from './mode
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { CourseType } from '../enums/course-type.enum';
 import type { LectureWithQuizzesDto } from '../lectures/models';
 import type { LookupDto } from '../look-up/models';
 import type { ResponseApi } from '../response/models';
@@ -72,11 +73,11 @@ export class CourseService {
     { apiName: this.apiName,...config });
   
 
-  getList = (pageNumber: number, pageSize: number, search: string, config?: Partial<Rest.Config>) =>
+  getList = (pageNumber: number, pageSize: number, search: string, type: CourseType, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<CourseDto>>({
       method: 'GET',
       url: '/api/app/course',
-      params: { pageNumber, pageSize, search },
+      params: { pageNumber, pageSize, search, type },
     },
     { apiName: this.apiName,...config });
   

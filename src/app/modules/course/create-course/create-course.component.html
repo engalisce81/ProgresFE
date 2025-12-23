@@ -1,170 +1,135 @@
-<div class="create-container">
-  <div class="header">
-    <h2>Create New Course</h2>
-    <button type="button" routerLink="/courses" class="btn btn-secondary">Back to List</button>
+<div class="list-container">
+  <div class="toolbar">
+    <div class="header">
+      <h2 style="color: var(--text); margin: 0;">Create New Course</h2>
+      <p style="color: var(--muted); font-size: 0.9rem;">Choose the type and fill details</p>
+    </div>
+    <button routerLink="/courses" class="filter-buttons btn-filter">
+      <i class="bi bi-arrow-left"></i> Back to List
+    </button>
   </div>
 
-  <form [formGroup]="courseForm" (ngSubmit)="submit()" class="course-form">
+  <div class="filter-buttons" style="margin-bottom: 30px; justify-content: center; gap: 15px;">
+    <button type="button" class="btn-filter" [class.active]="selectedTab === courseTypes.General" (click)="selectTab(courseTypes.General)">
+      <i class="bi bi-play-circle"></i> Standard Course
+    </button>
+    <button type="button" class="btn-filter" [class.active]="selectedTab === courseTypes.Quiz" (click)="selectTab(courseTypes.Quiz)">
+      <i class="bi bi-patch-question"></i> Exams Only
+    </button>
+    <button type="button" class="btn-filter" [class.active]="selectedTab === courseTypes.Pdf" (click)="selectTab(courseTypes.Pdf)">
+      <i class="bi bi-file-earmark-pdf"></i> PDF Library
+    </button>
+  </div>
 
-    <div class="form-section">
-      <h3>Basic Information</h3>
-
-      <!-- Course Name -->
-      <div class="form-row">
+  <div class="form-card" style="max-width: 900px; margin: 0 auto; border: 1px solid var(--surface-variant);">
+    <form [formGroup]="courseForm" (ngSubmit)="submit()">
+      
+      <div class="row-grid">
         <div class="form-group">
-          <label for="name">Course Name *</label>
-          <input id="name" type="text" formControlName="name" class="form-control"
-            [class.is-invalid]="courseForm.get('name')?.invalid && courseForm.get('name')?.touched"
-            placeholder="Enter course name" />
-          @if (courseForm.get('name')?.invalid && courseForm.get('name')?.touched) {
-          <div class="error-message">Course name is required</div>
-          }
+          <label>Course Display Name *</label>
+          <input type="text" formControlName="name" class="form-control" placeholder="e.g. Full Chemistry 2024">
+        </div>
+        <div class="form-group">
+          <label>Title/Slogan *</label>
+          <input type="text" formControlName="title" class="form-control" placeholder="e.g. Master Organic Chemistry">
         </div>
       </div>
 
-      <!-- Title -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="title">Title *</label>
-          <input id="title" type="text" formControlName="title" class="form-control"
-            [class.is-invalid]="courseForm.get('title')?.invalid && courseForm.get('title')?.touched"
-            placeholder="Enter title" />
-          @if (courseForm.get('title')?.invalid && courseForm.get('title')?.touched) {
-          <div class="error-message">Title is required</div>
-          }
-        </div>
+      <div class="form-group">
+        <label>Comprehensive Description *</label>
+        <textarea formControlName="description" class="form-control" rows="4" placeholder="What will students learn?"></textarea>
       </div>
 
-      <!-- Description -->
-      <div class="form-row">
+      <div class="row-grid">
         <div class="form-group">
-          <label for="description">Description *</label>
-          <textarea id="description" formControlName="description" class="form-control" rows="3"
-            placeholder="Enter course description">
-          </textarea>
+          <label>Price (EGP) *</label>
+          <input type="number" formControlName="price" class="form-control">
         </div>
-      </div>
-
-      <!-- Price -->
-      <div class="form-row">
         <div class="form-group">
-          <label for="price">Price *</label>
-          <input id="price" type="number" formControlName="price" class="form-control"
-            [class.is-invalid]="courseForm.get('price')?.invalid && courseForm.get('price')?.touched" />
-          @if (courseForm.get('price')?.invalid && courseForm.get('price')?.touched) {
-          <div class="error-message">Price is required</div>
-          }
-        </div>
-      </div>
-
-
-
-
-      <!-- Subject -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="subjectId">Subject *</label>
-          <select id="subjectId" formControlName="subjectId" class="form-control"
-            [class.is-invalid]="courseForm.get('subjectId')?.invalid && courseForm.get('subjectId')?.touched">
+          <label>Category/Subject *</label>
+          <select formControlName="subjectId" class="form-control">
             <option value="">-- Select Subject --</option>
             @for (s of subjects; track s.id) {
-            <option [value]="s.id">{{ s.name }}</option>
+              <option [value]="s.id">{{ s.name }}</option>
             }
           </select>
-          @if (courseForm.get('subjectId')?.invalid && courseForm.get('subjectId')?.touched) {
-          <div class="error-message">Subject is required</div>
-          }
         </div>
       </div>
 
-      <!-- Logo -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="logo">Logo *</label>
-          <input id="logo" type="file" (change)="onFileSelected($event)" class="form-control" accept="image/*"
-            required />
-          @if (logoPreview) {
-          <div class="logo-preview" style="margin-top:10px;">
-            <img [src]="logoPreview" alt="Logo Preview" style="max-width:150px;">
+      <div class="animate-fade">
+        @if (selectedTab !== courseTypes.Pdf) {
+          <div class="form-group">
+            <label><i class="bi bi-youtube"></i> Introduction Video URL (YouTube/Vimeo)</label>
+            <input type="text" formControlName="introductionVideoUrl" class="form-control" placeholder="https://...">
           </div>
+        }
+
+        @if (selectedTab === courseTypes.Pdf) {
+          <div class="form-group" style="border: 2px dashed var(--purple-600); padding: 20px; border-radius: 15px; background: rgba(124, 58, 237, 0.05);">
+            <label style="color: var(--purple-600); font-weight: bold;">Course Materials (PDF) *</label>
+            <input type="file" (change)="onPdfSelected($event)" class="form-control" accept=".pdf">
+            @if (pdfFileName) { <div style="margin-top: 10px; color: var(--text);">📄 {{ pdfFileName }}</div> }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Course Banner/Logo *</label>
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <input type="file" (change)="onFileSelected($event)" class="form-control" accept="image/*" style="flex: 1;">
+          @if (logoPreview) {
+            <img [src]="logoPreview" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid var(--purple-600);">
           }
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="introductionVideoUrl">Introduction Video URL</label>
-          <input id="introductionVideoUrl" type="text" formControlName="introductionVideoUrl" class="form-control"
-            placeholder="https://example.com/video.mp4" />
+      <div class="checkbox-group" style="background: var(--surface); padding: 15px; border-radius: 12px; margin: 20px 0;">
+        <div style="display: flex; gap: 30px;">
+          <label class="checkbox-container">
+            <input type="checkbox" formControlName="isActive">
+            <span class="checkmark"></span> Publicly Active
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" formControlName="isLifetime">
+            <span class="checkmark"></span> Unlimited Access
+          </label>
+
+          <label class="checkbox-container">
+      <input type="checkbox" formControlName="showSubscriberCount">
+      <span class="checkmark"></span> Show Subscriber Count
+    </label>
         </div>
       </div>
 
-      <!-- Active, Lifetime, PDF -->
-      <div class="form-row">
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="isActive"> Active
-          </label>
-          <label>
-            <input type="checkbox" formControlName="isLifetime"> Lifetime
-          </label>
-          <label>
-            <input type="checkbox" formControlName="isPdf"> Is PDF Course
-          </label>
+      @if (!courseForm.get('isLifetime')?.value) {
+        <div class="form-group animate-fade">
+          <label>Subscription Period (Days)</label>
+          <input type="number" formControlName="durationInDays" class="form-control" placeholder="e.g. 365">
         </div>
-      </div>
-
-      <!-- Upload PDF -->
-
-      @if(courseForm.get('isPdf')?.value){<div class="form-row">
-        <div class="form-group">
-          <label for="pdfFile">Upload PDF *</label>
-          <input id="pdfFile" type="file" (change)="onPdfSelected($event)" class="form-control" accept="application/pdf"
-            required />
-          @if (pdfFileName) {
-          <div style="margin-top:5px;">📄 {{ pdfFileName }}</div>
-          }
-        </div>
-      </div>
       }
 
-      <!-- Duration -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="durationInDays">Duration (Days)</label>
-          <input id="durationInDays" type="number" formControlName="durationInDays" class="form-control">
-        </div>
-      </div>
-
-      <!-- Infos -->
-      <div class="form-section" formArrayName="infos">
-        <h3>Course Infos</h3>
+      <div class="form-section" formArrayName="infos" style="background: var(--surface-variant); padding: 20px; border-radius: 15px;">
+        <h3 style="font-size: 1rem; margin-bottom: 15px;"><i class="bi bi-stars"></i> Key Course Features</h3>
         @for (info of infos.controls; track $index) {
-        <div class="form-group">
-          <label>Info {{ $index + 1 }} *</label>
-          <div class="info-row">
-            <input type="text" class="form-control" [formControlName]="$index" placeholder="Enter info">
-            <button type="button" class="btn btn-danger" (click)="removeInfo($index)">Remove</button>
+          <div class="info-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" class="form-control" [formControlName]="$index" placeholder="e.g. Monthly Live Sessions">
+            <button type="button" (click)="removeInfo($index)" class="btn-delete-all" style="padding: 10px; height: 45px;">
+              <i class="bi bi-trash"></i>
+            </button>
           </div>
-          @if (info.invalid && info.touched) {
-          <div class="error-message">Info is required</div>
-          }
-        </div>
         }
-        <button type="button" class="btn btn-secondary" (click)="addInfo()">+ Add Info</button>
+        <button type="button" (click)="addInfo()" class="btn-filter" style="width: 100%; justify-content: center; background: var(--surface);">
+          <i class="bi bi-plus-circle"></i> Add Another Feature
+        </button>
       </div>
 
-    </div>
-
-    <div class="form-actions">
-      <button type="button" routerLink="/courses" class="btn btn-secondary" [disabled]="loading">Cancel</button>
-      <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid || loading">
-        @if (loading) {
-        <span class="spinner"></span> Creating...
-        } @else {
-        Create Course
-        }
-      </button>
-    </div>
-  </form>
+      <div class="modal-actions" style="position: static; margin-top: 30px;">
+        <button type="button" routerLink="/courses" class="btn-cancel">Discard Changes</button>
+        <button type="submit" class="btn-confirm" [disabled]="loading || courseForm.invalid">
+          @if (loading) { <span class="spinner-border spinner-border-sm"></span> Processing... }
+          @else { <i class="bi bi-cloud-arrow-up"></i> Finalize & Create Course }
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

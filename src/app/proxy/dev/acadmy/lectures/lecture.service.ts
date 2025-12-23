@@ -62,11 +62,11 @@ export class LectureService {
     { apiName: this.apiName,...config });
   
 
-  getList = (pageNumber: number, pageSize: number, search: string,  chapterId:string,config?: Partial<Rest.Config>) =>
+  getList = (pageNumber: number, pageSize: number, search: string, chapterId: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<LectureDto>>({
       method: 'GET',
       url: '/api/app/lecture',
-      params: { pageNumber, pageSize, search,chapterId },
+      params: { pageNumber, pageSize, search, chapterId },
     },
     { apiName: this.apiName,...config });
   

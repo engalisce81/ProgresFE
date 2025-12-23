@@ -1,11 +1,11 @@
 <div class="list-container">
-
   @if (showDeleteConfirm) {
   <div class="modal-overlay">
     <div class="delete-card">
-      <i class="bi bi-exclamation-triangle text-warning"></i>
-      <h3>Delete Course?</h3>
-      <p>Are you sure you want to delete <strong>{{ courseToDelete.name }}</strong>?</p>
+      <i class="bi bi-exclamation-triangle text-warning"
+        style="font-size: 3rem; display: block; text-align: center;"></i>
+      <h3 style="text-align: center;">Delete Course?</h3>
+      <p style="text-align: center;">Are you sure you want to delete <strong>{{ courseToDelete.name }}</strong>?</p>
       <div class="modal-actions">
         <button class="btn-cancel" (click)="cancelDelete()">No, Cancel</button>
         <button class="btn-confirm" (click)="deleteCourse()">Yes, Delete</button>
@@ -14,11 +14,20 @@
   </div>
   }
 
-  <div class="toolbar">
-    <div class="search-wrapper">
-      <i class="bi bi-search search-icon"></i>
-      <input type="text" [ngModel]="search" (keyup)="onSearchKeyup($event)"
-        placeholder="Search courses by name or title..." class="search-input-modern" />
+  <div class="toolbar" style="margin-bottom: 15px;">
+    <div class="filter-buttons">
+      <button class="btn-filter" [class.active]="selectedType === courseTypes.All"
+        (click)="onTabChange(courseTypes.All)">
+        <i class="bi bi-grid"></i> All
+      </button>
+      <button class="btn-filter" [class.active]="selectedType === courseTypes.Quiz"
+        (click)="onTabChange(courseTypes.Quiz)">
+        <i class="bi bi-journal-check"></i> Quizzes
+      </button>
+      <button class="btn-filter" [class.active]="selectedType === courseTypes.Pdf"
+        (click)="onTabChange(courseTypes.Pdf)">
+        <i class="bi bi-file-earmark-pdf"></i> PDF
+      </button>
     </div>
 
     <button routerLink="/courses/create" class="btn-create-modern">
@@ -26,9 +35,18 @@
     </button>
   </div>
 
+  <div class="toolbar">
+    <div class="search-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input type="text" [ngModel]="search" (keyup)="onSearchKeyup($event)" placeholder="Search courses..."
+        class="search-input-modern" />
+    </div>
+  </div>
+
   @if (loading) {
-  <div class="loading-overlay">
-    <div class="spinner-modern"></div>
+  <div class="global-loader">
+    <div class="spinner"></div>
+    <p>Loading Courses...</p>
   </div>
   }
 
@@ -37,7 +55,8 @@
     @for (course of courses; track course.id) {
     <div class="course-card">
       <div class="card-header">
-        <img [src]="course.logoUrl || '/assets/default-course.png'" class="course-logo" />
+        <img [src]="course.logoUrl || '/assets/default-course.png'"
+          style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 1px solid var(--sky-300);" />
 
         <div class="dropdown-actions">
           <button class="dots-btn" (click)="$event.stopPropagation(); course.showMenu = !course.showMenu">
@@ -46,48 +65,21 @@
 
           @if (course.showMenu) {
           <div class="actions-menu" (mouseleave)="course.showMenu = false">
-            <button [routerLink]="[course.id , 'chapters']" class="menu-btn">
-              <i class="bi bi-layers-fill"></i>
-              <span>Chapters Content</span>
+            <button [routerLink]="['/courses', course.id , 'chapters']">
+              <i class="bi bi-layers"></i> Chapters
             </button>
-
-            <button [routerLink]="[course.id , 'exams']" class="menu-btn">
-             <i class="bi bi-journal-text"></i>
-              <span>Exams Content</span>
+            <button [routerLink]="['/courses', course.id , 'exams']">
+              <i class="bi bi-journal-text"></i> Exams
             </button>
-
-            <button [routerLink]="['/courses/subscriber', course.id]" class="menu-btn">
-              <i class="bi bi-people-fill"></i>
-              <span>Subscribers</span>
+            <button [routerLink]="['/courses/update', course.id]">
+              <i class="bi bi-pencil"></i> Edit
             </button>
-
-            @if(hasRole("admin")){
-            <button [routerLink]="['/courses/requestjoin', course.id]" class="menu-btn">
-              <i class="bi bi-person-check-fill"></i>
-              <span>Join Requests</span>
+            <button (click)="duplicate(course.id)">
+              <i class="bi bi-files"></i> Duplicate
             </button>
-            }
-
-            <button [routerLink]="[course.id , 'feedbacks']" class="menu-btn">
-              <i class="bi bi-chat-left-dots-fill"></i>
-              <span>Feedbacks</span>
+            <button class="text-danger" (click)="confirmDelete(course)">
+              <i class="bi bi-trash"></i> Delete
             </button>
-
-            <div class="menu-divider"></div> <button (click)="duplicate(course.id)" class="menu-btn">
-              <i class="bi bi-files"></i>
-              <span>Duplicate Course</span>
-            </button>
-
-            <button [routerLink]="['/courses/update', course.id]" class="menu-btn">
-              <i class="bi bi-pencil-square"></i>
-              <span>Edit Settings</span>
-            </button>
-
-            <button class="menu-btn text-danger" (click)="confirmDelete(course)">
-              <i class="bi bi-trash3-fill"></i>
-              <span>Delete Course</span>
-            </button>
-
           </div>
           }
         </div>
@@ -95,33 +87,42 @@
 
       <div class="card-body">
         <div class="badge-group">
-          <span class="custom-badge college">{{ course.collegeName }}</span>
-          <span class="custom-badge subject">{{ course.subjectName }}</span>
+          <span class="custom-badge">{{ course.collegeName }}</span>
+          <span class="custom-badge bg-info" style="margin-left: 5px;">{{ course.subjectName }}</span>
+
+          @if(course.isPdf) { <span class="custom-badge bg-success" style="margin-left: 5px;">PDF</span> }
+          @if(course.isQuiz) { <span class="custom-badge bg-warning" style="margin-left: 5px;">Quiz</span> }
         </div>
 
-        <h3 class="course-name" [title]="course.name">{{ course.name }}</h3>
-        <p class="course-title">{{ course.title }}</p>
+        <h3 class="course-name">{{ course.name }}</h3>
+        <p class="course-title"><i class="bi bi-person"></i> {{ course.userName }}</p>
 
-        <div class="details-grid">
-          <div class="detail-item"><i class="bi bi-person-circle"></i> {{ course.userName }}</div>
-          <div class="detail-item"><i class="bi bi-tag-fill"></i> {{ course.price }} EGP</div>
-          <div class="detail-item"><i class="bi bi-star-fill text-warning"></i> {{ course.rating }}</div>
-          <div class="detail-item">
-            <i class="bi bi-circle-fill" [style.color]="course.isActive ? 'var(--success)' : '#666'"></i>
-            {{ course.isActive ? 'Active' : 'Hidden' }}
+        <div class="course-stats"
+          style="display: flex; gap: 15px; margin: 10px 0; font-size: 0.85rem; color: var(--slate-600);">
+          <span><i class="bi bi-layers"></i> {{ course.chapterCount }} Chapters</span>
+          <span><i class="bi bi-play-circle"></i> {{ course.lectureCount }} Lectures</span>
+
+          @if (course.showSubscriberCount) {
+          <span class="text-primary"><i class="bi bi-people"></i> {{ course.subscriberCount }} Students</span>
+          }
+        </div>
+
+        <div class="social-bar" style="border-top: 1px solid #eee; ">
+          <span class="phone-number" style="font-weight: bold; color: var(--primary-color);">{{ course.price }}
+            EGP</span>
+          <div style="flex: 1;"></div>
+
+          <div class="rating-box">
+            <i class="bi bi-star-fill text-warning"></i>
+            <span style="font-weight: 600; margin-left: 4px;">{{ course.rating }}</span>
           </div>
         </div>
 
-        <div class="footer-actions">
-          <a [href]="course.introductionVideoUrl" target="_blank" class="btn-action-outline">
-            <i class="bi bi-youtube"></i> Intro
-          </a>
-          @if(course.isPdf) {
-          <a [href]="course.pdfUrl" target="_blank" class="btn-action-primary">
-            <i class="bi bi-file-earmark-pdf"></i> PDF
-          </a>
-          }
-        </div>
+        @if(course.unvirsityName) {
+        <p style="font-size: 0.75rem; color: #888; margin-top: 5px;">
+          <i class="bi bi-geo-alt"></i> {{ course.unvirsityName }} - {{ course.gradeLevelName }}
+        </p>
+        }
       </div>
     </div>
     }
@@ -129,8 +130,8 @@
 
   @if (courses.length === 0) {
   <div class="no-data">
-    <i class="bi bi-inbox"></i>
-    <p>No courses found matching your search.</p>
+    <i class="bi bi-inbox" style="font-size: 4rem;"></i>
+    <p>No courses found in this category.</p>
   </div>
   }
 
@@ -139,13 +140,9 @@
     <button class="page-nav" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
       <i class="bi bi-chevron-left"></i>
     </button>
-
     @for (p of pages; track p) {
-    <button class="page-num" [class.active]="p === pageIndex" (click)="onPageChange(p)">
-      {{ p }}
-    </button>
+    <button class="page-num" [class.active]="p === pageIndex" (click)="onPageChange(p)">{{ p }}</button>
     }
-
     <button class="page-nav" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">
       <i class="bi bi-chevron-right"></i>
     </button>

@@ -24,22 +24,6 @@ function configureRoutes(routesService: RoutesService) {
       requiredPolicy: 'Acadmy.Universites',
     },
     {
-      path: 'colleges',
-      name: 'Colleges',
-      iconClass: 'fas fa-building',
-      order: 3,
-      layout: eLayoutType.application,
-      requiredPolicy: 'Acadmy.Colleges',
-    },
-    {
-      path: 'subjects',
-      name: 'Subjects',
-      iconClass: 'fas fa-book',
-      order: 4,
-      layout: eLayoutType.application,
-      requiredPolicy: 'Acadmy.Subjects',
-    },
-    {
       path: 'courses',
       name: 'Courses',
       iconClass: 'fas fa-solid fa-laptop-code',
@@ -47,15 +31,7 @@ function configureRoutes(routesService: RoutesService) {
       layout: eLayoutType.application,
       requiredPolicy: 'Acadmy.Courses',
     },
-    
-    {
-      path: 'lectures',
-      name: 'Lectures',
-      iconClass: 'fas fa-chalkboard',
-      order: 7,
-      layout: eLayoutType.application,
-      requiredPolicy: 'Acadmy.Lectures',
-    },
+  
     {
       path: 'students',
       name: 'Students',
@@ -89,14 +65,7 @@ function configureRoutes(routesService: RoutesService) {
       requiredPolicy: 'Acadmy.CourseStudents.Edit'
 
     },
-    {
-      path: 'exams',
-      name: 'Exams',
-      iconClass: 'fas fa-file-alt',
-      order: 12,
-      layout: eLayoutType.application,
-      requiredPolicy: 'Acadmy.QuestionBanks',
-    },
+    
      {
       path: 'profile',
       name: 'Profile',

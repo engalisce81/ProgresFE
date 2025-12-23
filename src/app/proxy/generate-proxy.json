@@ -1664,8 +1664,8 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Courses.CourseAppService"
             },
-            "GetListAsyncByPageNumberAndPageSizeAndSearch": {
-              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearch",
+            "GetListAsyncByPageNumberAndPageSizeAndSearchAndType": {
+              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearchAndType",
               "name": "GetListAsync",
               "httpMethod": "GET",
               "url": "api/app/course",
@@ -1692,6 +1692,14 @@
                   "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "type",
+                  "typeAsString": "Dev.Acadmy.Enums.CourseType, Dev.Acadmy.Domain",
+                  "type": "Dev.Acadmy.Enums.CourseType",
+                  "typeSimple": "enum",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -1724,6 +1732,18 @@
                 {
                   "nameOnMethod": "search",
                   "name": "search",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "type",
+                  "name": "type",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
@@ -2800,15 +2820,15 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Courses.CourseStudentAppService"
             },
-            "DeleteAsyncById": {
-              "uniqueName": "DeleteAsyncById",
+            "DeleteAsyncByUserId": {
+              "uniqueName": "DeleteAsyncByUserId",
               "name": "DeleteAsync",
               "httpMethod": "DELETE",
-              "url": "api/app/course-student/{id}",
+              "url": "api/app/course-student",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "id",
+                  "name": "userId",
                   "typeAsString": "System.Guid, System.Private.CoreLib",
                   "type": "System.Guid",
                   "typeSimple": "string",
@@ -2818,15 +2838,15 @@
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "id",
-                  "name": "id",
+                  "nameOnMethod": "userId",
+                  "name": "userId",
                   "jsonName": null,
                   "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
                   "descriptorName": ""
                 }
               ],
@@ -3678,8 +3698,8 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Lectures.LectureAppService"
             },
-            "GetListAsyncByPageNumberAndPageSizeAndSearch": {
-              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearch",
+            "GetListAsyncByPageNumberAndPageSizeAndSearchAndChapterId": {
+              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearchAndChapterId",
               "name": "GetListAsync",
               "httpMethod": "GET",
               "url": "api/app/lecture",
@@ -3705,6 +3725,14 @@
                   "name": "search",
                   "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "chapterId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null
@@ -3740,6 +3768,18 @@
                   "name": "search",
                   "jsonName": null,
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "chapterId",
+                  "name": "chapterId",
+                  "jsonName": null,
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
@@ -5684,7 +5724,7 @@
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Advertisementes.AdvertisementDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Advertisementes.AdvertisementDto>"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Interfaces.IAdvertisementAppService"
             }
           }
@@ -6905,8 +6945,8 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Universites.CollegeAppService"
             },
-            "GetListAsyncByPageNumberAndPageSizeAndSearch": {
-              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearch",
+            "GetListAsyncByPageNumberAndPageSizeAndSearchAndUniversityId": {
+              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearchAndUniversityId",
               "name": "GetListAsync",
               "httpMethod": "GET",
               "url": "api/app/college",
@@ -6932,6 +6972,14 @@
                   "name": "search",
                   "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "universityId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null
@@ -6967,6 +7015,18 @@
                   "name": "search",
                   "jsonName": null,
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "universityId",
+                  "name": "universityId",
+                  "jsonName": null,
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
@@ -7526,8 +7586,8 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Universites.SubjectAppService"
             },
-            "GetListAsyncByPageNumberAndPageSizeAndSearch": {
-              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearch",
+            "GetListAsyncByPageNumberAndPageSizeAndSearchAndGradeLevelId": {
+              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearchAndGradeLevelId",
               "name": "GetListAsync",
               "httpMethod": "GET",
               "url": "api/app/subject",
@@ -7553,6 +7613,14 @@
                   "name": "search",
                   "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "gradeLevelId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null
@@ -7588,6 +7656,18 @@
                   "name": "search",
                   "jsonName": null,
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "gradeLevelId",
+                  "name": "gradeLevelId",
+                  "jsonName": null,
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
@@ -11435,34 +11515,10 @@
           "regex": null
         },
         {
-          "name": "UserName",
-          "jsonName": null,
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
           "name": "CollegeId",
           "jsonName": null,
           "type": "System.Guid?",
           "typeSimple": "string?",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "CollegeName",
-          "jsonName": null,
-          "type": "System.String",
-          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -11499,18 +11555,6 @@
           "jsonName": null,
           "type": "System.Guid?",
           "typeSimple": "string?",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "SubjectName",
-          "jsonName": null,
-          "type": "System.String",
-          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -11591,10 +11635,130 @@
           "regex": null
         },
         {
+          "name": "IsQuiz",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "Infos",
           "jsonName": null,
           "type": "[System.String]",
           "typeSimple": "[string]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "GradeLevelName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "SubjectName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CollegeName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UnvirsityName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ShowSubscriberCount",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ChapterCount",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LectureCount",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "SubscriberCount",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -11646,6 +11810,18 @@
           "minimum": null,
           "maximum": null,
           "regex": null
+        },
+        {
+          "name": "ShowSubscriberCount",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
         }
       ]
     },
@@ -11685,6 +11861,18 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsQuiz",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -11817,6 +12005,18 @@
           "jsonName": null,
           "type": "System.Guid?",
           "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ShowSubscriberCount",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -12215,6 +12415,18 @@
           "regex": null
         },
         {
+          "name": "ShowSubscriberCount",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "IntroductionVideoUrl",
           "jsonName": null,
           "type": "System.String",
@@ -12231,6 +12443,18 @@
           "jsonName": null,
           "type": "System.Guid?",
           "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsQuiz",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -12797,6 +13021,18 @@
           "regex": null
         },
         {
+          "name": "IsInstructor",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "CreationTime",
           "jsonName": null,
           "type": "System.DateTime",
@@ -13022,6 +13258,22 @@
           "regex": null
         }
       ]
+    },
+    "Dev.Acadmy.Enums.CourseType": {
+      "baseType": "System.Enum",
+      "isEnum": true,
+      "enumNames": [
+        "All",
+        "Quiz",
+        "Pdf"
+      ],
+      "enumValues": [
+        0,
+        1,
+        2
+      ],
+      "genericArguments": null,
+      "properties": null
     },
     "Dev.Acadmy.Exams.CreateUpdateExamDto": {
       "baseType": null,
@@ -14520,18 +14772,6 @@
           "minimum": null,
           "maximum": null,
           "regex": null
-        },
-        {
-          "name": "CourseId",
-          "jsonName": null,
-          "type": "System.Guid",
-          "typeSimple": "string",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
         }
       ]
     },
@@ -14581,8 +14821,8 @@
         {
           "name": "QuestionBankId",
           "jsonName": null,
-          "type": "System.Guid",
-          "typeSimple": "string",
+          "type": "System.Guid?",
+          "typeSimple": "string?",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -14840,7 +15080,7 @@
           "regex": null
         },
         {
-          "name": "CourseId",
+          "name": "UserId",
           "jsonName": null,
           "type": "System.Guid",
           "typeSimple": "string",
@@ -14852,7 +15092,7 @@
           "regex": null
         },
         {
-          "name": "CourseName",
+          "name": "UserName",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",

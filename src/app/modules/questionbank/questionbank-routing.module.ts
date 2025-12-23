@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListQuestionbankComponent } from './list-questionbank/list-questionbank.component';
-import { CreatQuestionbankComponent } from './creat-questionbank/creat-questionbank.component';
-import { UpdateQuestionbankComponent } from './update-questionbank/update-questionbank.component';
 import { BankQuestionComponent } from './bank-question/bank-question.component';
 
 const routes: Routes = [
   {path:'',pathMatch:"full", component:ListQuestionbankComponent},
-  {path:'create',pathMatch:"full", component:CreatQuestionbankComponent},
-  {path:'update/:id',pathMatch:"full", component:UpdateQuestionbankComponent},
   {path:'bankquestion/:id',pathMatch:"full", component: BankQuestionComponent},
 
 

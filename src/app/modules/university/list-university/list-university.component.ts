@@ -1,31 +1,37 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { UniversityDto, UniversityService } from '@proxy/dev/acadmy/universites';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { UniversityDto, UniversityService, CreateUpdateUniversityDto } from '@proxy/dev/acadmy/universites';
 
 @Component({
   selector: 'app-list-university',
-  imports: [FormsModule ,RouterLink],
+  standalone: true,
+  imports: [ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './list-university.component.html',
-  styleUrl: './list-university.component.scss'
+  styleUrl: './list-university.component.scss' // تأكد أن الـ SCSS هو اللي فيه الاستايل المودرن
 })
-export class ListUniversityComponent {
-  universities: UniversityDto[] = [];
+export class ListUniversityComponent implements OnInit {
+  universities: any[] = [];
   loading = false;
   search = '';
-
-  totalCount = 0;
-  pageSize = 10;
-  pageIndex = 1;
-
-  // Delete confirmation state
+  
+  // Modal states
+  showFormModal = false;
   showDeleteConfirm = false;
-  universityToDelete!:UniversityDto;
+  isEditMode = false;
+  
+  universityForm: FormGroup;
+  universityToDelete: UniversityDto | null = null;
+  selectedUniversityId: string | null = null;
 
   constructor(
-    private universityService: UniversityService,
-    private router: Router
-  ) {}
+    private fb: FormBuilder,
+    private universityService: UniversityService
+  ) {
+    this.universityForm = this.fb.group({
+      name: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.loadUniversities();
@@ -33,59 +39,78 @@ export class ListUniversityComponent {
 
   loadUniversities(): void {
     this.loading = true;
-
-    this.universityService
-      .getList(this.pageIndex, this.pageSize, this.search)
-      .subscribe({
-        next: (res) => {
-          this.universities = res.items;
-          this.totalCount = res.totalCount;
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-        },
-      });
+    this.universityService.getList(1, 100, this.search).subscribe({
+      next: (res) => {
+        this.universities = res.items.map(u => ({ ...u, showMenu: false }));
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
   }
 
   onSearchChange(): void {
-    this.pageIndex = 1;
     this.loadUniversities();
   }
 
-  onPageChange(page: number): void {
-    this.pageIndex = page;
-    this.loadUniversities();
+  // Logic لفتح الـ Modal في حالة الكريت
+  openCreateModal() {
+    this.isEditMode = false;
+    this.universityForm.reset();
+    this.showFormModal = true;
   }
 
-  confirmDelete(university: UniversityDto): void {
-    this.universityToDelete = university;
+  // Logic لفتح الـ Modal في حالة الأبديت
+  openEditModal(uni: UniversityDto) {
+    this.isEditMode = true;
+    this.selectedUniversityId = uni.id;
+    this.universityForm.patchValue({ name: uni.name });
+    this.showFormModal = true;
+  }
+
+  closeFormModal() {
+    this.showFormModal = false;
+    this.selectedUniversityId = null;
+  }
+
+  submitForm() {
+    if (this.universityForm.invalid) return;
+    
+    this.loading = true;
+    const dto: CreateUpdateUniversityDto = this.universityForm.value;
+
+    const request = this.isEditMode 
+      ? this.universityService.update(this.selectedUniversityId!, dto)
+      : this.universityService.create(dto);
+
+    request.subscribe({
+      next: () => {
+        this.loadUniversities();
+        this.closeFormModal();
+      },
+      error: (err) => {
+        this.loading = false;
+        alert('Error: ' + err.message);
+      }
+    });
+  }
+
+  confirmDelete(uni: UniversityDto) {
+    this.universityToDelete = uni;
     this.showDeleteConfirm = true;
   }
 
-  cancelDelete(): void {
+  cancelDelete() {
     this.showDeleteConfirm = false;
-    this.universityToDelete = null!;
+    this.universityToDelete = null;
   }
 
-  deleteUniversity(): void {
+  deleteUniversity() {
     if (!this.universityToDelete) return;
-
     this.universityService.delete(this.universityToDelete.id).subscribe({
       next: () => {
         this.loadUniversities();
         this.showDeleteConfirm = false;
-        this.universityToDelete = null!;
-      },
-      error: (error) => {
-        console.error('Failed to delete university:', error);
-        this.showDeleteConfirm = false;
-        this.universityToDelete = null!;
-      },
+      }
     });
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.totalCount / this.pageSize);
   }
 }

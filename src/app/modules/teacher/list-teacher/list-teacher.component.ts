@@ -1,150 +1,161 @@
-import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TeacherDto, TeacherService, CreateUpdateTeacherDto } from '@proxy/dev/acadmy/teachers';
+import { UniversityService, CollegeService } from '@proxy/dev/acadmy/universites';
 import { AccountcustomService } from '@proxy/dev/acadmy/account-customs';
-import { TeacherDto, TeacherService } from '@proxy/dev/acadmy/teachers';
-
+import { LookupDto } from '@proxy/dev/acadmy/look-up';
 
 @Component({
   selector: 'app-list-teacher',
-  imports: [FormsModule,RouterLink ,NgClass],
+  standalone: true,
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './list-teacher.component.html',
   styleUrl: './list-teacher.component.scss'
 })
-export class ListTeacherComponent {
-teachers: TeacherDto[] = [];
+export class ListTeacherComponent implements OnInit {
+  // Data Properties
+  teachers: any[] = [];
   loading = false;
   search = '';
-
+  
+  // Pagination
   totalCount = 0;
   pageSize = 10;
   pageIndex = 1;
+
+  // Lookups
+  universities: LookupDto[] = [];
+  colleges: LookupDto[] = [];
+
+  // Form & Modals
+  teacherForm: FormGroup;
+  showFormModal = false;
+  isEditMode = false;
+  selectedTeacherId: string | null = null;
+
+  // Password Reset Modal
+  showPasswordModal = false;
+  selectedTeacher: any = null;
   newPassword = '';
   confirmPassword = '';
   passwordError = '';
-  // Delete confirmation state
-  showDeleteConfirm = false;
-  teacherToDelete!: TeacherDto;
-showPasswordModal = false;
-  selectedteacher!: TeacherDto;
 
   constructor(
+    private fb: FormBuilder,
     private teacherService: TeacherService,
-        private accountcustomService: AccountcustomService,
-    private router: Router
-  ) {}
+    private universityService: UniversityService,
+    private collegeService: CollegeService,
+    private accountService: AccountcustomService
+  ) {
+    this.teacherForm = this.fb.group({
+      fullName: ['', Validators.required],
+      userName: ['', Validators.required],
+      password: [''],
+      gender: ['', Validators.required],
+      universityId: ['', Validators.required],
+      collegeId: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
+      accountTypeKey: [2], // 2 = Teacher
+      teacherMobileIP: ['']
+    });
+  }
 
   ngOnInit(): void {
     this.loadTeachers();
+    this.loadInitialData();
+    this.setupFormListeners();
   }
-  openPasswordModal(teacher: TeacherDto): void {
-    this.selectedteacher = teacher;
+
+  loadInitialData() {
+    this.universityService.getUniversitysList().subscribe(res => this.universities = res.items);
+  }
+
+  setupFormListeners() {
+    this.teacherForm.get('universityId')?.valueChanges.subscribe(id => {
+      this.colleges = [];
+      this.teacherForm.patchValue({ collegeId: '' }, { emitEvent: false });
+      if (id) this.collegeService.getCollegesList(id).subscribe(res => this.colleges = res.items);
+    });
+  }
+
+  loadTeachers() {
+    this.loading = true;
+    this.teacherService.getTeacherList(this.pageIndex, this.pageSize, this.search).subscribe({
+      next: (res) => {
+        this.teachers = res.items.map(t => ({ ...t, showMenu: false }));
+        this.totalCount = res.totalCount;
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
+  }
+
+  // Pagination Logic
+  get totalPages(): number { return Math.ceil(this.totalCount / this.pageSize); }
+  onPageChange(page: number) { this.pageIndex = page; this.loadTeachers(); }
+  onSearchChange() { this.pageIndex = 1; this.loadTeachers(); }
+
+  // Modal Actions
+  openCreateModal() {
+    this.isEditMode = false;
+    this.teacherForm.reset({ universityId: '', collegeId: '', gender: '', accountTypeKey: 2 });
+    this.teacherForm.get('password')?.setValidators([Validators.required]);
+    this.showFormModal = true;
+  }
+
+  openEditModal(teacher: any) {
+    this.isEditMode = true;
+    this.selectedTeacherId = teacher.id;
+    this.teacherForm.get('password')?.clearValidators();
+    
+    this.collegeService.getCollegesList(teacher.universityId).subscribe(cRes => {
+      this.colleges = cRes.items;
+      this.teacherForm.patchValue(teacher);
+      this.showFormModal = true;
+    });
+  }
+
+  closeFormModal() { this.showFormModal = false; }
+
+  submitForm() {
+    if (this.teacherForm.invalid) return;
+    this.loading = true;
+    const dto = this.teacherForm.value;
+    if(this.isEditMode) dto.password="12345"
+    const request = this.isEditMode 
+      ? this.teacherService.update(this.selectedTeacherId!, dto)
+      : this.teacherService.create(dto);
+
+    request.subscribe({
+      next: () => { this.loadTeachers(); this.closeFormModal(); },
+      error: (err) => { this.loading = false; alert(err.message); }
+    });
+  }
+
+  // Password Reset
+  openPasswordModal(teacher: any) {
+    this.selectedTeacher = teacher;
     this.newPassword = '';
     this.confirmPassword = '';
     this.passwordError = '';
     this.showPasswordModal = true;
   }
-  closePasswordModal(): void {
-    this.showPasswordModal = false;
-  }
 
-  // ✅ Reset password
-  resetPassword(): void {
-    if (!this.newPassword || !this.confirmPassword) {
-      this.passwordError = 'Please fill in both fields.';
+  resetPassword() {
+    if (!this.newPassword || this.newPassword !== this.confirmPassword) {
+      this.passwordError = "Passwords do not match";
       return;
     }
-    if (this.newPassword !== this.confirmPassword) {
-      this.passwordError = 'Passwords do not match.';
-      return;
-    }
-
-    this.passwordError = '';
     this.loading = true;
-
-    this.accountcustomService
-      .resetPassword(this.selectedteacher.id!, this.newPassword)
-      .subscribe({
-        next: () => {
-          this.loading = false;
-          alert('Password changed successfully!');
-          this.showPasswordModal = false;
-        },
-        error: (err) => {
-          this.loading = false;
-          alert('Error changing password: ' + err.message);
-        }
-      });
-  }
-
-
-  loadTeachers(): void {
-    this.loading = true;
-
-    this.teacherService
-      .getTeacherList(this.pageIndex, this.pageSize, this.search)
-      .subscribe({
-        next: (res) => {
-          this.teachers = res.items;
-          this.totalCount = res.totalCount;
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error loading teachers:', err);
-          this.loading = false;
-        }
-      });
-  }
-
-  onSearchChange(): void {
-    this.pageIndex = 1;
-    this.loadTeachers();
-  }
-
-  onPageChange(page: number): void {
-    this.pageIndex = page;
-    this.loadTeachers();
-  }
-
-  confirmDelete(teacher: TeacherDto): void {
-    this.teacherToDelete = teacher;
-    this.showDeleteConfirm = true;
-  }
-
-  cancelDelete(): void {
-    this.showDeleteConfirm = false;
-    this.teacherToDelete = null!;
-  }
-
-  deleteTeacher(): void {
-    if (!this.teacherToDelete) return;
-
-    this.teacherService.delete(this.teacherToDelete.id!).subscribe({
-      next: () => {
-        this.loadTeachers();
-        this.showDeleteConfirm = false;
-        this.teacherToDelete = null!;
-      },
-      error: (err) => {
-        console.error('Failed to delete teacher:', err);
-        this.showDeleteConfirm = false;
-        this.teacherToDelete = null!;
-      }
+    this.accountService.resetPassword(this.selectedTeacher.id, this.newPassword).subscribe({
+      next: () => { alert('Success!'); this.showPasswordModal = false; this.loading = false; },
+      error: (err) => { this.loading = false; alert(err.message); }
     });
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.totalCount / this.pageSize);
+  confirmDelete(teacher: any) {
+    if (confirm(`Are you sure you want to delete ${teacher.fullName}?`)) {
+      this.teacherService.delete(teacher.id).subscribe(() => this.loadTeachers());
+    }
   }
-    showNewPassword = false;
-showConfirmPassword = false;
-
-toggleNewPassword() {
-  this.showNewPassword = !this.showNewPassword;
-}
-
-toggleConfirmPassword() {
-  this.showConfirmPassword = !this.showConfirmPassword;
-}
 }

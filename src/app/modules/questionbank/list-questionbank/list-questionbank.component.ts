@@ -1,34 +1,57 @@
-import { Component } from '@angular/core';
-import { FormsModule,  } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { QuestionBankDto, QuestionBankService } from '@proxy/dev/acadmy/questions';
+import { QuestionBankDto, QuestionBankService, CreateUpdateQuestionBankDto } from '@proxy/dev/acadmy/questions';
+import { CourseService } from '@proxy/dev/acadmy/courses';
+import { LookupDto } from '@proxy/dev/acadmy/look-up';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-list-questionbank',
-  imports: [RouterLink,FormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './list-questionbank.component.html',
   styleUrl: './list-questionbank.component.scss'
 })
-export class ListQuestionbankComponent {
- questionBanks: QuestionBankDto[] = [];
+export class ListQuestionbankComponent implements OnInit {
+  // بيانات العرض
+  questionBanks: any[] = [];
+  courses: LookupDto[] = [];
   loading = false;
   search = '';
 
+  // الباجيناشن
   totalCount = 0;
   pageSize = 10;
   pageIndex = 1;
 
-  // Delete confirmation
+  // المودال والنموذج
+  questionBankForm: FormGroup;
+  showFormModal = false;
+  isEditMode = false;
+  selectedId: string | null = null;
+
+  // حذف
   showDeleteConfirm = false;
-  questionBankToDelete!: QuestionBankDto;
+  itemToDelete: any = null;
 
   constructor(
+    private fb: FormBuilder,
     private questionBankService: QuestionBankService,
-    private router: Router
-  ) {}
+    private courseService: CourseService
+  ) {
+    this.questionBankForm = this.fb.group({
+      name: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.loadQuestionBanks();
+    this.loadCourses();
+  }
+
+  loadCourses() {
+    this.courseService.getMyCoursesLookUp().subscribe(res => this.courses = res.items);
   }
 
   loadQuestionBanks(): void {
@@ -37,54 +60,76 @@ export class ListQuestionbankComponent {
       .getList(this.pageIndex, this.pageSize, this.search)
       .subscribe({
         next: (res) => {
-          this.questionBanks = res.items;
+          this.questionBanks = res.items.map(q => ({ ...q, showMenu: false }));
           this.totalCount = res.totalCount;
           this.loading = false;
         },
-        error: () => {
-          this.loading = false;
-        },
+        error: () => this.loading = false
       });
   }
 
-  onSearchChange(): void {
-    this.pageIndex = 1;
-    this.loadQuestionBanks();
+  // منطق الباجيناشن والبحث
+  get totalPages(): number { return Math.ceil(this.totalCount / this.pageSize); }
+  onPageChange(page: number) { this.pageIndex = page; this.loadQuestionBanks(); }
+  onSearchChange() { this.pageIndex = 1; this.loadQuestionBanks(); }
+
+  // إجراءات المودال
+  openCreateModal() {
+    this.isEditMode = false;
+    this.showFormModal = true;
   }
 
-  onPageChange(page: number): void {
-    this.pageIndex = page;
-    this.loadQuestionBanks();
+  openEditModal(qb: any) {
+    this.isEditMode = true;
+    this.selectedId = qb.id;
+    this.questionBankForm.patchValue({
+      name: qb.name,
+    });
+    this.showFormModal = true;
   }
 
-  confirmDelete(qb: QuestionBankDto): void {
-    this.questionBankToDelete = qb;
-    this.showDeleteConfirm = true;
+  closeFormModal() {
+    this.showFormModal = false;
+    this.selectedId = null;
   }
 
-  cancelDelete(): void {
-    this.showDeleteConfirm = false;
-    this.questionBankToDelete = null!;
-  }
+  submitForm() {
+    if (this.questionBankForm.invalid) return;
+    this.loading = true;
+    const dto: CreateUpdateQuestionBankDto = this.questionBankForm.value;
 
-  deleteQuestionBank(): void {
-    if (!this.questionBankToDelete) return;
+    const request = this.isEditMode 
+      ? this.questionBankService.update(this.selectedId!, dto)
+      : this.questionBankService.create(dto);
 
-    this.questionBankService.delete(this.questionBankToDelete.id).subscribe({
+    request.subscribe({
       next: () => {
         this.loadQuestionBanks();
-        this.showDeleteConfirm = false;
-        this.questionBankToDelete = null!;
+        this.closeFormModal();
       },
-      error: (error) => {
-        console.error('Failed to delete question bank:', error);
-        this.showDeleteConfirm = false;
-        this.questionBankToDelete = null!;
-      },
+      error: (err) => {
+        this.loading = false;
+        alert(err.message);
+      }
     });
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.totalCount / this.pageSize);
+  // الحذف
+  confirmDelete(qb: any) {
+    this.itemToDelete = qb;
+    this.showDeleteConfirm = true;
+  }
+
+  deleteItem() {
+    if (!this.itemToDelete) return;
+    this.loading = true;
+    this.questionBankService.delete(this.itemToDelete.id).subscribe({
+      next: () => {
+        this.loadQuestionBanks();
+        this.showDeleteConfirm = false;
+        this.itemToDelete = null;
+      },
+      error: () => this.loading = false
+    });
   }
 }

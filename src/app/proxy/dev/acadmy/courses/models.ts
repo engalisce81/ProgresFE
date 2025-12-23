@@ -10,32 +10,41 @@ export interface CourseDto extends AuditedEntityDto<string> {
   logoUrl?: string;
   userId?: string;
   rating: number;
-  userName?: string;
   collegeId?: string;
-  collegeName?: string;
   subjectId?: string;
   questionBankId?: string;
   examId?: string;
-  subjectName?: string;
   isActive: boolean;
   isLifetime: boolean;
   isPdf: boolean;
   pdfUrl?: string;
   introductionVideoUrl?: string;
   durationInDays?: number;
+  isQuiz: boolean;
   infos: string[];
+  gradeLevelName?: string;
+  subjectName?: string;
+  collegeName?: string;
+  unvirsityName?: string;
+  userName?: string;
+  showSubscriberCount: boolean;
+  chapterCount: number;
+  lectureCount: number;
+  subscriberCount: number;
 }
 
 export interface CourseInfoDto extends AuditedEntityDto<string> {
   name?: string;
   courseId?: string;
   courseName?: string;
+  showSubscriberCount: boolean;
 }
 
 export interface CourseInfoHomeDto {
   id?: string;
   isPdf: boolean;
   pdfUrl?: string;
+  isQuiz: boolean;
   name?: string;
   description?: string;
   price: number;
@@ -47,6 +56,7 @@ export interface CourseInfoHomeDto {
   collegeId?: string;
   collegeName?: string;
   subjectId?: string;
+  showSubscriberCount: boolean;
   subjectName?: string;
   gradelevelId?: string;
   gradelevelName?: string;
@@ -84,8 +94,10 @@ export interface CreateUpdateCourseDto {
   durationInDays?: number;
   isPdf: boolean;
   pdfUrl?: string;
+  showSubscriberCount: boolean;
   introductionVideoUrl?: string;
   subjectId?: string;
+  isQuiz: boolean;
   infos: string[];
 }
 

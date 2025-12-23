@@ -1,84 +1,102 @@
-<div class="list-container" style="width: 100%;">
+<div class="list-container">
+  
+  @if (showFormModal) {
+    <div class="modal-overlay">
+      <div class="form-card">
+        <h3>{{ isEditMode ? 'Edit University' : 'Create New University' }}</h3>
+        
+        <form [formGroup]="universityForm" (ngSubmit)="submitForm()">
+          <div class="form-group">
+            <label>University Name *</label>
+            <input type="text" formControlName="name" class="form-control" placeholder="Enter university name">
+            @if (universityForm.get('name')?.invalid && universityForm.get('name')?.touched) {
+              <small class="text-danger">Name is required</small>
+            }
+          </div>
 
-  <!-- Delete confirmation -->
-  @if (showDeleteConfirm){
-  <div class="delete-confirm-card">
-    <p>Are you sure you want to delete <strong>{{ universityToDelete.name }}</strong>?</p>
-    <div class="delete-confirm-actions">
-      <button class="btn btn-secondary" (click)="cancelDelete()">No</button>
-      <button class="btn btn-danger" (click)="deleteUniversity()">Yes</button>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" (click)="closeFormModal()">Cancel</button>
+            <button type="submit" class="btn-confirm" [disabled]="universityForm.invalid || loading">
+              {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
   }
 
-  <!-- Search and Create -->
+  @if (showDeleteConfirm) {
+    <div class="modal-overlay">
+      <div class="delete-card">
+        <i class="bi bi-exclamation-triangle text-warning" style="font-size: 3rem; display: block; text-align: center; margin-bottom: 15px;"></i>
+        <h3 style="text-align: center;">Delete University?</h3>
+        <p style="text-align: center; color: var(--muted); margin-bottom: 25px;">
+          Are you sure you want to delete <strong>{{ universityToDelete?.name }}</strong>?
+        </p>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="cancelDelete()">No, Keep it</button>
+          <button class="btn-confirm" style="background: #dc3545;" (click)="deleteUniversity()">Yes, Delete</button>
+        </div>
+      </div>
+    </div>
+  }
+
   <div class="toolbar">
-    <input type="text" [(ngModel)]="search" placeholder="Search universities..." class="search-input"
-      (keyup.enter)="onSearchChange()" />
-    <button class="btn btn-search" (click)="onSearchChange()" title="Search">
-      <i class="bi bi-search"></i>
-    </button>
-
-    <button routerLink="/universties/create" class="btn btn-create" title="Create">
-      <i class="bi bi-plus-circle me-1"></i> Create
+    <div class="search-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input type="text" [(ngModel)]="search" (input)="onSearchChange()" placeholder="Search universities..." class="search-input-modern" />
+    </div>
+    
+    <button (click)="openCreateModal()" class="btn-create-modern">
+      <i class="bi bi-plus-lg"></i> <span>Add New University</span>
     </button>
   </div>
 
-  <!-- Loading -->
-  @if (loading){
-  <div class="loading-container">
-  <div class="spinner"></div>
-  <p class="loading-text">Loading...</p>
-</div>
-
+  @if (loading && !universities.length) {
+    <div class="loading-state" style="text-align: center; padding: 50px;">
+      <div class="spinner-border text-primary"></div>
+      <p style="margin-top: 15px; color: var(--muted);">Loading universities...</p>
+    </div>
   }
 
-  <!-- Table -->
-  @if (!loading) {
-  @if (universities.length > 0){
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (uni of universities; track uni.id; let i = $index){
-      <tr>
-        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-        <td>{{ uni.name }}</td>
-        <td class="actions">
-          <button [routerLink]="['/universties/update', uni.id]" class="btn btn-edit" title="Edit">
-            <i class="bi bi-pencil"></i>
-          </button>
-          <button (click)="confirmDelete(uni)" class="btn btn-delete" title="Delete">
-            <i class="bi bi-trash"></i>
-          </button>
-        </td>
-      </tr>
+  @if (!loading || universities.length > 0) {
+    <div class="cards-grid">
+      @for (uni of universities; track uni.id) {
+        <div class="course-card">
+          <div class="card-header">
+            <div class="chapter-icon-placeholder"><i class="bi bi-bank"></i></div>
+            <div class="dropdown-actions">
+              <button class="dots-btn" (click)="$event.stopPropagation(); uni['showMenu'] = !uni['showMenu']">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              @if (uni['showMenu']) {
+                <div class="actions-menu" (mouseleave)="uni['showMenu'] = false">
+                  <button class="text-danger"  [routerLink]="[uni.id,'colleges']">
+                    <i class="bi bi-trash3"></i> Colleges
+                  </button>
+                  <button (click)="openEditModal(uni)">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </button>
+                  <button class="text-danger" (click)="confirmDelete(uni)">
+                    <i class="bi bi-trash3"></i> Delete
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="course-name">{{ uni.name }}</h3>
+            <p class="course-title">ID: {{ uni.id.substring(0,8) }}...</p>
+          </div>
+        </div>
       }
-    </tbody>
-  </table>
+    </div>
 
-  <!-- Pagination -->
-  @if (totalCount > pageSize){
-  <div class="pagination">
-    <button class="btn btn-previous" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
-      Previous
-    </button>
-    <button class="btn btn-next" [disabled]="pageIndex >= totalPages" (click)="onPageChange(pageIndex + 1)">
-      Next
-    </button>
-  </div>
+    @if (universities.length === 0 && !loading) {
+      <div class="empty-state" style="text-align: center; padding: 100px; color: var(--muted);">
+        <i class="bi bi-building-x" style="font-size: 4rem;"></i>
+        <p>No universities found.</p>
+      </div>
+    }
   }
-  }
-  @else {
-  <div class="no-data-message">
-    <p>No universities found.</p>
-  </div>
-  }
-  }
-
 </div>

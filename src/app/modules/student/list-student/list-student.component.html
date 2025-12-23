@@ -1,237 +1,174 @@
-<div class="list-container" style="width: 100%;">
+<div class="list-container">
 
-  <!-- Delete confirmation -->
-  @if (showDeleteConfirm) {
-    <div class="delete-confirm-card">
-      <p>Are you sure you want to delete <strong>{{ studentToDelete.fullName }}</strong>?</p>
-      <div class="delete-confirm-actions">
-        <button class="btn btn-secondary" (click)="cancelDelete()">No</button>
-        <button class="btn btn-danger" (click)="deleteStudent()">Yes</button>
-      </div>
-    </div>
-  }
-
-<!-- 🔹 Password Reset Modal -->
-@if (showPasswordModal) {
-  <div class="modal-backdrop">
-    <div class="modal">
-      <h3>Reset Password for {{ selectedStudent.fullName }}</h3>
-
-      <!-- 🟣 New Password -->
-      <div class="form-group password-group">
-        <label>New Password</label>
-        <div class="password-wrapper">
-          <input
-            [type]="showNewPassword ? 'text' : 'password'"
-            [(ngModel)]="newPassword"
-            class="form-control"
-          />
-          <i
-            class="bi"
-            [ngClass]="showNewPassword ? 'bi-eye-slash' : 'bi-eye'"
-            (click)="toggleNewPassword()"
-          ></i>
-        </div>
-      </div>
-
-      <!-- 🟣 Confirm Password -->
-      <div class="form-group password-group">
-        <label>Confirm Password</label>
-        <div class="password-wrapper">
-          <input
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            [(ngModel)]="confirmPassword"
-            class="form-control"
-          />
-          <i
-            class="bi"
-            [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"
-            (click)="toggleConfirmPassword()"
-          ></i>
-        </div>
-      </div>
-
-      @if (passwordError) {
-        <p class="text-danger">{{ passwordError }}</p>
-      }
-
-      <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="closePasswordModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="resetPassword()" [disabled]="loading">
-          @if (loading) { Processing... } @else { Save }
-        </button>
-      </div>
-    </div>
-  </div>
-}
-
-  <!-- Search and Create -->
-  <div class="toolbar">
-    <input type="text" [(ngModel)]="search" placeholder="Search students..." class="search-input"
-      (keyup.enter)="onSearchChange()" />
-    <button class="btn btn-search" (click)="onSearchChange()" title="Search">
-      <i class="bi bi-search"></i>
-    </button>
-
-    <button routerLink="/students/create" class="btn btn-create" title="Create">
-      <i class="bi bi-plus-circle me-1"></i> Create
-    </button>
-  </div>
-
-  <!-- Loading -->
-  @if (loading) {
-    <div class="loading-container">
-      <div class="spinner"></div>
-      <p class="loading-text">Loading...</p>
-    </div>
-  }
-
-  <!-- Table -->
-  @if (!loading) {
-    @if (students.length > 0) {
-      <table class="table" style="width: 100%;">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Full Name</th>
-            <th>Username</th>
-            <th>Gender</th>
-            <th>Conecet</th>
-            <th>Courses</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (student of students; track student.id; let i = $index) {
-            <tr>
-              <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
-              <td class="student-cell">
-                <img 
-                  [src]="student.logoUrl || '/assets/default-avatar.png'" 
-                  class="student-avatar" 
-                  alt="Student Image"
-                />
-
-  {{ student.fullName }}
-</td>
-              <td>{{ student.userName }}</td>
-              <td>{{ student.gender ? 'Male' : 'Female' }}</td>
-              <td  class="icon-connect">
-                <!-- WhatsApp Icon -->
-                <a class="btn-icon whatsapp" 
-                  [href]="'https://wa.me/' + student.phoneNumber" 
-                  target="_blank" rel="noopener noreferrer" title="WhatsApp">
-                  <i class="bi bi-whatsapp"></i>
-                </a>
-
-                <!-- Telegram Icon -->
-                <a class="btn-icon telegram" 
-                  [href]="'https://t.me/+' + student.phoneNumber" 
-                  target="_blank" rel="noopener noreferrer" title="Telegram">
-                  <i class="bi bi-telegram"></i>
-                </a>
-              </td>
-
-<td>
-  <div class="courses-cell">
-    @for (cname of student.coursesName; track $index) {
-      <span class="course-badge">{{ cname }}</span>
-    }
-  </div>
-</td>
-
-              <td class="actions">
-                <button [routerLink]="['/students/update', student.id]" class="btn btn-edit" title="Edit">
-                  <i class="bi bi-pencil"></i>
-                </button>
-
-                <button (click)="confirmDelete(student)" class="btn btn-delete" title="Delete">
-                  <i class="bi bi-trash"></i>
-                </button>
-
-                <!-- ✅ Password reset icon -->
-                <button (click)="openPasswordModal(student)" class="btn btn-warning" title="Reset Password">
-                  <i class="bi bi-key"></i>
-                </button>
-
-                <!-- Assign Courses Button -->
-                <button (click)="openAssignCoursesModal(student)" class="btn btn-info" title="Assign Courses">
-                  <i class="bi bi-book"></i>
-                </button>
-
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-
-      <!-- Pagination -->
-      @if (totalCount > pageSize) {
-        <div class="pagination">
-          <button 
-            class="btn btn-previous" 
-            [disabled]="pageIndex === 1" 
-            (click)="onPageChange(pageIndex - 1)">
-            Previous
-          </button>
-
-          <button 
-            class="btn btn-next" 
-            [disabled]="pageIndex === totalPages" 
-            (click)="onPageChange(pageIndex + 1)">
-            Next
-          </button>
-        </div>
-      }
-    }
-    @else {
-      <div class="no-data-message">
-        <p>No students found.</p>
-      </div>
-    }
-  }
-
-</div>
-
-<!-- 🔹 Assign Courses Modal -->
-@if (showAssignCoursesModal) {
-  <div class="modal-backdrop">
-    <div class="modal">
-      <h3>Assign Courses for {{ selectedStudent.fullName }}</h3>
-
-      <!-- Search -->
-      <div class="form-group">
-        <input type="text" [(ngModel)]="courseSearch" placeholder="Search courses..." class="form-control"
-          (keyup.enter)="loadCourses()" />
-        <button class="btn btn-search" (click)="loadCourses()">Search</button>
-      </div>
-
-      <!-- Courses List -->
-      <div class="courses-list" style="max-height: 300px; overflow-y: auto;">
-        @for (course of courses; track $index) {
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="course.isSelect" id="{{ course.courseId }}">
-            <label class="form-check-label" for="{{ course.courseId }}">
-              {{ course.name }}
-            </label>
+ @if (showFormModal) {
+  <div class="modal-overlay">
+    <div class="form-card" style="max-width: 600px;">
+      <h3>{{ isEditMode ? 'Edit Student' : 'Create New Student' }}</h3>
+      <form [formGroup]="studentForm" (ngSubmit)="submitForm()">
+        <div class="row-grid">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" formControlName="fullName" placeholder="Enter full name (e.g. Ahmed Ali)" class="form-control">
           </div>
-        }
-      </div>
-
-      <!-- Pagination -->
-      @if(courseTotalCount > coursePageSize){
-        <div  class="pagination">
-          <button [disabled]="coursePageIndex === 1" (click)="onCoursePageChange(coursePageIndex - 1)">Previous</button>
-          <button [disabled]="coursePageIndex === courseTotalPages" (click)="onCoursePageChange(coursePageIndex + 1)">Next</button>
+          <div class="form-group">
+            <label>Username *</label>
+            <input type="text" formControlName="userName" placeholder="Enter unique username" class="form-control">
+          </div>
         </div>
-      }
 
+        <div class="row-grid">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="text" formControlName="phoneNumber" placeholder="e.g. 01xxxxxxxxx" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Gender *</label>
+            <select formControlName="gender" class="form-control">
+              <option value="" disabled selected>-- Choose Gender --</option>
+              <option [value]="true">Male</option>
+              <option [value]="false">Female</option>
+            </select>
+          </div>
+        </div>
+
+        @if (!isEditMode) {
+        <div class="form-group">
+          <label>Password *</label>
+          <input type="password" formControlName="password" placeholder="Create a strong password" class="form-control">
+        </div>
+        }
+
+        <div class="form-group">
+          <label>University *</label>
+          <select formControlName="universityId" class="form-control">
+            <option value="" disabled selected>-- Select University --</option>
+            @for (u of universities; track u.id) { <option [value]="u.id">{{u.name}}</option> }
+          </select>
+        </div>
+
+        <div class="row-grid">
+          <div class="form-group">
+            <label>College *</label>
+            <select formControlName="collegeId" class="form-control">
+              <option value="" disabled selected>-- Select College --</option>
+              @for (c of colleges; track c.id) { <option [value]="c.id">{{c.name}}</option> }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Grade Level *</label>
+            <select formControlName="gradeLevelId" class="form-control">
+              <option value="" disabled selected>-- Select Grade Level --</option>
+              @for (g of gradeLevels; track g.id) { <option [value]="g.id">{{g.name}}</option> }
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeFormModal()">Cancel</button>
+          <button type="submit" class="btn-confirm" [disabled]="studentForm.invalid || loading">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+  @if (showPasswordModal) {
+  <div class="modal-overlay">
+    <div class="form-card">
+      <h3>Reset Password</h3>
+      <p class="text-muted">For: <b>{{selectedStudent?.fullName}}</b></p>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" [(ngModel)]="newPassword"  placeholder="Enter new password" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" [(ngModel)]="confirmPassword" placeholder="Repeat new password" class="form-control">
+      </div>
+      @if (passwordError) { <small class="text-danger">{{passwordError}}</small> }
       <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="closeAssignCoursesModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="assignCoursesToStudent()" [disabled]="loading">
-          @if (loading) { Processing... } @else { Assign }
-        </button>
+        <button class="btn-cancel" (click)="showPasswordModal = false">Cancel</button>
+        <button class="btn-confirm" (click)="resetPassword()">Reset Now</button>
       </div>
     </div>
   </div>
-}
+  }
+
+  @if (showAssignCoursesModal) {
+    <div class="modal-overlay">
+      <div class="form-card" style="max-width: 500px;">
+        <h3>Assign Courses</h3>
+        <div class="course-list-scroll" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;">
+          @for (course of courses; track course.courseId) {
+            <div class="checkbox-group" style="padding: 10px; border-bottom: 1px solid var(--surface-variant);">
+              <input type="checkbox" [(ngModel)]="course.isSelect" [id]="course.courseId">
+              <label [for]="course.courseId" style="margin-left: 10px;">{{course.courseName}}</label>
+            </div>
+          }
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="showAssignCoursesModal = false">Cancel</button>
+          <button class="btn-confirm" (click)="assignCourses()">Assign Selected</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="toolbar">
+    <div class="search-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input type="text" [(ngModel)]="search" (input)="onSearchChange()" placeholder="Search students..." class="search-input-modern" />
+    </div>
+    <button (click)="openCreateModal()" class="btn-create-modern">
+      <i class="bi bi-person-plus"></i> <span>Add Student</span>
+    </button>
+  </div>
+
+  <div class="cards-grid">
+    @for (student of students; track student.id) {
+    <div class="course-card">
+      <div class="card-header">
+        <div class="chapter-icon-placeholder">
+          <i class="bi" [ngClass]="student.gender === 1 ? 'bi-person-standing' : 'bi-person-standing-dress'"></i>
+        </div>
+        <div class="dropdown-actions">
+          <button class="dots-btn" (click)="$event.stopPropagation(); student['showMenu'] = !student['showMenu']">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          @if (student['showMenu']) {
+          <div class="actions-menu" (mouseleave)="student['showMenu'] = false">
+            <button (click)="openEditModal(student)"><i class="bi bi-pencil"></i> Edit</button>
+            <button (click)="openPasswordModal(student)"><i class="bi bi-key"></i> Password</button>
+            <button (click)="openAssignCoursesModal(student)"><i class="bi bi-book"></i> Courses</button>
+            <button class="text-danger" (click)="confirmDelete(student)"><i class="bi bi-trash"></i> Delete</button>
+          </div>
+          }
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="badge-group">
+          <span class="custom-badge">{{ student.userName }}</span>
+        </div>
+        <h3 class="course-name">{{ student.fullName }}</h3>
+        <p class="course-title">{{ student.collegeName }} - {{ student.gradeLevelName }}</p>
+        <p class="course-title" style="font-size: 0.8rem;"><i class="bi bi-telephone"></i> {{ student.phoneNumber }}</p>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (totalCount > pageSize) {
+    <div class="pagination-modern">
+      <button class="page-nav" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      @for (p of [].constructor(totalPages); track $index) {
+        <button class="page-num" [class.active]="pageIndex === ($index + 1)" (click)="onPageChange($index + 1)">
+          {{ $index + 1 }}
+        </button>
+      }
+      <button class="page-nav" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  }
+</div>

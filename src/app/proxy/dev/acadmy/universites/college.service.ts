@@ -53,11 +53,11 @@ export class CollegeService {
     { apiName: this.apiName,...config });
   
 
-  getList = (pageNumber: number, pageSize: number, search: string, config?: Partial<Rest.Config>) =>
+  getList = (pageNumber: number, pageSize: number, search: string, universityId: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<CollegeDto>>({
       method: 'GET',
       url: '/api/app/college',
-      params: { pageNumber, pageSize, search },
+      params: { pageNumber, pageSize, search, universityId },
     },
     { apiName: this.apiName,...config });
   

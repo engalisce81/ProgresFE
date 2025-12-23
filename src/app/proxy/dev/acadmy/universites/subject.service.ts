@@ -37,11 +37,11 @@ export class SubjectService {
     { apiName: this.apiName,...config });
   
 
-  getList = (pageNumber: number, pageSize: number, search: string, config?: Partial<Rest.Config>) =>
+  getList = (pageNumber: number, pageSize: number, search: string, gradeLevelId: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<SubjectDto>>({
       method: 'GET',
       url: '/api/app/subject',
-      params: { pageNumber, pageSize, search },
+      params: { pageNumber, pageSize, search, gradeLevelId },
     },
     { apiName: this.apiName,...config });
   

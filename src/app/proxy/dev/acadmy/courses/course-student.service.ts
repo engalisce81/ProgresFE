@@ -30,10 +30,11 @@ export class CourseStudentService {
     { apiName: this.apiName,...config });
   
 
-  delete = (id: string, config?: Partial<Rest.Config>) =>
+  delete = (userId: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: `/api/app/course-student/${id}`,
+      url: '/api/app/course-student',
+      params: { userId },
     },
     { apiName: this.apiName,...config });
   

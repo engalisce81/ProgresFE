@@ -11,21 +11,8 @@ const routes: Routes = [
   {
     path: 'universties',
     loadChildren: () => import('./modules/university/university.module').then(m => m.UniversityModule),
-  },
-  {
-    path: 'colleges',
-    loadChildren: () => import('./modules/college/college.module').then(m => m.CollegeModule),
-  },
-  {
-    path: 'subjects',
-    loadChildren: () => import('./modules/subject/subject.module').then(m => m.SubjectModule),
-  },
-  
-  {
-    path: 'lectures',
-    loadChildren: () => import('./modules/lecture/lecture.module').then(m => m.LectureModule),
-  },
-  
+  }, 
+
   {
     path: 'courses',
     loadChildren: () => import('./modules/course/course.module').then(m => m.CourseModule),
@@ -53,17 +40,13 @@ const routes: Routes = [
     loadChildren: () => import('./modules/questionbank/questionbank.module').then(m => m.QuestionbankModule),
   },
 
-  {
-    path: 'exams',
-    loadChildren: () => import('./modules/exam/exam.module').then(m => m.ExamModule),
-  },
+ 
 
   {
     path: 'profile',
     loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule),
   },
   
-
   {
     path: 'account',
     loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule.forLazy()),

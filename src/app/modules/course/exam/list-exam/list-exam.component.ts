@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ExamDto, ExamService, CreateUpdateExamDto } from '@proxy/dev/acadmy/exams';
+import { ExamDto, ExamService, CreateUpdateExamDto, ExamQuestionsDto, CreateUpdateExamQuestionDto } from '@proxy/dev/acadmy/exams';
+import { QuestionBankService } from '@proxy/dev/acadmy/questions';
+import { LookupDto } from '@proxy/dev/acadmy/look-up';
 
 @Component({
   selector: 'app-list-exam',
@@ -20,41 +22,45 @@ export class ListExamComponent implements OnInit {
   loading = false;
   submitting = false;
   search = '';
-  courseId: string = ''; 
-
+  courseId: string = '';
+  
   // التحكم في النوافذ المنبثقة (Modals)
   showForm = false;
   isEditMode = false;
   selectedExamId: string | null = null;
   showDeleteConfirm = false;
   examToDelete: ExamDto | null = null;
+  
+  // === إدارة الأسئلة ===
+  activeTab: 'exams' | 'questions' = 'exams';
+  selectedExamForQuestions: ExamDto | null = null;
+  banks: LookupDto[] = [];
+  selectedBankIds: string[] = [];
+  questions: ExamQuestionsDto[] = [];
+  loadingQuestions = false;
+  
+  // حالات التحقق
+  get hasSelectedQuestions(): boolean {
+    return this.questions.some(q => q.isSelected);
+  }
 
   constructor(
     private examService: ExamService,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private bankService: QuestionBankService
   ) {}
 
   ngOnInit(): void {
-    // التقاط المعرف من الرابط (Param)
     this.courseId = this.route.snapshot.paramMap.get('id') || '';
     this.initForm();
     this.loadExams();
+    this.loadBanks();
   }
 
-  initForm() {
-    this.examForm = this.fb.group({
-      name: ['', Validators.required],
-      timeExam: [0, [Validators.required, Validators.min(1)]],
-      score: [0, [Validators.required, Validators.min(1)]],
-      isActive: [true],
-      courseId: [this.courseId] // يتم التثبيت من البرام تلقائياً
-    });
-  }
-
+  // === التحميل الأساسي ===
   loadExams() {
     this.loading = true;
-    // جلب قائمة الامتحانات المفلترة حسب الكورس المأخوذ من الرابط
     this.examService.getList(1, 100, this.search).subscribe({
       next: (res) => {
         this.exams = res.items;
@@ -64,7 +70,33 @@ export class ListExamComponent implements OnInit {
     });
   }
 
-  // --- إدارة الفورم (Modal CRUD) ---
+  loadBanks() {
+    this.bankService.getListMyBank().subscribe({
+      next: (res) => (this.banks = res.items),
+      error: (err) => console.error('Error loading banks:', err)
+    });
+  }
+
+  // === التحكم في التبويبات ===
+  switchTab(tab: 'exams' | 'questions', exam?: ExamDto) {
+    this.activeTab = tab;
+    if (exam && tab === 'questions') {
+      this.selectedExamForQuestions = exam;
+      this.loadQuestionsForExam();
+    }
+  }
+
+  // === إدارة الامتحانات (CRUD) ===
+  initForm() {
+    this.examForm = this.fb.group({
+      name: ['', Validators.required],
+      timeExam: [0, [Validators.required, Validators.min(1)]],
+      score: [0, [Validators.required, Validators.min(1)]],
+      isActive: [true],
+      courseId: [this.courseId]
+    });
+  }
+
   openCreateForm() {
     this.isEditMode = false;
     this.showForm = true;
@@ -108,7 +140,6 @@ export class ListExamComponent implements OnInit {
     });
   }
 
-  // --- إدارة الحذف (Custom Modal) ---
   confirmDelete(exam: ExamDto) {
     this.examToDelete = exam;
     this.showDeleteConfirm = true;
@@ -129,6 +160,67 @@ export class ListExamComponent implements OnInit {
         this.loadExams();
       },
       error: () => this.loading = false
+    });
+  }
+
+  // === إدارة الأسئلة ===
+  loadQuestionsForExam() {
+    if (this.selectedBankIds.length === 0) {
+      alert('Please select at least one bank.');
+      return;
+    }
+
+    if (!this.selectedExamForQuestions) return;
+
+    this.loadingQuestions = true;
+    this.examService.getQuestionsFromBank(this.selectedBankIds, this.selectedExamForQuestions.id).subscribe({
+      next: (res) => {
+        this.questions = res.items;
+        this.loadingQuestions = false;
+      },
+      error: (err) => {
+        this.loadingQuestions = false;
+        alert('Error loading questions: ' + err.message);
+      }
+    });
+  }
+
+  onBankChecked(event: any, bankId: string) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      this.selectedBankIds.push(bankId);
+    } else {
+      this.selectedBankIds = this.selectedBankIds.filter(id => id !== bankId);
+    }
+  }
+
+  addSelectedQuestions() {
+    if (!this.selectedExamForQuestions) return;
+
+    const selectedQuestions = this.questions.filter(q => q.isSelected).map(q => q.id!);
+
+    if (selectedQuestions.length === 0) {
+      alert('Please select at least one question.');
+      return;
+    }
+
+    const dto: CreateUpdateExamQuestionDto = {
+      examId: this.selectedExamForQuestions.id,
+      questionIds: selectedQuestions,
+      questionBankIds: this.selectedBankIds,
+    };
+
+    this.loadingQuestions = true;
+    this.examService.addQuestionToExam(dto).subscribe({
+      next: () => {
+        this.loadingQuestions = false;
+        alert('Questions added successfully!');
+        this.switchTab('exams');
+      },
+      error: (err) => {
+        this.loadingQuestions = false;
+        alert('Error adding questions: ' + err.message);
+      }
     });
   }
 }

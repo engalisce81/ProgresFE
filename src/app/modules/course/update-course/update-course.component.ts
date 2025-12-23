@@ -1,28 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CourseService, CreateUpdateCourseDto } from '@proxy/dev/acadmy/courses';
 import { LookupDto } from '@proxy/dev/acadmy/look-up';
 import { MediaItemService } from '@proxy/dev/acadmy/media-items';
 import { SubjectService } from '@proxy/dev/acadmy/universites';
 
+// التأكد من تطابق الأنواع مع الـ Create
+export enum CourseType { General = 0, Quiz = 1, Pdf = 2 }
 
 @Component({
   selector: 'app-update-course',
-  imports: [ReactiveFormsModule , RouterLink ],
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink, FormsModule],
   templateUrl: './update-course.component.html',
   styleUrl: './update-course.component.scss'
 })
-export class UpdateCourseComponent implements OnInit{
+export class UpdateCourseComponent implements OnInit {
   courseForm: FormGroup;
   loading = false;
   subjects: LookupDto[] = [];
-  logoFile: File | null = null;
-  pdfFile: File | null = null;
-  logoPreview: string | ArrayBuffer | null = null;
-  pdfFileName: string | null = null;
   courseId!: string;
-  courseLoaded = false;
+
+  // ملفات الرفع والمعاينة
+  pdfFile: File | null = null;
+  pdfFileName: string | null = null;
+  logoFile: File | null = null;
+  logoPreview: string | ArrayBuffer | null = null;
+
+  // إدارة التابات (تلقائياً سيتم تحديدها عند تحميل البيانات)
+  selectedTab: CourseType = CourseType.General;
+  courseTypes = CourseType;
 
   constructor(
     private fb: FormBuilder,
@@ -33,19 +41,19 @@ export class UpdateCourseComponent implements OnInit{
     private router: Router
   ) {
     this.courseForm = this.fb.group({
-      name: ['', [Validators.required, this.nonEmptyValidator]],
-      title: ['', [Validators.required, this.nonEmptyValidator]],
-      description: ['', [Validators.required, this.nonEmptyValidator]],
+      name: ['', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       subjectId: ['', Validators.required],
+      introductionVideoUrl: [""],
       isActive: [true],
       isLifetime: [false],
+      showSubscriberCount: [true], // الحقل الجديد
       durationInDays: [0],
-      logoFile: [null],
       isPdf: [false],
-      pdfUrl: [''],
-      introductionVideoUrl: [''],
-      infos: this.fb.array([], [Validators.required, this.infosArrayValidator])
+      isQuiz: [false],
+      infos: this.fb.array([]) // سيتم ملؤه من البيانات القادمة
     });
   }
 
@@ -55,45 +63,19 @@ export class UpdateCourseComponent implements OnInit{
     this.loadCourseData();
   }
 
-  // ✅ Validators
-  nonEmptyValidator(control: any) {
-    const value = control.value;
-    if (value && value.trim().length === 0) {
-      return { empty: true };
-    }
-    return null;
-  }
-
-  infosArrayValidator(control: FormArray) {
-    if (control.length === 0) return { noInfos: true };
-
-    const hasEmptyInfo = control.controls.some(
-      infoControl => !infoControl.value || infoControl.value.trim().length === 0
-    );
-
-    if (hasEmptyInfo) return { emptyInfo: true };
-    return null;
-  }
-
   get infos(): FormArray {
     return this.courseForm.get('infos') as FormArray;
   }
 
-  addInfo() {
-    this.infos.push(this.fb.control('', [Validators.required, this.nonEmptyValidator]));
-    this.courseForm.updateValueAndValidity();
+  // منطق التبديل بين التابات
+  selectTab(type: CourseType) {
+    this.selectedTab = type;
+    this.courseForm.patchValue({
+      isPdf: type === CourseType.Pdf,
+      isQuiz: type === CourseType.Quiz
+    });
   }
 
-  removeInfo(index: number) {
-    if (this.infos.length > 1) {
-      this.infos.removeAt(index);
-      this.courseForm.updateValueAndValidity();
-    } else {
-      alert('At least one info is required.');
-    }
-  }
-
-  // ✅ Load Data
   loadSubjects() {
     this.subjectService.getSubjectsWithCollegeList().subscribe(res => {
       this.subjects = res.items;
@@ -103,81 +85,101 @@ export class UpdateCourseComponent implements OnInit{
   loadCourseData() {
     this.courseService.get(this.courseId).subscribe({
       next: (course) => {
+        const data = course.data;
+        
+        // 1. تحديد التابة النشطة بناءً على نوع الكورس المسترجع
+        if (data.isPdf) this.selectedTab = CourseType.Pdf;
+        else if (data.isQuiz) this.selectedTab = CourseType.Quiz;
+        else this.selectedTab = CourseType.General;
+
+        // 2. تحديث الفورم
         this.courseForm.patchValue({
-          name: course.data.name,
-          title: course.data.title,
-          description: course.data.description,
-          price: course.data.price,
-          subjectId: course.data.subjectId,
-          isActive: course.data.isActive,
-          isLifetime: course.data.isLifetime,
-          durationInDays: course.data.durationInDays,
-          isPdf: course.data.isPdf,
-          pdfUrl: course.data.pdfUrl || '',
-          introductionVideoUrl: course.data.introductionVideoUrl || ''
+          name: data.name,
+          title: data.title,
+          description: data.description,
+          price: data.price,
+          subjectId: data.subjectId,
+          introductionVideoUrl: data.introductionVideoUrl || '',
+          showSubscriberCount: data.showSubscriberCount, // تعبئة القيمة من الداتابيز
+          isActive: data.isActive,
+          isLifetime: data.isLifetime,
+          durationInDays: data.durationInDays,
+          isPdf: data.isPdf,
+          isQuiz: data.isQuiz
         });
 
-        this.logoPreview = course.data.logoUrl || null;
+        // 3. عرض اللوجو القديم
+        this.logoPreview = data.logoUrl || null;
+        this.pdfFileName = data.pdfUrl ? 'Current PDF Document' : null;
 
+        // 4. ملء الـ Infos Array
         this.infos.clear();
-        if (course.data.infos?.length) {
-          course.data.infos.forEach(info =>
-            this.infos.push(this.fb.control(info, [Validators.required, this.nonEmptyValidator]))
-          );
+        if (data.infos?.length) {
+          data.infos.forEach(info => {
+            this.infos.push(this.fb.control(info, Validators.required));
+          });
         } else {
-          this.infos.push(this.fb.control('', [Validators.required, this.nonEmptyValidator]));
+          this.addInfo(); // حقل فارغ لو مفيش بيانات
         }
-
-        this.courseLoaded = true;
-        this.courseForm.updateValueAndValidity();
       },
-      error: (err) => {
-        alert('Error loading course: ' + err.message);
-        this.courseLoaded = true;
-      }
+      error: (err) => alert('Error loading course: ' + err.message)
     });
   }
 
-  // ✅ Logo
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
-
     this.logoFile = input.files[0];
-    this.courseForm.patchValue({ logoFile: this.logoFile });
-    this.courseForm.get('logoFile')?.updateValueAndValidity();
-
     const reader = new FileReader();
-    reader.onload = e => (this.logoPreview = e.target?.result);
+    reader.onload = e => this.logoPreview = e.target?.result;
     reader.readAsDataURL(this.logoFile);
   }
 
-  // ✅ PDF Upload
-  onPdfSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.pdfFile = file;
-      this.pdfFileName = file.name;
-      this.courseForm.patchValue({ pdfUrl: file.name });
-    }
+  onPdfSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.pdfFile = input.files[0];
+    this.pdfFileName = this.pdfFile.name;
   }
 
-  // ✅ Submit
-  submit() {
-    this.courseForm.markAllAsTouched();
+  addInfo() {
+    this.infos.push(this.fb.control('', Validators.required));
+  }
 
-    if (this.courseForm.invalid || !this.areRequiredFieldsValid()) {
-      alert('Please fill all required fields with valid values.');
+  removeInfo(index: number) {
+    if (this.infos.length > 1) this.infos.removeAt(index);
+  }
+
+  async submit() {
+    if (this.courseForm.invalid) {
+      this.courseForm.markAllAsTouched();
+      alert('Please check required fields');
       return;
     }
 
     this.loading = true;
+    try {
+      let finalLogoUrl = (this.logoPreview as string) || '';
+      let finalPdfUrl = this.courseForm.get('pdfUrl')?.value || '';
 
-    const handleUpdate = (logoUrl?: string, pdfUrl?: string) => {
+      // رفع لوجو جديد لو المستخدم اختار ملف
+      if (this.logoFile) {
+        const res = await this.uploadService.uploadImage(this.logoFile).toPromise();
+        finalLogoUrl = res.data;
+      }
+
+      // رفع PDF جديد لو التابة PDF والمستخدم اختار ملف
+      if (this.selectedTab === CourseType.Pdf && this.pdfFile) {
+        const res = await this.uploadService.uploadImage(this.pdfFile).toPromise();
+        finalPdfUrl = res.data;
+      }
+
       const dto: CreateUpdateCourseDto = {
         ...this.courseForm.value,
-        logoUrl: logoUrl || (this.logoPreview as string) || '',
-        pdfUrl: pdfUrl || this.courseForm.value.pdfUrl || '',
+        logoUrl: finalLogoUrl,
+        pdfUrl: finalPdfUrl,
+        isPdf: this.selectedTab === CourseType.Pdf,
+        isQuiz: this.selectedTab === CourseType.Quiz,
         infos: this.infos.value.filter((i: string) => i && i.trim() !== '')
       };
 
@@ -188,70 +190,13 @@ export class UpdateCourseComponent implements OnInit{
         },
         error: (err) => {
           this.loading = false;
-          alert('Error updating course: ' + err.message);
+          alert('Update Error: ' + err.message);
         }
       });
-    };
 
-    // ✅ Upload files if exist
-    if (this.logoFile) {
-      this.uploadService.uploadImage(this.logoFile).subscribe({
-        next: (res) => {
-          if (this.pdfFile) {
-            this.uploadService.uploadImage(this.pdfFile).subscribe({
-              next: (pdfRes) => handleUpdate(res.data, pdfRes.data),
-              error: (err) => {
-                this.loading = false;
-                alert('Error uploading PDF: ' + err.message);
-              }
-            });
-          } else handleUpdate(res.data);
-        },
-        error: (err) => {
-          this.loading = false;
-          alert('Error uploading logo: ' + err.message);
-        }
-      });
-    } else if (this.pdfFile) {
-      this.uploadService.uploadImage(this.pdfFile).subscribe({
-        next: (pdfRes) => handleUpdate(undefined, pdfRes.data),
-        error: (err) => {
-          this.loading = false;
-          alert('Error uploading PDF: ' + err.message);
-        }
-      });
-    } else {
-      handleUpdate();
+    } catch (error) {
+      this.loading = false;
+      alert('Upload Error: ' + error);
     }
   }
-
-  // ✅ Helper
-  areRequiredFieldsValid(): boolean {
-    const basicFieldsValid =
-      this.courseForm.get('name')?.valid &&
-      this.courseForm.get('title')?.valid &&
-      this.courseForm.get('price')?.valid &&
-      this.courseForm.get('description')?.valid &&
-      this.courseForm.get('subjectId')?.valid;
-
-    const infosValid = this.infos.valid && this.infos.length > 0;
-    return !!(basicFieldsValid && infosValid);
-  }
-
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.courseForm.get(fieldName);
-    return !!(field && field.invalid && field.touched);
-  }
-
-  getFieldError(fieldName: string): string {
-    const field = this.courseForm.get(fieldName);
-    if (!field || !field.errors || !field.touched) return '';
-
-    const errors = field.errors;
-    if (errors['required']) return 'This field is required';
-    if (errors['empty']) return 'This field cannot be empty';
-    if (errors['min']) return `Minimum value is ${errors['min'].min}`;
-    return 'Invalid value';
-  }
 }
-

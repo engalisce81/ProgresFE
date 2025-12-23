@@ -6,5 +6,6 @@ export interface ChatMessageDto extends EntityDto<string> {
   logoUrl?: string;
   receverId?: string;
   message?: string;
+  isInstructor: boolean;
   creationTime?: string;
 }
