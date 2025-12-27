@@ -1,0 +1,14 @@
+.lpx-sidebar, .lpx-navbar,.lpx-sidebar-container {
+    display: none !important;
+}
+.lpx-sidebar-container{
+    display: none !important;
+}
+.website{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0;
+    right: 0;
+    overflow-y: scroll;
+}/* إخفاء عناصر ABP تماماً عندما يكون الكلاس فعالاً */

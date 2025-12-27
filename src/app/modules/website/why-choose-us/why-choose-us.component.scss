@@ -1,0 +1,77 @@
+/* Why Choose Us Component Styles */
+
+:host {
+  display: block;
+}
+
+.why-choose {
+  background: var(--surface);
+  padding: 4rem 2rem;
+  margin: 0 0;
+  transition: background 0.3s ease;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.feature-card {
+  background: var(--card);
+  padding: 2rem;
+  border-radius: var(--radius);
+  text-align: start;
+  box-shadow: var(--shadow-1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-2);
+  border: 1px solid var(--purple-600);
+}
+
+svg {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.feature-title {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--sky-300);
+  transition: color 0.3s ease;
+}
+
+.feature-description {
+  color: var(--muted);
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .why-choose {
+    padding: 3rem 1rem;
+    margin: 3rem 0;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .feature-card {
+    padding: 1.5rem;
+  }
+}

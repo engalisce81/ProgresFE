@@ -1,0 +1,74 @@
+<header>
+  <div class="header-container">
+    <a href="#" class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      <span>Tadriscom</span>
+    </a>
+    
+    <nav class="desktop-nav">
+      <a href="#plan">
+        <i class="fas fa-calendar-alt"></i>
+        {{ '::Menu:Plan' | abpLocalization }}
+      </a>
+      <a routerLink="dash">
+        <i class="fas fa-chalkboard-teacher"></i>
+        {{ '::Menu:Teach' | abpLocalization }}
+      </a>
+      <a href="#posts">
+        <i class="fas fa-blog"></i>
+        {{ '::Menu:Blog' | abpLocalization }}
+      </a>
+      <a href="#courses">
+        <i class="fas fa-book-open"></i>
+        {{ '::Menu:Courses' | abpLocalization }}
+      </a>
+
+      <div class="lang-switch" (click)="changeLanguage()">
+        <i class="fas fa-globe"></i>
+        <span>{{ currentLang === 'ar' ? 'English' : 'عربي' }}</span>
+      </div>
+
+      <div class="mode-toggle" (click)="toggleDarkMode()">
+        <span class="mode-toggle-icon sun">☀️</span>
+        <span class="mode-toggle-icon moon">🌙</span>
+      </div>
+
+      <a href="#login" class="btn-login">
+        <i class="fas fa-sign-in-alt"></i>
+        {{ '::Menu:Login' | abpLocalization }}
+      </a>
+    </nav>
+    
+    <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  
+  <div class="mobile-nav-overlay" [class.active]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
+  <nav class="mobile-nav" [class.active]="isMobileMenuOpen">
+    <div class="mobile-nav-header">
+      <h3>{{ '::Menu:Title' | abpLocalization }}</h3>
+      <button class="mobile-close-btn" (click)="toggleMobileMenu()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="mobile-links">
+        <a href="#teach"><i class="fas fa-chalkboard-teacher"></i> {{ '::Menu:Teach' | abpLocalization }}</a>
+        <a href="#posts"><i class="fas fa-blog"></i> {{ '::Menu:Blog' | abpLocalization }}</a>
+        <a href="#courses"><i class="fas fa-book-open"></i> {{ '::Menu:Courses' | abpLocalization }}</a>
+        <a href="#login"><i class="fas fa-sign-in-alt"></i> {{ '::Menu:Login' | abpLocalization }}</a>
+    </div>
+
+    <div class="mobile-footer-actions">
+        <div class="action-item" (click)="changeLanguage()">
+            <i class="fas fa-globe"></i>
+            <span>{{ currentLang === 'ar' ? 'English' : 'العربية' }}</span>
+        </div>
+        <div class="action-item" (click)="toggleDarkMode()">
+            <i class="fas" [ngClass]="isDarkMode ? 'fa-sun' : 'fa-moon'"></i>
+            <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
+        </div>
+    </div>
+  </nav>
+</header>

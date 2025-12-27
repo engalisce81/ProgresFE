@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+.qa-section {
+  background: linear-gradient(180deg, var(--bg), var(--surface) 100%);
+  padding: 5rem 1.5rem;
+}
+
+.container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text); 
+  letter-spacing: -0.5px;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 4px;
+    background: var(--an-color);
+    margin: 15px auto 0;
+    border-radius: 10px;
+  }
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.accordion-item {
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-1);
+  
+  // بوردر مطفي جداً منسجم مع الخلفية
+  border: 1px solid var(--surface-variant); 
+
+  &:hover {
+    border-color: var(--bell-300);
+    background: var(--surface-tint);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    // البوردر النشط بلون الأرجواني
+    border-color: var(--purple-600);
+    background: var(--surface);
+    box-shadow: var(--shadow-2);
+  }
+}
+
+.accordion-header {
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  background-color: var(--card);
+  .question {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: color 0.3s;
+  }
+
+  .toggle-icon {
+    color: var(--sky-300);
+    font-size: 0.9rem;
+    transition: transform 0.4s ease, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.accordion-body {
+  padding: 0 1.8rem 1.6rem;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  background-color: transparent;
+  
+  // بوردر فاصل علوي ناعم جداً
+  border-top: 1px solid var(--surface-variant); 
+  margin-top: 0;
+  padding-top: 1.2rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* دعم RTL للعربية */
+[dir="rtl"] {
+  .accordion-header, 
+  .accordion-body,
+  .section-title {
+    text-align: right;
+    font-family: 'Cairo', sans-serif;
+  }
+}
+
+/* حالة التفعيل */
+.accordion-item.active {
+  .question { color: var(--sky-300); }
+  .toggle-icon {
+    transform: rotate(180deg);
+    color: var(--purple-600);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.accordion-header:focus { outline: none; }

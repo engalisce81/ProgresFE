@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tadriscom - Learn, Apply, Get Hired</title>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes donut-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    :root {
+      --violet-900: #2A5A75;
+      --purple-600: #4A7A9A;
+      --bell-300: #6494B7;
+      --blue-500: #70B86D;
+      --sky-300: #8DCC89;
+      --bg: #0B1418;
+      --surface: #151F24;
+      --card: #1A272D;
+      --surface-variant: #1F2C32;
+      --text: #E8EDF2;
+      --muted: #B8C5CF;
+      --success: #56A653;
+      --radius: 18px;
+      --shadow-1: 0 8px 18px rgba(0, 0, 0, 0.35);
+      --shadow-2: 0 18px 40px rgba(0, 0, 0, 0.45);
+      --bg-btn: linear-gradient(135deg, var(--purple-600), var(--bell-300));
+    }
+
+    /* Light Mode Variables */
+    body.light-mode {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --card: #f1f5f9;
+      --surface-variant: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --violet-900: #3b82f6;
+      --purple-600: #6366f1;
+      --bell-300: #8b5cf6;
+      --blue-500: #10b981;
+      --sky-300: #0ea5e9;
+      --success: #22c55e;
+      --shadow-1: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-2: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #0a1215 60%, #070e11);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-mode {
+      background: linear-gradient(180deg, var(--bg), #f1f5f9 60%, #e2e8f0);
+    }
+
+    /* Header */
+    header {
+      background: var(--violet-900);
+      padding: 1rem 0;
+      box-shadow: var(--shadow-1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--sky-300);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 2rem;
+    }
+
+    .desktop-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .desktop-nav a {
+      color: var(--bell-300);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+    }
+
+    .desktop-nav a:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-login {
+      background: var(--bg-btn);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: var(--shadow-1);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-2);
+    }
+
+    .mode-toggle {
+      background: var(--surface);
+      border: 1px solid var(--surface-variant);
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 1rem;
+    }
+
+    .mode-toggle:after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: var(--violet-900);
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    body.light-mode .mode-toggle:after {
+      transform: translateX(20px);
+      background: var(--blue-500);
+    }
+
+    .mode-toggle-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+    }
+
+    .mode-toggle-icon.sun {
+      left: 4px;
+      color: #fbbf24;
+    }
+
+    .mode-toggle-icon.moon {
+      right: 4px;
+      color: #94a3b8;
+    }
+
+    /* Mobile Navigation */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--bell-300);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 300px;
+      height: 100vh;
+      background: var(--surface);
+      padding: 5rem 2rem 2rem;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: right 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .mobile-nav.active {
+      right: 0;
+    }
+
+    .mobile-nav a {
+      color: var(--bell-300);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 1rem;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav a:hover {
+      background: var(--card);
+      color: var(--sky-300);
+      border-color: var(--surface-variant);
+    }
+
+    .mobile-nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .mobile-close-btn {
+      background: none;
+      border: none;
+      color: var(--bell-300);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .hero-content {
+      animation: slideInLeft 0.8s ease;
+    }
+
+    .hero-subtitle {
+      color: var(--sky-300);
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--sky-300), var(--bell-300));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .btn-cta {
+      background: var(--bg-btn);
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      box-shadow: var(--shadow-2);
+      transition: all 0.3s ease;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.1);
+    }
+
+    .hero-image {
+      animation: slideInRight 0.8s ease;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-2);
+    }
+
+    .tags {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--surface);
+      color: var(--sky-300);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      border: 1px solid var(--surface-variant);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Why Choose Section */
+    .why-choose {
+      background: var(--surface);
+      padding: 4rem 2rem;
+      margin: 4rem 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      text-align: center;
+      box-shadow: var(--shadow-1);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-2);
+      border: 1px solid var(--purple-600);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--sky-300);
+    }
+
+    .feature-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--sky-300);
+    }
+
+    /* Courses Section */
+    .courses {
+      background: linear-gradient(180deg, var(--bg), var(--surface) 100%);
+      padding: 4rem 0;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .course-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-1);
+      transition: all 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-2);
+      border: 1px solid var(--surface-variant);
+    }
+
+    .course-header {
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--violet-900), var(--purple-600));
+    }
+
+    .course-content {
+      padding: 1.5rem;
+    }
+
+    .btn-enroll {
+      background: var(--bg-btn);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-enroll:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-1);
+    }
+
+    .all-courses-link a {
+      color: var(--sky-300);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--surface-variant);
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+    }
+
+    .all-courses-link a:hover {
+      background: var(--surface-variant);
+      transform: translateY(-2px);
+    }
+
+    /* Platform Benefits */
+    .platform-benefits {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .benefits-image img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-2);
+    }
+
+    .benefits-list {
+      list-style: none;
+    }
+
+    .benefits-list li {
+      padding: 1rem 0;
+      padding-left: 2rem;
+      position: relative;
+      color: var(--muted);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .benefits-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      background: var(--surface);
+      padding: 4rem 2rem;
+      margin: 4rem 0;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-1);
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-2);
+    }
+
+    .testimonial-content {
+      position: relative;
+    }
+
+    .testimonial-text {
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .testimonial-text:before {
+      content: "❝";
+      position: absolute;
+      left: -0.5rem;
+      top: -0.5rem;
+      font-size: 2rem;
+      color: var(--sky-300);
+      opacity: 0.5;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--surface-variant);
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover .author-avatar {
+      border-color: var(--sky-300);
+      transform: scale(1.05);
+    }
+
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+
+    .author-role {
+      color: var(--sky-300);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .author-rating {
+      display: flex;
+      gap: 0.2rem;
+      margin-top: 0.3rem;
+    }
+
+    .author-rating i {
+      color: #FFD700;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--surface);
+      padding: 4rem 0 2rem;
+      margin-top: 4rem;
+      border-top: 1px solid var(--surface-variant);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3rem;
+    }
+
+    .footer-column h3 {
+      color: var(--sky-300);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .footer-column ul li a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--sky-300);
+    }
+
+    .footer-column p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--card);
+      border-radius: 50%;
+      color: var(--sky-300);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--violet-900);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--surface-variant);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--sky-300);
+    }
+
+    /* Posts Section */
+    .posts {
+      background: linear-gradient(180deg, var(--surface), var(--bg) 100%);
+      padding: 4rem 2rem;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .post-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-1);
+      transition: all 0.3s ease;
+    }
+
+    .post-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-2);
+    }
+
+    .post-image {
+      height: 180px;
+      overflow: hidden;
+    }
+
+    .post-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .post-card:hover .post-image img {
+      transform: scale(1.05);
+    }
+
+    .post-content {
+      padding: 1.5rem;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .post-category {
+      background: var(--surface-variant);
+      color: var(--sky-300);
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .post-title {
+      color: var(--text);
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .post-excerpt {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-title {
+        font-size: 2.8rem;
+      }
+      
+      .features-grid,
+      .testimonials-grid,
+      .courses-grid,
+      .posts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        margin: 2rem auto;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-image {
+        order: -1;
+      }
+
+      .desktop-nav {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .features-grid,
+      .testimonials-grid,
+      .courses-grid,
+      .posts-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px !important;
+      }
+
+      .platform-benefits {
+        grid-template-columns: 1fr;
+      }
+
+      .benefits-image {
+        order: -1;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-container {
+        padding: 0 1rem;
+      }
+      
+      .hero {
+        padding: 0 1rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .mobile-nav {
+        width: 85%;
+      }
+      
+      .author-avatar {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        Tadriscom
+      </a>
+      
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav">
+        <a href="#plan">
+          <i class="fas fa-calendar-alt"></i>
+          Plan
+        </a>
+        <a href="#teach">
+          <i class="fas fa-chalkboard-teacher"></i>
+          Teach in Devly
+        </a>
+        <a href="#posts">
+          <i class="fas fa-blog"></i>
+          Blog Posts
+        </a>
+        <a href="#courses">
+          <i class="fas fa-book-open"></i>
+          Courses
+        </a>
+        <a href="#login" class="btn-login">
+          <i class="fas fa-sign-in-alt"></i>
+          Login
+        </a>
+        <div class="mode-toggle" id="modeToggle">
+          <span class="mode-toggle-icon sun">☀️</span>
+          <span class="mode-toggle-icon moon">🌙</span>
+        </div>
+      </nav>
+      
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+    <nav class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav-header">
+        <h3 style="color: var(--sky-300);">Menu</h3>
+        <button class="mobile-close-btn" id="mobileCloseBtn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <a href="#plan">
+        <i class="fas fa-calendar-alt"></i>
+        Plan
+      </a>
+      <a href="#teach">
+        <i class="fas fa-chalkboard-teacher"></i>
+        Teach in Devly
+      </a>
+      <a href="#posts">
+        <i class="fas fa-blog"></i>
+        Blog Posts
+      </a>
+      <a href="#courses">
+        <i class="fas fa-book-open"></i>
+        Courses
+      </a>
+      <a href="#login">
+        <i class="fas fa-sign-in-alt"></i>
+        Login
+      </a>
+      <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem; padding: 1rem;">
+        <span style="color: var(--muted);">Theme:</span>
+        <div class="mode-toggle mobile-mode-toggle" id="mobileModeToggle">
+          <span class="mode-toggle-icon sun">☀️</span>
+          <span class="mode-toggle-icon moon">🌙</span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-subtitle">
+        <i class="fas fa-rocket"></i>
+        Learn, Apply, Get Hired
+      </div>
+      <h1 class="hero-title">Learn, Apply, and Kickstart Your Career from Day One!</h1>
+      <p class="hero-description">
+        We're not just another learning platform – we're your gateway to the job market. Learn from industry experts, test your skills with real assessments, earn a certified diploma, and gain hands-on training in top companies.
+      </p>
+      <a href="#" class="btn-cta">
+        <i class="fas fa-play-circle"></i>
+        Start Your Journey Now
+      </a>
+      <div class="tags">
+        <span class="tag">
+          <i class="fas fa-code"></i>
+          Frontend
+        </span>
+        <span class="tag">
+          <i class="fas fa-server"></i>
+          Backend
+        </span>
+        <span class="tag">
+          <i class="fas fa-mobile-alt"></i>
+          Mobile
+        </span>
+        <span class="tag">
+          <i class="fas fa-paint-brush"></i>
+          Graphics
+        </span>
+        <span class="tag">
+          <i class="fas fa-briefcase"></i>
+          Internship Ready
+        </span>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop" alt="Students learning">
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="why-choose">
+    <div class="container">
+      <h2 class="section-title">
+        <i class="fas fa-star"></i>
+        Why Choose Us?
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3 class="feature-title">Certified Diplomas</h3>
+          <p class="feature-description">Industry-recognized certificates that boost your career</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+          <h3 class="feature-title">Proctored Exams</h3>
+          <p class="feature-description">Fair and secure assessment system</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <h3 class="feature-title">Installments</h3>
+          <p class="feature-description">Flexible payment options for everyone</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section class="courses" id="courses">
+    <div class="container">
+      <h2 class="section-title">
+        <i class="fas fa-book"></i>
+        Our Featured Courses
+      </h2>
+      <p style="text-align: center; color: var(--muted); margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+        Dive into our industry-leading programs designed to take you from beginner to job-ready in just a few months.
+      </p>
+      
+      <div class="courses-grid">
+        
+        <!-- Course 1 -->
+        <div class="course-card">
+          <div class="course-header">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: rgba(255,255,255,0.1); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                <i class="fas fa-code"></i>
+              </div>
+              <div>
+                <h3 style="color: white; margin: 0;">Frontend Development</h3>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem;">
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    <i class="fas fa-signal"></i> Intermediate
+                  </span>
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">•</span>
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    <i class="far fa-clock"></i> 4 Months
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="course-content">
+            <p style="color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6;">
+              Master HTML, CSS, JavaScript, and React to build modern, responsive web applications. Includes real-world projects and portfolio development.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+              <div>
+                <span style="color: var(--sky-300); font-size: 1.3rem; font-weight: 600;">$299</span>
+                <span style="color: var(--muted); font-size: 0.9rem; margin-left: 0.5rem;">or $75/month</span>
+              </div>
+              <a href="#" class="btn-enroll">
+                <i class="fas fa-shopping-cart"></i>
+                Enroll Now
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Course 2 -->
+        <div class="course-card">
+          <div class="course-header" style="background: linear-gradient(135deg, var(--purple-600), var(--bell-300));">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: rgba(255,255,255,0.1); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                <i class="fas fa-server"></i>
+              </div>
+              <div>
+                <h3 style="color: white; margin: 0;">Backend Development</h3>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem;">
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    <i class="fas fa-signal"></i> Advanced
+                  </span>
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">•</span>
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    <i class="far fa-clock"></i> 5 Months
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="course-content">
+            <p style="color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6;">
+              Learn Node.js, Express, MongoDB, and APIs to build scalable server-side applications. Includes authentication, deployment, and database design.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+              <div>
+                <span style="color: var(--sky-300); font-size: 1.3rem; font-weight: 600;">$349</span>
+                <span style="color: var(--muted); font-size: 0.9rem; margin-left: 0.5rem;">or $87/month</span>
+              </div>
+              <a href="#" class="btn-enroll">
+                <i class="fas fa-shopping-cart"></i>
+                Enroll Now
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Course 3 -->
+        <div class="course-card">
+          <div class="course-header" style="background: linear-gradient(135deg, var(--bell-300), var(--blue-500));">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: rgba(255,255,255,0.1); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+              <div>
+                <h3 style="color: white; margin: 0;">Mobile App Development</h3>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem;">
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    <i class="fas fa-signal"></i> Intermediate
+                  </span>
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">•</span>
+                  <span style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    <i class="far fa-clock"></i> 4.5 Months
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="course-content">
+            <p style="color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6;">
+              Build cross-platform mobile apps with React Native. Learn state management, navigation, APIs, and app store submission.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+              <div>
+                <span style="color: var(--sky-300); font-size: 1.3rem; font-weight: 600;">$329</span>
+                <span style="color: var(--muted); font-size: 0.9rem; margin-left: 0.5rem;">or $82/month</span>
+              </div>
+              <a href="#" class="btn-enroll">
+                <i class="fas fa-shopping-cart"></i>
+                Enroll Now
+              </a>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div class="all-courses-link" style="text-align: center; margin-top: 3rem;">
+        <a href="#">
+          <i class="fas fa-eye"></i>
+          View All Courses
+          <span style="font-size: 1.2rem;">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts Section -->
+  <section class="posts" id="posts">
+    <div class="container">
+      <h2 class="section-title">
+        <i class="fas fa-newspaper"></i>
+        Latest Blog Posts
+      </h2>
+      <p style="text-align: center; color: var(--muted); margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+        Insights, tutorials, and industry news to help you stay ahead in your tech career.
+      </p>
+      
+      <div class="posts-grid">
+        
+        <!-- Post 1 -->
+        <div class="post-card">
+          <div class="post-image">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=180&fit=crop" alt="Coding on laptop">
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-category">
+                <i class="fas fa-code"></i>
+                Tutorial
+              </span>
+              <span>
+                <i class="far fa-calendar"></i>
+                March 15, 2024
+              </span>
+            </div>
+            <h3 class="post-title">
+              <i class="fas fa-react"></i>
+              Mastering React Hooks: A Complete Guide
+            </h3>
+            <p class="post-excerpt">
+              Learn how to use React Hooks effectively to build modern, efficient React applications with cleaner code.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Post 2 -->
+        <div class="post-card">
+          <div class="post-image">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w-400&h=180&fit=crop" alt="Job interview">
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-category">
+                <i class="fas fa-briefcase"></i>
+                Career
+              </span>
+              <span>
+                <i class="far fa-calendar"></i>
+                March 10, 2024
+              </span>
+            </div>
+            <h3 class="post-title">
+              <i class="fas fa-user-tie"></i>
+              How to Ace Your Tech Interview in 2024
+            </h3>
+            <p class="post-excerpt">
+              Essential tips and strategies to prepare for technical interviews and land your dream job in tech.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Post 3 -->
+        <div class="post-card">
+          <div class="post-image">
+            <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=180&fit=crop" alt="AI and programming">
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="post-category">
+                <i class="fas fa-robot"></i>
+                Trends
+              </span>
+              <span>
+                <i class="far fa-calendar"></i>
+                March 5, 2024
+              </span>
+            </div>
+            <h3 class="post-title">
+              <i class="fas fa-brain"></i>
+              The Future of Web Development with AI
+            </h3>
+            <p class="post-excerpt">
+              Exploring how artificial intelligence is transforming web development workflows and tools.
+            </p>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div class="all-courses-link" style="text-align: center; margin-top: 3rem;">
+        <a href="#">
+          <i class="fas fa-book-reader"></i>
+          Read All Posts
+          <span style="font-size: 1.2rem;">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform Benefits -->
+  <section class="platform-benefits">
+    <div class="benefits-image">
+      <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop" alt="Team collaboration">
+    </div>
+    <div class="benefits-content">
+      <h2 class="section-title" style="text-align: left; display: block;">
+        <i class="fas fa-check-circle"></i>
+        Why Choose Our Platform?
+      </h2>
+      <p style="color: var(--muted); margin-bottom: 2rem;">
+        We're your partner from learning to hiring. Our programs combine expert-led content, smart quizzes, proctored exams, and real-world projects to make you job-ready, faster.
+      </p>
+      <ul class="benefits-list">
+        <li><i class="fas fa-chart-line"></i> Step-by-step learning with smart assessments</li>
+        <li><i class="fas fa-shield-alt"></i> Proctored exams to ensure fairness and integrity</li>
+        <li><i class="fas fa-flask"></i> Free practical workshops after the course</li>
+        <li><i class="fas fa-certificate"></i> Accredited certificates + guaranteed internship opportunities</li>
+        <li><i class="fas fa-money-check-alt"></i> Flexible installment payment options</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-title">
+        <i class="fas fa-comments"></i>
+        What Our Students Say
+      </h2>
+      <p style="text-align: center; color: var(--muted); margin-bottom: 3rem;">
+        Real feedback from real learners who have transformed their careers with our courses.
+      </p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p class="testimonial-text">
+              "The quizzes and proctored exams kept me accountable. I landed an internship two weeks after graduating. The hands-on projects were exactly what employers were looking for!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Alex Shaw">
+              </div>
+              <div class="author-info">
+                <div class="author-name">Alex Shaw</div>
+                <div class="author-role">
+                  <i class="fas fa-code"></i>
+                  Frontend Graduate
+                </div>
+                <div class="author-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p class="testimonial-text">
+              "Best part was the career support. The team reviewed my projects and CV thoroughly. I got 3 job offers within a month of completing the backend course!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Maryam Rizk">
+              </div>
+              <div class="author-info">
+                <div class="author-name">Maryam Rizk</div>
+                <div class="author-role">
+                  <i class="fas fa-server"></i>
+                  Backend Graduate
+                </div>
+                <div class="author-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p class="testimonial-text">
+              "Hands‑on projects made all the difference. I shipped my first app to the store during the course! The instructors were always available to help."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face" alt="Omar Ali">
+              </div>
+              <div class="author-info">
+                <div class="author-name">Omar Ali</div>
+                <div class="author-role">
+                  <i class="fas fa-mobile-alt"></i>
+                  Mobile Apps Graduate
+                </div>
+                <div class="author-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>
+          <i class="fas fa-graduation-cap"></i>
+          Tadriscom
+        </h3>
+        <p>Your gateway to the job market. Learn from industry experts, test your skills with real assessments, earn a certified diploma, and gain hands-on training.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>
+          <i class="fas fa-link"></i>
+          Quick Links
+        </h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="#courses"><i class="fas fa-book"></i> Courses</a></li>
+          <li><a href="#posts"><i class="fas fa-blog"></i> Blog</a></li>
+          <li><a href="#plan"><i class="fas fa-calendar-alt"></i> Learning Plan</a></li>
+          <li><a href="#teach"><i class="fas fa-chalkboard-teacher"></i> Teach with Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>
+          <i class="fas fa-graduation-cap"></i>
+          Courses
+        </h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-code"></i> Frontend Development</a></li>
+          <li><a href="#"><i class="fas fa-server"></i> Backend Development</a></li>
+          <li><a href="#"><i class="fas fa-mobile-alt"></i> Mobile Development</a></li>
+          <li><a href="#"><i class="fas fa-paint-brush"></i> Graphic Design</a></li>
+          <li><a href="#"><i class="fas fa-chart-bar"></i> Data Science</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>
+          <i class="fas fa-envelope"></i>
+          Contact Us
+        </h3>
+        <ul>
+          <li><a href="mailto:info@tadriscom.com"><i class="fas fa-envelope"></i> info@tadriscom.com</a></li>
+          <li><a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 234 567 890</a></li>
+          <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Learning St, Tech City</a></li>
+          <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+          <li><a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div>
+        <i class="far fa-copyright"></i>
+        2024 Tadriscom. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+        <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+        <a href="#"><i class="fas fa-cookie-bite"></i> Cookie Policy</a>
+        <a href="#"><i class="fas fa-sitemap"></i> Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dark/Light Mode Toggle
+    const modeToggle = document.getElementById('modeToggle');
+    const mobileModeToggle = document.getElementById('mobileModeToggle');
+    const body = document.body;
+    
+    // Check for saved theme or prefer-color-scheme
+    const savedTheme = localStorage.getItem('theme') || 
+                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    
+    if (savedTheme === 'light') {
+      body.classList.add('light-mode');
+    }
+    
+    function toggleTheme() {
+      body.classList.toggle('light-mode');
+      
+      // Save theme preference
+      const currentTheme = body.classList.contains('light-mode') ? 'light' : 'dark';
+      localStorage.setItem('theme', currentTheme);
+    }
+    
+    modeToggle.addEventListener('click', toggleTheme);
+    mobileModeToggle.addEventListener('click', toggleTheme);
+    
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+    
+    function openMobileMenu() {
+      mobileNav.classList.add('active');
+      mobileNavOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMobileMenu() {
+      mobileNav.classList.remove('active');
+      mobileNavOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    mobileMenuBtn.addEventListener('click', openMobileMenu);
+    mobileCloseBtn.addEventListener('click', closeMobileMenu);
+    mobileNavOverlay.addEventListener('click', closeMobileMenu);
+    
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // Close mobile menu on window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        closeMobileMenu();
+      }
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<footer>
+  <div class="footer-content">
+    <div class="footer-column">
+      <h3>
+        <i class="fas fa-graduation-cap"></i>
+        Tadriscom
+      </h3>
+      <p>Your gateway to the job market. Learn from industry experts, test your skills with real assessments, earn a certified diploma, and gain hands-on training.</p>
+      <div class="social-links">
+        <a *ngFor="let social of socialLinks" 
+           [href]="social.link" 
+           [attr.aria-label]="social.label"
+           target="_blank" 
+           rel="noopener noreferrer">
+          <i [class]="social.icon"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div class="footer-column">
+      <h3>
+        <i class="fas fa-link"></i>
+        Quick Links
+      </h3>
+      <ul>
+        <li *ngFor="let link of quickLinks">
+          <a [routerLink]="link.path">
+            <i [class]="'fas ' + link.icon"></i>
+            {{link.text}}
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>
+        <i class="fas fa-graduation-cap"></i>
+        Courses
+      </h3>
+      <ul>
+        <li *ngFor="let course of courses">
+          <a [routerLink]="course.path">
+            <i [class]="'fas ' + course.icon"></i>
+            {{course.text}}
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3>
+        <i class="fas fa-envelope"></i>
+        Contact Us
+      </h3>
+      <ul>
+        <li *ngFor="let contact of contactInfo">
+          <a *ngIf="contact.link" [href]="contact.link">
+            <i [class]="'fas ' + contact.icon"></i>
+            {{contact.text}}
+          </a>
+          <span *ngIf="!contact.link">
+            <i [class]="'fas ' + contact.icon"></i>
+            {{contact.text}}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>
+      <i class="far fa-copyright"></i>
+      {{currentYear}} Tadriscom. All rights reserved.
+    </div>
+    <div class="footer-links">
+      <a *ngFor="let link of footerBottomLinks" href="#">
+        <i class="fas fa-circle"></i>
+        {{link.text}}
+      </a>
+    </div>
+  </div>
+</footer>

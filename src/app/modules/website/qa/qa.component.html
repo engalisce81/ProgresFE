@@ -1,0 +1,21 @@
+<section class="qa-section">
+  <div class="container">
+    <h2 class="section-title">{{ '::QA:Title' | abpLocalization }}</h2>
+
+    <div class="accordion">
+      <div *ngFor="let item of faqItems; let i = index" 
+           class="accordion-item" 
+           [class.active]="item.active">
+        
+        <div class="accordion-header" (click)="toggleItem(i)">
+          <span class="question">{{ item.question | abpLocalization }}</span>
+          <i class="fas" [ngClass]="item.active ? 'fa-minus' : 'fa-plus'"></i>
+        </div>
+
+        <div class="accordion-body" *ngIf="item.active">
+          <p>{{ item.answer | abpLocalization }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

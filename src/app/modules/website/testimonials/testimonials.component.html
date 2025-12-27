@@ -1,0 +1,40 @@
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-comments"></i>
+      What Our Students Say
+    </h2>
+    <p class="testimonials-description">
+      Real feedback from real learners who have transformed their careers with our courses.
+    </p>
+    
+    <div class="testimonials-grid">
+      <div *ngFor="let testimonial of testimonials" class="testimonial-card">
+        <div class="testimonial-content">
+          <p class="testimonial-text">
+            {{testimonial.text}}
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img [src]="testimonial.avatar" [alt]="testimonial.name">
+            </div>
+            <div class="author-info">
+              <div class="author-name">{{testimonial.name}}</div>
+              <div class="author-role">
+                <i class="fas {{testimonial.roleIcon}}"></i>
+                {{testimonial.role}}
+              </div>
+              <div class="author-rating">
+                <ng-container *ngFor="let star of getStars(testimonial.rating)">
+                  <i *ngIf="star === 'full'" class="fas fa-star"></i>
+                  <i *ngIf="star === 'half'" class="fas fa-star-half-alt"></i>
+                  <i *ngIf="star === 'empty'" class="far fa-star"></i>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

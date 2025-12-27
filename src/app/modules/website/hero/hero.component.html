@@ -1,0 +1,33 @@
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-subtitle">
+      <i class="fas fa-rocket"></i>
+      {{ '::Hero:Subtitle' | abpLocalization }}
+    </div>
+    
+    <h1 class="hero-title">
+      {{ '::Hero:Title' | abpLocalization }}
+    </h1>
+
+    <p class="hero-description">
+      {{ '::Hero:Description' | abpLocalization }}
+    </p>
+
+    <a href="#" class="btn-cta">
+      <i class="fas fa-play-circle"></i>
+      {{ '::Hero:CTA' | abpLocalization }}
+    </a>
+
+    <div class="tags">
+      <span *ngFor="let tag of tags" class="tag">
+        <i class="fas {{tag.icon}}"></i>
+        {{ tag.text | abpLocalization }}
+      </span>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop" 
+         [alt]="'::Hero:ImageAlt' | abpLocalization">
+  </div>
+</section>

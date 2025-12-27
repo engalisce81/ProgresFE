@@ -1,0 +1,55 @@
+<section class="courses" id="courses">
+    <div class="container">
+        <h2 class="section-title">
+            <i class="fas fa-book"></i>
+            Our Featured Courses
+        </h2>
+
+        <div *ngIf="loading" class="text-center">Loading...</div>
+
+        <div class="courses-grid" *ngIf="!loading">
+            <div *ngFor="let course of courses; let i = index" class="course-card">
+                
+                <div class="course-banner">
+                    <img *ngIf="course.logoUrl" [src]="course.logoUrl" alt="course cover" class="full-img">
+                    <div *ngIf="!course.logoUrl" class="placeholder-img" [class]="getGradientClass(i)">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+
+                <div class="course-content">
+                    <div class="course-header-flex">
+                        <h3 class="course-title">{{course.name}}</h3>
+                        <div class="course-rating">
+                            <i class="fas fa-star"></i>
+                            <span>{{course.rating}}</span>
+                        </div>
+                    </div>
+
+                    <p class="course-description">{{course.description}}</p>
+
+                    <div class="course-instructor-row">
+                        <div class="instructor-details">
+                            <img src="https://ui-avatars.com/api/?name=Instructor&background=random" alt="instructor" class="instructor-thumb">
+                            <div class="instructor-text">
+                                <span class="inst-label">Instructor</span>
+                                <span class="inst-name">{{course.userName}}</span> </div>
+                        </div>
+
+                        <div class="enroll-action">
+                            <a href="#" class="btn-enroll">
+                                <i class="fas" [ngClass]="course.alreadyJoin ? 'fa-check' : 'fa-shopping-cart'"></i>
+                                {{ course.alreadyJoin ? 'Joined' : 'Enroll' }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="course-meta-footer">
+                         <span><i class="fas fa-signal"></i> {{course.gradelevelName}}</span>
+                         <span><i class="far fa-clock"></i> {{course.durationInDays}} Weeks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
