@@ -27,6 +27,8 @@ const routes: Routes = [
    {path:':id/chapters/:chapterId/lectures',pathMatch:'full',component:ListLectureComponent},
    {path:':id/chapters/:chapterId/lectures/:lectureId/quizies',pathMatch:'full',component:ListQuizComponent},
    {path:':id/exams',pathMatch:'full',component:ListExamComponent},
+   {path:':id/quizies',pathMatch:'full',component:ListQuizComponent},
+
 
 
 

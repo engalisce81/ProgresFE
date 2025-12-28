@@ -43,12 +43,6 @@
     </div>
   </div>
 
-  @if (loading) {
-  <div class="global-loader">
-    <div class="spinner"></div>
-    <p>Loading Courses...</p>
-  </div>
-  }
 
   @if (!loading) {
   <div class="cards-grid">
@@ -64,11 +58,17 @@
           </button>
 
           @if (course.showMenu) {
+
           <div class="actions-menu" (mouseleave)="course.showMenu = false">
             <button [routerLink]="['/courses', course.id, 'chapters']" class="btn-action">
               <i class="bi bi-list-ul"></i> Chapters
             </button>
+            @if(course.isQuiz){
+            <button [routerLink]="[ course.id, 'quizies']" [queryParams]="{ isCourse: true }" class="btn-action">
+              <i class="bi bi-list-ul"></i> Quizzes
+            </button>
 
+            }
             <button [routerLink]="[course.id, 'chat']" class="btn-action">
               <i class="bi bi-chat-dots"></i> Chat
             </button>
@@ -90,7 +90,7 @@
             </button>
 
             <button (click)="duplicate(course.id)" class="btn-action">
-              <i class="bi bi-pencil-square"></i>  Duplicate
+              <i class="bi bi-pencil-square"></i> Duplicate
             </button>
 
             <button *ngIf="isAdmin" class="btn-action text-danger" (click)="confirmDelete(course)">

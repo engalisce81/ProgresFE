@@ -32,6 +32,7 @@ export interface CreateUpdateQuizDto {
   quizTime: number;
   quizTryCount: number;
   lectureId?: string;
+  courseId?: string;
 }
 
 export interface LectureQuizResultDto {
@@ -68,6 +69,7 @@ export interface QuizDto extends EntityDto<string> {
   quizTime: number;
   quizTryCount: number;
   leactureName?: string;
+  courseName?: string;
 }
 
 export interface QuizResultDetailDto {

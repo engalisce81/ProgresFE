@@ -46,7 +46,8 @@ export class UpdateCourseComponent implements OnInit {
       description: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       subjectId: ['', Validators.required],
-      introductionVideoUrl: [""],
+      youTubeVideoUrl: [""],
+      driveVideoUrl:[""],
       isActive: [true],
       isLifetime: [false],
       showSubscriberCount: [true], // الحقل الجديد
@@ -99,7 +100,8 @@ export class UpdateCourseComponent implements OnInit {
           description: data.description,
           price: data.price,
           subjectId: data.subjectId,
-          introductionVideoUrl: data.introductionVideoUrl || '',
+          youTubeVideoUrl:data.youTubeVideoUrl, 
+          driveVideoUrl: data.driveVideoUrl,
           showSubscriberCount: data.showSubscriberCount, // تعبئة القيمة من الداتابيز
           isActive: data.isActive,
           isLifetime: data.isLifetime,

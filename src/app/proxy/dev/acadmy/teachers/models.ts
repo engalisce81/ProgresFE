@@ -18,9 +18,9 @@ export interface TeacherDto {
   password?: string;
   gender: boolean;
   collegeId?: string;
+  collegeName?: string;
   universityId?: string;
-  gradeLevelId?: string;
+  universityName?: string;
   accountTypeKey: number;
-  studentMobileIP?: string;
   logoUrl?: string;
 }

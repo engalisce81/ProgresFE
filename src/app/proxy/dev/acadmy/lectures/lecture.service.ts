@@ -54,10 +54,11 @@ export class LectureService {
     { apiName: this.apiName,...config });
   
 
-  getLectureWithQuizzes = (lectureId: string, config?: Partial<Rest.Config>) =>
+  getLectureWithQuizzes = (refId: string, isCourse: boolean, config?: Partial<Rest.Config>) =>
     this.restService.request<any, ResponseApi<LectureWithQuizzesDto>>({
       method: 'GET',
-      url: `/api/app/lecture/lecture-with-quizzes/${lectureId}`,
+      url: `/api/app/lecture/lecture-with-quizzes/${refId}`,
+      params: { isCourse },
     },
     { apiName: this.apiName,...config });
   

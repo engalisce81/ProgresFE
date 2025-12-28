@@ -2914,15 +2914,15 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Courses.CourseStudentAppService"
             },
-            "DeleteAsyncByUserId": {
-              "uniqueName": "DeleteAsyncByUserId",
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
               "name": "DeleteAsync",
               "httpMethod": "DELETE",
-              "url": "api/app/course-student",
+              "url": "api/app/course-student/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "userId",
+                  "name": "id",
                   "typeAsString": "System.Guid, System.Private.CoreLib",
                   "type": "System.Guid",
                   "typeSimple": "string",
@@ -2932,15 +2932,15 @@
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "userId",
-                  "name": "userId",
+                  "nameOnMethod": "id",
+                  "name": "id",
                   "jsonName": null,
                   "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
                   "descriptorName": ""
                 }
               ],
@@ -4151,26 +4151,34 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Lectures.LectureAppService"
             },
-            "GetLectureWithQuizzesAsyncByLectureId": {
-              "uniqueName": "GetLectureWithQuizzesAsyncByLectureId",
+            "GetLectureWithQuizzesAsyncByRefIdAndIsCourse": {
+              "uniqueName": "GetLectureWithQuizzesAsyncByRefIdAndIsCourse",
               "name": "GetLectureWithQuizzesAsync",
               "httpMethod": "GET",
-              "url": "api/app/lecture/lecture-with-quizzes/{lectureId}",
+              "url": "api/app/lecture/lecture-with-quizzes/{refId}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "lectureId",
+                  "name": "refId",
                   "typeAsString": "System.Guid, System.Private.CoreLib",
                   "type": "System.Guid",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "isCourse",
+                  "typeAsString": "System.Boolean, System.Private.CoreLib",
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "lectureId",
-                  "name": "lectureId",
+                  "nameOnMethod": "refId",
+                  "name": "refId",
                   "jsonName": null,
                   "type": "System.Guid",
                   "typeSimple": "string",
@@ -4178,6 +4186,18 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "isCourse",
+                  "name": "isCourse",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
                   "descriptorName": ""
                 }
               ],
@@ -4642,6 +4662,886 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.MediaItems.MediaItemAppService"
+            }
+          }
+        },
+        "Dev.Acadmy.Posts.PostAppService": {
+          "controllerName": "Post",
+          "controllerGroupName": "Post",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Dev.Acadmy.Posts.PostAppService",
+          "interfaces": [
+            {
+              "type": "Dev.Acadmy.Posts.IPostAppService",
+              "name": "IPostAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+                  }
+                },
+                {
+                  "name": "GetListPostAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "isGeneral",
+                      "typeAsString": "System.Nullable`1[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Boolean?",
+                      "typeSimple": "boolean?",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageNumber",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageSize",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+                  }
+                },
+                {
+                  "name": "GetMyPostsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "pageNumber",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": true,
+                      "defaultValue": 1
+                    },
+                    {
+                      "name": "pageSize",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": true,
+                      "defaultValue": 10
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "AddCommentAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>"
+                  }
+                },
+                {
+                  "name": "GetListCommentAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "postId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageNumber",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageSize",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.CommentDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.CommentDto>"
+                  }
+                },
+                {
+                  "name": "UpdateCommentAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "commentId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "newText",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>"
+                  }
+                },
+                {
+                  "name": "DeleteCommentAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "commentId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ToggleReactionAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/app/post/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "GetListPostAsyncByIsGeneralAndPageNumberAndPageSize": {
+              "uniqueName": "GetListPostAsyncByIsGeneralAndPageNumberAndPageSize",
+              "name": "GetListPostAsync",
+              "httpMethod": "GET",
+              "url": "api/app/post/post",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "isGeneral",
+                  "typeAsString": "System.Nullable`1[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Boolean?",
+                  "typeSimple": "boolean?",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageNumber",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageSize",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "isGeneral",
+                  "name": "isGeneral",
+                  "jsonName": null,
+                  "type": "System.Boolean?",
+                  "typeSimple": "boolean?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageNumber",
+                  "name": "pageNumber",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageSize",
+                  "name": "pageSize",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "GetMyPostsAsyncByPageNumberAndPageSize": {
+              "uniqueName": "GetMyPostsAsyncByPageNumberAndPageSize",
+              "name": "GetMyPostsAsync",
+              "httpMethod": "GET",
+              "url": "api/app/post/my-posts",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "pageNumber",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageSize",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "pageNumber",
+                  "name": "pageNumber",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageSize",
+                  "name": "pageSize",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/post",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Title",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Content",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "File",
+                  "jsonName": null,
+                  "type": "Microsoft.AspNetCore.Http.IFormFile",
+                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "IsGeneral",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/post/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Title",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Content",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "File",
+                  "jsonName": null,
+                  "type": "Microsoft.AspNetCore.Http.IFormFile",
+                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "IsGeneral",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.PostDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/post/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "AddCommentAsyncByInput": {
+              "uniqueName": "AddCommentAsyncByInput",
+              "name": "AddCommentAsync",
+              "httpMethod": "POST",
+              "url": "api/app/post/comment",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "GetListCommentAsyncByPostIdAndPageNumberAndPageSize": {
+              "uniqueName": "GetListCommentAsyncByPostIdAndPageNumberAndPageSize",
+              "name": "GetListCommentAsync",
+              "httpMethod": "GET",
+              "url": "api/app/post/comment/{postId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "postId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageNumber",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageSize",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "postId",
+                  "name": "postId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageNumber",
+                  "name": "pageNumber",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageSize",
+                  "name": "pageSize",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.CommentDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Posts.CommentDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "UpdateCommentAsyncByCommentIdAndNewText": {
+              "uniqueName": "UpdateCommentAsyncByCommentIdAndNewText",
+              "name": "UpdateCommentAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/post/comment/{commentId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "commentId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "newText",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "commentId",
+                  "name": "commentId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "newText",
+                  "name": "newText",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Posts.CommentDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "DeleteCommentAsyncByCommentId": {
+              "uniqueName": "DeleteCommentAsyncByCommentId",
+              "name": "DeleteCommentAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/post/comment/{commentId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "commentId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "commentId",
+                  "name": "commentId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
+            },
+            "ToggleReactionAsyncByInput": {
+              "uniqueName": "ToggleReactionAsyncByInput",
+              "name": "ToggleReactionAsync",
+              "httpMethod": "POST",
+              "url": "api/app/post/toggle-reaction",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Posts.IPostAppService"
             }
           }
         },
@@ -5351,6 +6251,570 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Questions.QuestionBankAppService"
+            }
+          }
+        },
+        "Dev.Acadmy.Reports.UserReportAppService": {
+          "controllerName": "UserReport",
+          "controllerGroupName": "UserReport",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Dev.Acadmy.Reports.UserReportAppService",
+          "interfaces": [
+            {
+              "type": "Dev.Acadmy.Interfaces.IUserReportAppService",
+              "name": "IUserReportAppService",
+              "methods": [
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+                  }
+                },
+                {
+                  "name": "GetMyReportsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "pageNumber",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageSize",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "type",
+                      "typeAsString": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Int32?",
+                      "typeSimple": "number?",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "status",
+                      "typeAsString": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Int32?",
+                      "typeSimple": "number?",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageNumber",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "pageSize",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+                  }
+                },
+                {
+                  "name": "UpdateStatusAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "status",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                    "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/user-report",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/user-report/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
+            },
+            "GetMyReportsAsyncByPageNumberAndPageSize": {
+              "uniqueName": "GetMyReportsAsyncByPageNumberAndPageSize",
+              "name": "GetMyReportsAsync",
+              "httpMethod": "GET",
+              "url": "api/app/user-report/my-reports",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "pageNumber",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageSize",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "pageNumber",
+                  "name": "pageNumber",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageSize",
+                  "name": "pageSize",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
+            },
+            "GetListAsyncByTypeAndStatusAndPageNumberAndPageSize": {
+              "uniqueName": "GetListAsyncByTypeAndStatusAndPageNumberAndPageSize",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/user-report",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "type",
+                  "typeAsString": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "status",
+                  "typeAsString": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageNumber",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageSize",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "type",
+                  "name": "type",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "status",
+                  "name": "status",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageNumber",
+                  "name": "pageNumber",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageSize",
+                  "name": "pageSize",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/app/user-report/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
+            },
+            "UpdateStatusAsyncByIdAndStatus": {
+              "uniqueName": "UpdateStatusAsyncByIdAndStatus",
+              "name": "UpdateStatusAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/user-report/{id}/status",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "status",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "status",
+                  "name": "status",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Reports.ReportDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/user-report/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.IUserReportAppService"
             }
           }
         },
@@ -11705,7 +13169,43 @@
           "regex": null
         },
         {
-          "name": "IntroductionVideoUrl",
+          "name": "HasYouTubeVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasDriveVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -12215,7 +13715,43 @@
           "regex": null
         },
         {
-          "name": "IntroductionVideoUrl",
+          "name": "HasYouTubeVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasDriveVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -12533,7 +14069,19 @@
           "regex": null
         },
         {
-          "name": "IntroductionVideoUrl",
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -12839,7 +14387,19 @@
           "regex": null
         },
         {
-          "name": "TargetUrl",
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -12969,6 +14529,186 @@
           "jsonName": null,
           "type": "System.Boolean",
           "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateCommentDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Text",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "PostId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Request.Posts.CreateUpdatePostDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Title",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": 256,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Content",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "File",
+          "jsonName": null,
+          "type": "Microsoft.AspNetCore.Http.IFormFile",
+          "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsGeneral",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Request.Posts.CreateUpdateReactionDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "PostId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Type",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Request.Reports.CreateUpdateReportDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Title",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": 0,
+          "maxLength": 128,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Description",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": 0,
+          "maxLength": 2000,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Type",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TargetEntityId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -13212,6 +14952,318 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Posts.CommentDto": {
+      "baseType": "Volo.Abp.Application.Dtos.AuditedEntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "PostId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Text",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LogoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Posts.PostDto": {
+      "baseType": "Volo.Abp.Application.Dtos.AuditedEntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Title",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Content",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsGeneral",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "AuthorName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LogoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TotalCommentsCount",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ReactionsSummaries",
+          "jsonName": null,
+          "type": "[Dev.Acadmy.Dtos.Response.Posts.ReactionSummaryDto]",
+          "typeSimple": "[Dev.Acadmy.Dtos.Response.Posts.ReactionSummaryDto]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Posts.ReactionSummaryDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Type",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Count",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Reports.ReportDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Title",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Description",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Type",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Status",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserEmail",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CreationTime",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TargetEntityId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -13986,7 +16038,19 @@
           "regex": null
         },
         {
-          "name": "VideoUrl",
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -14070,6 +16134,18 @@
           "regex": null
         },
         {
+          "name": "IsRequiredQuiz",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "SuccessQuizRate",
           "jsonName": null,
           "type": "System.Int32",
@@ -14127,7 +16203,43 @@
           "regex": null
         },
         {
-          "name": "VideoUrl",
+          "name": "HasYouTubeVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasDriveVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -14247,6 +16359,18 @@
           "regex": null
         },
         {
+          "name": "IsRequiredQuiz",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "SuccessQuizRate",
           "jsonName": null,
           "type": "System.Int32",
@@ -14316,7 +16440,55 @@
           "regex": null
         },
         {
-          "name": "VideoUrl",
+          "name": "HasYouTubeVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasDriveVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsQuizRequired",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "YouTubeVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -15673,6 +17845,18 @@
           "minimum": null,
           "maximum": null,
           "regex": null
+        },
+        {
+          "name": "CourseId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
         }
       ]
     },
@@ -15961,6 +18145,18 @@
         },
         {
           "name": "LeactureName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CourseName",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
@@ -16598,9 +18794,33 @@
           "regex": null
         },
         {
+          "name": "CollegeName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "UniversityId",
           "jsonName": null,
           "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UniversityName",
+          "jsonName": null,
+          "type": "System.String",
           "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
@@ -16614,6 +18834,18 @@
           "jsonName": null,
           "type": "System.Guid?",
           "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "GradeLevelName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -16958,6 +19190,18 @@
           "regex": null
         },
         {
+          "name": "CollegeName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "UniversityId",
           "jsonName": null,
           "type": "System.Guid",
@@ -16970,10 +19214,10 @@
           "regex": null
         },
         {
-          "name": "GradeLevelId",
+          "name": "UniversityName",
           "jsonName": null,
-          "type": "System.Guid?",
-          "typeSimple": "string?",
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -16986,18 +19230,6 @@
           "jsonName": null,
           "type": "System.Int32",
           "typeSimple": "number",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "StudentMobileIP",
-          "jsonName": null,
-          "type": "System.String",
-          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
