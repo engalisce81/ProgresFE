@@ -1,5 +1,4 @@
 @if (isLoading) {
-  <div class="loading">Loading student quizzes...</div>
 } @else if (studentLectures?.length) {
   <div class="lectures-container">
     @for (lecture of studentLectures; track lecture) {

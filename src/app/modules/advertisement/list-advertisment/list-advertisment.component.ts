@@ -41,7 +41,8 @@ export class ListAdvertisementComponent implements OnInit {
     this.adForm = this.fb.group({
       title: ['', Validators.required],
       imageUrl: ['', Validators.required],
-      targetUrl: [''],
+      youTubeVideoUrl: [""],
+      driveVideoUrl:[""],
       startDate: [null],
       endDate: [null],
       isActive: [true]

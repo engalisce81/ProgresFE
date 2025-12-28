@@ -65,13 +65,15 @@ export class ListLectureComponent implements OnInit {
     this.lectureForm = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
-      videoUrl: [''],
+      youTubeVideoUrl: [""],
+      driveVideoUrl:[""], 
       quizTime: [0, [Validators.required, Validators.min(0)]],
       quizTryCount: [0, [Validators.required, Validators.min(0)]],
       quizCount: [0, [Validators.required, Validators.min(0)]],
       successQuizRate: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       isVisible: [true],
-      isFree: [false]
+      isFree: [false],
+      isRequiredQuiz:[false]
     });
   }
 

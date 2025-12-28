@@ -16,10 +16,10 @@ import { Observable } from 'rxjs';
   styleUrl: './list-quiz.component.scss'
 })
 export class ListQuizComponent implements OnInit {
-  lectureId!: string;
+  refId!: string;
   lecture?: LectureWithQuizzesDto;
   loading = false;
-  
+  isCourse=true;
   // Modal Control
   activeModal: 'none' | 'delete' | 'quizForm' | 'questionForm' = 'none';
   isEditMode = false;
@@ -47,11 +47,27 @@ export class ListQuizComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lectureId = this.route.snapshot.paramMap.get('lectureId')!;
-    this.loadLecture();
+  // نضع كل شيء داخل الاشتراك لضمان ترتيب التنفيذ
+  this.route.queryParamMap.subscribe(params => {
+    const isCourseParam = params.get('isCourse');
+    this.isCourse = isCourseParam === 'true';
+
+    // الآن نأتي بالـ ID بناءً على القيمة الصحيحة لـ isCourse
+    this.refId = this.isCourse 
+      ? this.route.snapshot.paramMap.get('id') 
+      : this.route.snapshot.paramMap.get('lectureId');
+
+    // إعادة تهيئة الفورم بالقيم الجديدة
+    this.initForms();
+    
+    // تحميل البيانات
+    if (this.refId) {
+      this.loadLecture();
+    }
     this.loadQuestionTypes();
-    this.loadQuestionBanks(); // تحميل بنوك الأسئلة عند البداية
-  }
+    this.loadQuestionBanks();
+  });
+}
 
   initForms() {
     this.quizForm = this.fb.group({
@@ -59,7 +75,8 @@ export class ListQuizComponent implements OnInit {
       description: [''], // إضافة حقل الوصف
       quizTime: [1, [Validators.required, Validators.min(1)]],
       quizTryCount: [1, [Validators.required, Validators.min(1)]],
-      lectureId: [this.lectureId]
+      lectureId: [this.isCourse? null : this.refId],
+      courseId:[this.isCourse? this.refId : null]
     });
 
     this.questionForm = this.fb.group({
@@ -75,7 +92,7 @@ export class ListQuizComponent implements OnInit {
 
   loadLecture() {
     this.loading = true;
-    this.lectureService.getLectureWithQuizzes(this.lectureId).subscribe({
+    this.lectureService.getLectureWithQuizzes(this.refId,this.isCourse).subscribe({
       next: (res) => { 
         this.lecture = res.data; 
         this.loading = false; 
@@ -108,10 +125,11 @@ export class ListQuizComponent implements OnInit {
         description: quiz.description,
         quizTime: quiz.quizTime,
         quizTryCount: quiz.quizTryCount,
-        lectureId: this.lectureId
+        lectureId: this.isCourse?null: this.refId,
+        courseId :this.isCourse? this.refId : null
       });
     } else {
-      this.quizForm.reset({ lectureId: this.lectureId, quizTime: 1, quizTryCount: 1, description: '' });
+      this.quizForm.reset({ lectureId: this.isCourse? null: this.refId , courseId:this.isCourse? this.refId : null, quizTime: 1, quizTryCount: 1, description: '' });
     }
   }
 
@@ -187,6 +205,7 @@ export class ListQuizComponent implements OnInit {
         error: () => this.saveQuestion()
       });
     } else {
+      this.questionForm.patchValue({ logoUrl: "" });
       this.saveQuestion();
     }
   }

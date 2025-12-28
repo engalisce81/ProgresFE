@@ -18,7 +18,10 @@ export interface CourseDto extends AuditedEntityDto<string> {
   isLifetime: boolean;
   isPdf: boolean;
   pdfUrl?: string;
-  introductionVideoUrl?: string;
+  hasYouTubeVideo: boolean;
+  hasDriveVideo: boolean;
+  youTubeVideoUrl?: string;
+  driveVideoUrl?: string;
   durationInDays?: number;
   isQuiz: boolean;
   infos: string[];
@@ -65,7 +68,10 @@ export interface CourseInfoHomeDto {
   alreadyRequest: boolean;
   chapterCount: number;
   lectureCount: number;
-  introductionVideoUrl?: string;
+  hasYouTubeVideo: boolean;
+  hasDriveVideo: boolean;
+  youTubeVideoUrl?: string;
+  driveVideoUrl?: string;
   durationInWeeks?: number;
   infos: string[];
   courseChaptersDtos: CourseChaptersDto[];
@@ -96,7 +102,8 @@ export interface CreateUpdateCourseDto {
   isPdf: boolean;
   pdfUrl?: string;
   showSubscriberCount: boolean;
-  introductionVideoUrl?: string;
+  youTubeVideoUrl?: string;
+  driveVideoUrl?: string;
   subjectId?: string;
   isQuiz: boolean;
   infos: string[];

@@ -62,13 +62,7 @@
     </button>
   </div>
 
-  @if (loading && !colleges.length) {
-  <div class="loading-state" style="text-align: center; padding: 50px;">
-    <div class="spinner-border text-primary"></div>
-    <p style="margin-top: 15px; color: var(--muted);">Loading colleges...</p>
-  </div>
-  }
-
+ 
   <div class="cards-grid">
     @for (college of colleges; track college.id) {
     <div class="course-card">

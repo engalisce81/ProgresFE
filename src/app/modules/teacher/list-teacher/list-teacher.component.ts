@@ -103,18 +103,21 @@ export class ListTeacherComponent implements OnInit {
     this.showFormModal = true;
   }
 
-  openEditModal(teacher: any) {
-    this.isEditMode = true;
-    this.selectedTeacherId = teacher.id;
-    this.teacherForm.get('password')?.clearValidators();
-    
-    this.collegeService.getCollegesList(teacher.universityId).subscribe(cRes => {
-      this.colleges = cRes.items;
-      this.teacherForm.patchValue(teacher);
-      this.showFormModal = true;
-    });
-  }
+ openEditModal(teacher: any) {
+  this.isEditMode = true;
+  this.selectedTeacherId = teacher.id;
+  this.teacherForm.get('password')?.clearValidators();
+  
+  // تحميل الكليات فقط
+  this.collegeService.getCollegesList(teacher.universityId).subscribe(cRes => {
+    this.colleges = cRes.items;
 
+    // أهم خطوة: استخدم emitEvent: false لمنع الـ Listener من مسح الداتا
+    this.teacherForm.patchValue(teacher, { emitEvent: false });
+    
+    this.showFormModal = true;
+  });
+}
   closeFormModal() { this.showFormModal = false; }
 
   submitForm() {

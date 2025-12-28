@@ -1,21 +1,29 @@
 import { PagedResultDto } from '@abp/ng.core';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CourseStudentDto, CourseStudentService, CreateUpdateCourseStudentDto } from '@proxy/dev/acadmy/courses';
 
 @Component({
   selector: 'app-list-requestjoin',
-  imports: [],
+  standalone: true,
+  imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './list-requestjoin.component.html',
   styleUrl: './list-requestjoin.component.scss'
 })
-export class ListRequestjoinComponent {
-students: CourseStudentDto[] = [];
+export class ListRequestjoinComponent implements OnInit {
+  students: (CourseStudentDto & { processing?: boolean, showMenu?: boolean })[] = [];
   totalCount = 0;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 12;
   courseId!: string;
   loading = false;
+  search = '';
+
+  // حذف الطلب (الرفض النهائي)
+  showDeleteConfirm = false;
+  requestToDelete: CourseStudentDto | null = null;
 
   constructor(
     private courseStudentService: CourseStudentService,
@@ -30,14 +38,12 @@ students: CourseStudentDto[] = [];
   loadStudents() {
     if (!this.courseId) return;
     this.loading = true;
-
-    // 🟢 هنا نجيب غير المشتركين
     this.courseStudentService.getList(
       this.pageNumber,
       this.pageSize,
-      false,                // isSubscribe = false => غير المشتركين
+      false, // الطلبات المعلقة فقط
       this.courseId,
-      ''
+      this.search
     ).subscribe((res: PagedResultDto<CourseStudentDto>) => {
       this.students = res.items ?? [];
       this.totalCount = res.totalCount;
@@ -45,45 +51,43 @@ students: CourseStudentDto[] = [];
     });
   }
 
-  // ✅ Approve Student
-  approveStudent(student: CourseStudentDto) {
+  // ✅ الموافقة على الطالب
+  approveStudent(student: any) {
+    student.processing = true;
     const input: CreateUpdateCourseStudentDto = {
       userId: student.userId,
       courseId: this.courseId,
       isSubscibe: true
     };
 
-    this.courseStudentService.update(student.id, input).subscribe(() => {
-      student.isSubscibe = true; // تحديث الحالة في الواجهة
-      this.loadStudents();
+    this.courseStudentService.update(student.id, input).subscribe({
+      next: () => {
+        this.loadStudents(); // إعادة التحميل لنقله لقائمة المشتركين
+      },
+      error: () => student.processing = false
     });
   }
 
-  // ❌ Reject Student
-  rejectStudent(student: CourseStudentDto) {
-    const input: CreateUpdateCourseStudentDto = {
-      userId: student.userId,
-      courseId: this.courseId,
-      isSubscibe: false
-    };
-
-    this.courseStudentService.update(student.id, input).subscribe(() => {
-      student.isSubscibe = false; // تحديث الحالة في الواجهة
-      this.loadStudents();
-    });
+  // ❌ رفض (حذف الطلب تماماً)
+  confirmReject(student: CourseStudentDto) {
+    this.requestToDelete = student;
+    this.showDeleteConfirm = true;
   }
 
-  nextPage() {
-    if (this.pageNumber * this.pageSize < this.totalCount) {
-      this.pageNumber++;
-      this.loadStudents();
+  executeDelete() {
+    if (this.requestToDelete?.userId) {
+      this.courseStudentService.delete(this.requestToDelete.userId).subscribe(() => {
+        this.showDeleteConfirm = false;
+        this.loadStudents();
+      });
     }
   }
 
-  prevPage() {
-    if (this.pageNumber > 1) {
-      this.pageNumber--;
-      this.loadStudents();
-    }
+  onPageChange(page: number) {
+    this.pageNumber = page;
+    this.loadStudents();
   }
+
+  get totalPages(): number { return Math.ceil(this.totalCount / this.pageSize); }
+  get pages(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }
 }

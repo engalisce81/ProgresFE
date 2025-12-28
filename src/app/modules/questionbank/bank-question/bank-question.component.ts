@@ -6,7 +6,7 @@ import { ExamQuestionsDto, ExamService } from '@proxy/dev/acadmy/exams';
 
 @Component({
   selector: 'app-bank-question',
-  imports: [NgClass,ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './bank-question.component.html',
   styleUrl: './bank-question.component.scss'
 })
