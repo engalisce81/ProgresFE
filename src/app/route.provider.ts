@@ -50,7 +50,7 @@ function configureRoutes(routesService: RoutesService) {
     },
     {
       path: 'questionbanks',
-      name: 'Questionbanks',
+      name: 'QBanks',
       iconClass: 'fas fa-database',
       order: 10,
       layout: eLayoutType.application,
@@ -68,18 +68,17 @@ function configureRoutes(routesService: RoutesService) {
     {
       path: 'advertisement',
       name: 'Ads',
-      iconClass: 'fas fa-user-circle',
+      iconClass: 'fas fa-bullhorn',
       order: 12,
       layout: eLayoutType.application,
-      requiredPolicy: 'Acadmy.QuestionBanks',
+      requiredPolicy: 'Acadmy.Advertisements.Create',
     },
      {
       path: 'profile',
       name: 'Profile',
       iconClass: 'fas fa-user-circle',
-      order: 12,
+      order: 13,
       layout: eLayoutType.application,
-      requiredPolicy: 'Acadmy.QuestionBanks',
     },
     ]);
   };

@@ -4,13 +4,15 @@ import type { QuizInfoDto, QuizWithQuestionsDto } from '../quizzes/models';
 export interface CreateUpdateLectureDto {
   title?: string;
   content?: string;
-  videoUrl?: string;
+  youTubeVideoUrl?: string;
+  driveVideoUrl?: string;
   chapterId?: string;
   isVisible: boolean;
   quizTime: number;
   quizTryCount: number;
   quizCount: number;
   isFree: boolean;
+  isRequiredQuiz: boolean;
   successQuizRate: number;
   pdfUrls: string[];
 }
@@ -18,7 +20,10 @@ export interface CreateUpdateLectureDto {
 export interface LectureDto extends EntityDto<string> {
   title?: string;
   content?: string;
-  videoUrl?: string;
+  hasYouTubeVideo: boolean;
+  hasDriveVideo: boolean;
+  youTubeVideoUrl?: string;
+  driveVideoUrl?: string;
   chapterId?: string;
   courseId?: string;
   courseName?: string;
@@ -28,6 +33,7 @@ export interface LectureDto extends EntityDto<string> {
   quizCount: number;
   isVisible: boolean;
   isFree: boolean;
+  isRequiredQuiz: boolean;
   successQuizRate: number;
   pdfUrls: string[];
 }
@@ -36,7 +42,11 @@ export interface LectureInfoDto {
   lectureId?: string;
   title?: string;
   content?: string;
-  videoUrl?: string;
+  hasYouTubeVideo: boolean;
+  hasDriveVideo: boolean;
+  isQuizRequired: boolean;
+  youTubeVideoUrl?: string;
+  driveVideoUrl?: string;
   pdfUrls: string[];
   quiz: QuizInfoDto;
 }

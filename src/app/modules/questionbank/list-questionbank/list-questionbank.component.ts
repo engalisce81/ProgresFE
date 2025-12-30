@@ -9,7 +9,7 @@ import { NgClass } from '@angular/common';
 @Component({
   selector: 'app-list-questionbank',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule,RouterLink],
   templateUrl: './list-questionbank.component.html',
   styleUrl: './list-questionbank.component.scss'
 })

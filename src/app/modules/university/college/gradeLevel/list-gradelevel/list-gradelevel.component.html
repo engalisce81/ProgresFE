@@ -54,12 +54,7 @@
     </button>
   </div>
 
-  @if (loading && !gradeLevels.length) {
-  <div class="loading-state" style="text-align: center; padding: 50px;">
-    <div class="spinner-border text-primary"></div>
-    <p style="margin-top: 15px; color: var(--muted);">Loading levels...</p>
-  </div>
-  }
+ 
 
   <div class="cards-grid">
     @for (level of gradeLevels; track level.id) {

@@ -13,7 +13,7 @@ import { ShowPasswordDirective } from "@abp/ng.core";
 @Component({
   selector: 'app-list-student',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, NgClass, ShowPasswordDirective],
+  imports: [ReactiveFormsModule, FormsModule, NgClass],
   templateUrl: './list-student.component.html',
   styleUrl: './list-student.component.scss'
 })
@@ -50,6 +50,8 @@ export class ListStudentComponent implements OnInit {
   showAssignCoursesModal = false;
   courses: CourseLookupDto[] = [];
   courseSearch = '';
+    showDeleteConfirm = false;
+studentToDelete:StudentDto;
 
   constructor(
     private fb: FormBuilder,
@@ -67,9 +69,10 @@ export class ListStudentComponent implements OnInit {
       universityId: ['', Validators.required],
       collegeId: ['', Validators.required],
       gradeLevelId: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
       accountTypeKey: [3],
-      studentMobileIP: ['']
+      studentMobileIP: [''],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]]
+     
     });
   }
 
@@ -104,6 +107,7 @@ export class ListStudentComponent implements OnInit {
       next: (res) => {
         this.students = res.items.map(s => ({ ...s, showMenu: false }));
         this.totalCount = res.totalCount;
+        console.log(this.students);
         this.loading = false;
       },
       error: () => this.loading = false
@@ -124,19 +128,26 @@ export class ListStudentComponent implements OnInit {
   }
 
   openEditModal(student: any) {
-    this.isEditMode = true;
-    this.selectedStudentId = student.id;
-    this.studentForm.get('password')?.clearValidators();
+  this.isEditMode = true;
+  this.selectedStudentId = student.id;
+  this.studentForm.get('password')?.clearValidators();
+  
+  // 1. تحميل الكليات أولاً
+  this.collegeService.getCollegesList(student.universityId).subscribe(cRes => {
+    this.colleges = cRes.items;
     
-    this.collegeService.getCollegesList(student.universityId).subscribe(cRes => {
-      this.colleges = cRes.items;
-      this.collegeService.getGradeLevelList(student.collegeId).subscribe(gRes => {
-        this.gradeLevels = gRes.items;
-        this.studentForm.patchValue(student);
-        this.showFormModal = true;
-      });
+    // 2. تحميل المستويات الدراسية ثانياً
+    this.collegeService.getGradeLevelList(student.collegeId).subscribe(gRes => {
+      this.gradeLevels = gRes.items;
+
+      // 3. تعطيل الـ Listeners مؤقتاً أو استخدام { emitEvent: false } 
+      // لمنع الـ Listener في setupFormListeners من مسح الداتا
+      this.studentForm.patchValue(student, { emitEvent: false });
+      
+      this.showFormModal = true;
     });
-  }
+  });
+}
 
   closeFormModal() { this.showFormModal = false; }
 
@@ -144,7 +155,7 @@ export class ListStudentComponent implements OnInit {
     if (this.studentForm.invalid) return;
     this.loading = true;
     const dto = this.studentForm.value;
-
+    if(this.isEditMode) dto.password ="123456";
     const request = this.isEditMode 
       ? this.studentService.update(this.selectedStudentId!, dto)
       : this.studentService.create(dto);
@@ -196,9 +207,34 @@ export class ListStudentComponent implements OnInit {
     });
   }
 
-  confirmDelete(student: any) {
-    if (confirm(`Are you sure you want to delete ${student.fullName}?`)) {
-      this.studentService.delete(student.id).subscribe(() => this.loadStudents());
-    }
+
+
+  confirmDelete(student: any) { 
+  this.studentToDelete = student; 
+  this.showDeleteConfirm = true; 
+}
+
+// 2. إلغاء العملية وإغلاق المودال
+cancelDelete() { 
+  this.studentToDelete = null;
+  this.showDeleteConfirm = false; 
+}
+
+// 3. تنفيذ عملية الحذف الفعلية
+deleteStudent() {
+  if (this.studentToDelete) {
+    this.studentService.delete(this.studentToDelete.id).subscribe({
+      next: () => {
+        // إغلاق المودال وتحديث القائمة بعد النجاح
+        this.showDeleteConfirm = false;
+        this.loadStudents(); 
+        // يمكنك إضافة رسالة نجاح هنا (Toaster)
+      },
+      error: (err) => {
+        console.error("خطأ أثناء الحذف:", err);
+        this.showDeleteConfirm = false;
+      }
+    });
   }
+}
 }

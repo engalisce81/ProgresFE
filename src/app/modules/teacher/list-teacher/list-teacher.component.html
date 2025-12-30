@@ -11,7 +11,7 @@
             <input type="text" formControlName="fullName" placeholder="Enter full name" class="form-control">
           </div>
           <div class="form-group">
-            <label>Username *</label>
+            <label>Email *</label>
             <input type="text" formControlName="userName" placeholder="Enter username" class="form-control">
           </div>
         </div>
@@ -126,7 +126,7 @@
           <span class="custom-badge">{{ teacher.userName }}</span>
         </div>
         <h3 class="course-name">{{ teacher.fullName }}</h3>
-        <p class="course-title">{{ teacher.collegeName }}</p>
+        <p class="course-title">{{ teacher.universityName }} - {{ teacher.collegeName }}</p>
         <p class="course-title" style="font-size: 0.8rem;"><i class="bi bi-telephone"></i> {{ teacher.phoneNumber }}</p>
       </div>
     </div>

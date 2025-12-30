@@ -20,8 +20,11 @@ export interface StudentDto {
   password?: string;
   gender: boolean;
   collegeId?: string;
+  collegeName?: string;
   universityId?: string;
+  universityName?: string;
   gradeLevelId?: string;
+  gradeLevelName?: string;
   accountTypeKey: number;
   studentMobileIP?: string;
   logoUrl?: string;
