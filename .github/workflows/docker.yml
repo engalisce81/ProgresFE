@@ -31,5 +31,5 @@ jobs:
         file: ./Dockerfile 
         push: true
         tags: |
-          engalisce81/progres-fe:latest
-          engalisce81/progres-fe:${{ github.sha }}
+          engalisce81/tadriscomfe:latest
+          engalisce81/tadriscomfe:${{ github.sha }}
