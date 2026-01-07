@@ -14,6 +14,7 @@ export interface CreateUpdateLectureDto {
   isFree: boolean;
   isRequiredQuiz: boolean;
   successQuizRate: number;
+  telegramVideoUrl?: string;
   pdfUrls: string[];
 }
 
@@ -22,6 +23,8 @@ export interface LectureDto extends EntityDto<string> {
   content?: string;
   hasYouTubeVideo: boolean;
   hasDriveVideo: boolean;
+  hasTelegramVideo: boolean;
+  telegramVideoUrl?: string;
   youTubeVideoUrl?: string;
   driveVideoUrl?: string;
   chapterId?: string;
@@ -44,6 +47,8 @@ export interface LectureInfoDto {
   content?: string;
   hasYouTubeVideo: boolean;
   hasDriveVideo: boolean;
+  hasTelegramVideo: boolean;
+  telegramVideoUrl?: string;
   isQuizRequired: boolean;
   youTubeVideoUrl?: string;
   driveVideoUrl?: string;

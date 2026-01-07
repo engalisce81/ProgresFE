@@ -2,7 +2,7 @@ import type { CreateUpdateLectureDto, LectureDto, LectureTryDto, LectureWithQuiz
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { LectureQuizResultDto, QuizAnswerDto, QuizDetailsDto, QuizResultDto, QuizStudentDto } from '../quizzes/models';
+import type { LectureQuizResultDto, QuizAnswerDto, QuizDetailsDto, QuizResultDto } from '../quizzes/models';
 import type { ResponseApi } from '../response/models';
 
 @Injectable({
@@ -12,10 +12,11 @@ export class LectureService {
   apiName = 'Default';
   
 
-  correctQuiz = (input: QuizAnswerDto, config?: Partial<Rest.Config>) =>
+  correctQuiz = (input: QuizAnswerDto, isExam: boolean, config?: Partial<Rest.Config>) =>
     this.restService.request<any, ResponseApi<QuizResultDto>>({
       method: 'POST',
       url: '/api/app/lecture/correct-quiz',
+      params: { isExam },
       body: input,
     },
     { apiName: this.apiName,...config });
@@ -72,10 +73,11 @@ export class LectureService {
     { apiName: this.apiName,...config });
   
 
-  getQuizDetails = (quizId: string, config?: Partial<Rest.Config>) =>
+  getQuizDetails = (refId: string, isExam: boolean, config?: Partial<Rest.Config>) =>
     this.restService.request<any, ResponseApi<QuizDetailsDto>>({
       method: 'GET',
-      url: `/api/app/lecture/quiz-details/${quizId}`,
+      url: `/api/app/lecture/quiz-details/${refId}`,
+      params: { isExam },
     },
     { apiName: this.apiName,...config });
   
@@ -85,15 +87,6 @@ export class LectureService {
       method: 'GET',
       url: '/api/app/lecture/user-try-count',
       params: { userId, lecId, quizId },
-    },
-    { apiName: this.apiName,...config });
-  
-
-  markQuiz = (quizId: string, score: number, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, ResponseApi<QuizStudentDto>>({
-      method: 'POST',
-      url: `/api/app/lecture/mark-quiz/${quizId}`,
-      params: { score },
     },
     { apiName: this.apiName,...config });
   

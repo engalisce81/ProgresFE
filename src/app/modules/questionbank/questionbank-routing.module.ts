@@ -5,7 +5,7 @@ import { BankQuestionComponent } from './bank-question/bank-question.component';
 
 const routes: Routes = [
   {path:'',pathMatch:"full", component:ListQuestionbankComponent},
-  {path:':id/bankquestion',pathMatch:"full", component: BankQuestionComponent},
+  {path:':bankId/bankquestion',pathMatch:"full", component: BankQuestionComponent},
 ];
 
 @NgModule({

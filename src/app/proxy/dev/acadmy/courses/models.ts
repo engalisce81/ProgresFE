@@ -1,4 +1,5 @@
 import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
+import type { YoutubeVideoResultDto } from '../dtos/response/youtube-qualities/models';
 import type { CourseChaptersDto } from '../chapters/models';
 import type { FeedbackDto } from '../dtos/response/courses/models';
 
@@ -34,6 +35,7 @@ export interface CourseDto extends AuditedEntityDto<string> {
   chapterCount: number;
   lectureCount: number;
   subscriberCount: number;
+  youtubeVideoResultDto: YoutubeVideoResultDto;
 }
 
 export interface CourseInfoDto extends AuditedEntityDto<string> {

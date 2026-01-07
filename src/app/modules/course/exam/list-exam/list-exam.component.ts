@@ -61,7 +61,7 @@ export class ListExamComponent implements OnInit {
   // === التحميل الأساسي ===
   loadExams() {
     this.loading = true;
-    this.examService.getList(1, 100, this.search).subscribe({
+    this.examService.getList(1, 100, this.search,this.courseId).subscribe({
       next: (res) => {
         this.exams = res.items;
         this.loading = false;

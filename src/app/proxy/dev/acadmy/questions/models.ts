@@ -31,6 +31,7 @@ export interface QuestionAnswerPanelDto {
   id?: string;
   answer?: string;
   isCorrect: boolean;
+  isSelectedByStudent: boolean;
 }
 
 export interface QuestionBankDto extends EntityDto<string> {
@@ -60,6 +61,9 @@ export interface QuestionWithAnswersDto {
   questionTypeName?: string;
   logoUrl?: string;
   answers: QuestionAnswerPanelDto[];
+  studentTextAnswer?: string;
+  isStudentAnswerCorrect: boolean;
+  scoreObtained: number;
 }
 
 export interface QuestionAnswerDetailesDto {

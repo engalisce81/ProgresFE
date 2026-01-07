@@ -67,6 +67,7 @@ export class ListLectureComponent implements OnInit {
       content: ['', Validators.required],
       youTubeVideoUrl: [""],
       driveVideoUrl:[""], 
+      telegramVideoUrl:[""],
       quizTime: [0, [Validators.required, Validators.min(0)]],
       quizTryCount: [0, [Validators.required, Validators.min(0)]],
       quizCount: [0, [Validators.required, Validators.min(0)]],
@@ -144,7 +145,7 @@ export class ListLectureComponent implements OnInit {
   openCreateForm() {
     this.isEditMode = false;
     this.showForm = true;
-    this.lectureForm.reset({ isVisible: true, isFree: false, quizTime:0, quizCount:0, quizTryCount:0, successQuizRate:0 });
+    this.lectureForm.reset({ isVisible: true, isFree: false,isRequiredQuiz:false ,quizTime:0, quizCount:0, quizTryCount:0, successQuizRate:0 });
     this.pdfFiles = [];
     this.existingPdfs = [];
   }

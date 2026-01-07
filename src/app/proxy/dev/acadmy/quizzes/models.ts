@@ -89,10 +89,3 @@ export interface QuizResultDto {
   lectureTryCount: number;
   isSuccesful: boolean;
 }
-
-export interface QuizStudentDto {
-  lectureId?: string;
-  userId?: string;
-  quizId?: string;
-  score: number;
-}

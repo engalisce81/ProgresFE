@@ -668,6 +668,9 @@ body ,.lpx-content ,.lpx-content-container {
     &.text-danger:hover { background: #ef4444; }
   }
 }
+a{
+  text-decoration: none;
+}
 
 /* Card Body */
 .card-body {

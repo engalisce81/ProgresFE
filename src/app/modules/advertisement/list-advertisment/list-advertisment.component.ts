@@ -94,7 +94,7 @@ export class ListAdvertisementComponent implements OnInit {
     this.adForm.patchValue({
       title: ad.title,
       imageUrl: ad.imageUrl,
-      targetUrl: ad.targetUrl,
+      targetUrl: ad.youTubeVideoUrl,
       startDate: ad.startDate ? ad.startDate.split('T')[0] : null,
       endDate: ad.endDate ? ad.endDate.split('T')[0] : null,
       isActive: ad.isActive
