@@ -1,52 +1,95 @@
 @if (isLoading) {
-} @else if (studentLectures?.length) {
-  <div class="lectures-container">
-    @for (lecture of studentLectures; track lecture) {
-      <div class="lecture-card">
-        <h2 class="lecture-title">
-          🎓 {{ lecture.title }}
-        </h2>
+<div class="loading-container">
+  <div class="spinner-modern"></div>
+  <p>Loading student results...</p>
+</div>
+} @else {
+<div class="student-degree-container">
 
-        @if (lecture.quizzes?.length) {
-          <div class="quiz-list">
-            @for (quiz of lecture.quizzes; track quiz) {
-              <div class="quiz-card">
-                <h3 class="quiz-title">{{ quiz.title }}</h3>
-                @if (quiz.questions?.length) {
-                  <div class="questions">
-                    @for (question of quiz.questions; track question) {
-                      <div class="question-block">
-                        <p class="question-title">
-                          <strong>Q:</strong> {{ question.title }} 
-                          <span class="score">{{ question.score }} </span>
-                        </p>
-                        <p class="question-type">Type: {{ question.questionTypeName }}</p>
+  @for (lecture of studentLectures; track lecture.id) {
+  <div class="lecture-section">
+    <div class="lecture-header-main">
+      <h2><i class="bi bi-journal-text"></i> Lecture: {{ lecture.title }}</h2>
+    </div>
 
-                        <ul class="answers">
-                          @for (answer of question.answers; track answer) {
-                            <li [class.correct]="answer.isCorrect">
-                              {{ answer.answer }}
-                              @if (answer.isCorrect) {
-                                <span class="checkmark">✔</span>
-                              }
-                            </li>
-                          }
-                        </ul>
-                      </div>
-                    }
-                  </div>
-                } @else {
-                  <p class="muted">No questions found for this quiz.</p>
-                }
+    @for (quiz of lecture.quizzes; track quiz.id) {
+    <div class="quiz-container">
+      <h3 class="quiz-title"><i class="bi bi-patch-check"></i> {{ quiz.title }}</h3>
+
+      <div class="question-list">
+        @for (q of quiz.questions; track q.id) {
+        <div class="question-card" [class.wrong-border]="!q.isStudentAnswerCorrect" [class.correct-border]="q.isStudentAnswerCorrect">
+          
+          <div class="question-header">
+            <div class="question-title-area">
+              <strong><i class="bi bi-question-circle"></i> {{ q.title }}</strong>
+              <div class="badges">
+                <span class="type">({{ q.questionTypeName }})</span>
+                <span class="score">Score: {{ q.scoreObtained }} / {{ q.score }}</span>
               </div>
-            }
+            </div>
           </div>
-        } @else {
-          <p class="muted">No quizzes found for this lecture.</p>
+
+          @if (q.logoUrl && q.logoUrl.trim() !== '') {
+          <div class="question-image">
+            <img [src]="q.logoUrl" alt="Question media" />
+          </div>
+          }
+
+          @if (q.answers && q.answers.length > 0) {
+          <ul class="answers">
+            @for (ans of q.answers; track ans.id) {
+            <li [ngClass]="{
+                  'correct-ans': ans.isCorrect, 
+                  'student-selected': ans.isSelectedByStudent,
+                  'wrong-selection': ans.isSelectedByStudent && !ans.isCorrect
+                }">
+              
+              <div class="ans-content">
+                @if (ans.isSelectedByStudent) {
+                  <i class="bi" [ngClass]="ans.isCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
+                } @else {
+                  <i class="bi bi-circle"></i>
+                }
+                <span>{{ ans.answer }}</span>
+              </div>
+
+              <div class="ans-labels">
+                @if (ans.isCorrect) { <span class="badge bg-success">Correct Answer</span> }
+                @if (ans.isSelectedByStudent) { <span class="badge bg-primary">Your Choice</span> }
+              </div>
+            </li>
+            }
+          </ul>
+          }
+
+          @if (q.studentTextAnswer) {
+          <div class="text-answer-box">
+            <label>Student's Answer:</label>
+            <p class="answer-text">{{ q.studentTextAnswer }}</p>
+            <div class="feedback">
+              @if (q.isStudentAnswerCorrect) {
+                <span class="text-success"><i class="bi bi-check-all"></i> Correct</span>
+              } @else {
+                <span class="text-danger"><i class="bi bi-exclamation-triangle"></i> Incorrect or Needs Review</span>
+              }
+            </div>
+          </div>
+          }
+
+        </div>
         }
       </div>
+    </div>
     }
   </div>
-} @else {
-  <p class="muted">No data found for this student in this course.</p>
+  }
+
+  @if (studentLectures.length === 0) {
+  <div class="no-data">
+    <i class="bi bi-inbox"></i>
+    <p>No lectures or quizzes found for this student.</p>
+  </div>
+  }
+</div>
 }

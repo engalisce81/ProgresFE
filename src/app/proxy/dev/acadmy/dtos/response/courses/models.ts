@@ -7,3 +7,10 @@ export interface FeedbackDto extends EntityDto<string> {
   userName?: string;
   logoUrl?: string;
 }
+
+export interface CourseCertificateDto extends EntityDto<string> {
+  courseId?: string;
+  templateUrl?: string;
+  nameXPosition: number;
+  nameYPosition: number;
+}

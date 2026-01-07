@@ -14,6 +14,7 @@ export interface CourseChaptersDto {
   courseId?: string;
   courseName?: string;
   userId?: string;
+  examId?: string;
   userName?: string;
   logoUrl?: string;
   lectureCount: number;

@@ -2,6 +2,7 @@ import type { CreateUpdateExamDto, CreateUpdateExamQuestionDto, ExamDto, ExamQue
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { ExamStudentDto, ExamStudentResultDto, ExamStudentStatusDto } from '../dtos/response/exams/models';
 import type { ResponseApi } from '../response/models';
 
 @Injectable({
@@ -45,11 +46,28 @@ export class ExamService {
     { apiName: this.apiName,...config });
   
 
-  getList = (pageNumber: number, pageSize: number, search: string, config?: Partial<Rest.Config>) =>
+  getExamParticipants = (pageNumber: number, pageSize: number, search: string, examId: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, PagedResultDto<ExamStudentDto>>({
+      method: 'GET',
+      url: `/api/app/exam/exam-participants/${examId}`,
+      params: { pageNumber, pageSize, search },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getExamStudentStatus = (examId: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ExamStudentStatusDto>({
+      method: 'GET',
+      url: `/api/app/exam/exam-student-status/${examId}`,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getList = (pageNumber: number, pageSize: number, search: string, courseId: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<ExamDto>>({
       method: 'GET',
       url: '/api/app/exam',
-      params: { pageNumber, pageSize, search },
+      params: { pageNumber, pageSize, search, courseId },
     },
     { apiName: this.apiName,...config });
   
@@ -59,6 +77,15 @@ export class ExamService {
       method: 'GET',
       url: `/api/app/exam/questions-from-bank/${examId}`,
       params: { bankIds },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getStudentExamResult = (examId: string, userId?: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ResponseApi<ExamStudentResultDto>>({
+      method: 'GET',
+      url: '/api/app/exam/student-exam-result',
+      params: { examId, userId },
     },
     { apiName: this.apiName,...config });
   

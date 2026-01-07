@@ -1357,6 +1357,43 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Chapters.ChapterAppService"
             },
+            "GetChaptersByCourseLookUpAsyncByCourseId": {
+              "uniqueName": "GetChaptersByCourseLookUpAsyncByCourseId",
+              "name": "GetChaptersByCourseLookUpAsync",
+              "httpMethod": "GET",
+              "url": "api/app/chapter/chapters-by-course-look-up/{courseId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "courseId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "courseId",
+                  "name": "courseId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.LookUp.LookupDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.LookUp.LookupDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Chapters.ChapterAppService"
+            },
             "GetCourseChaptersAsyncByCourseIdAndPageNumberAndPageSize": {
               "uniqueName": "GetCourseChaptersAsyncByCourseIdAndPageNumberAndPageSize",
               "name": "GetCourseChaptersAsync",
@@ -1430,43 +1467,6 @@
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Chapters.CourseChaptersDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Chapters.CourseChaptersDto>"
-              },
-              "allowAnonymous": false,
-              "implementFrom": "Dev.Acadmy.Chapters.ChapterAppService"
-            },
-            "GetChaptersByCourseLookUpAsyncByCourseId": {
-              "uniqueName": "GetChaptersByCourseLookUpAsyncByCourseId",
-              "name": "GetChaptersByCourseLookUpAsync",
-              "httpMethod": "GET",
-              "url": "api/app/chapter/chapters-by-course-look-up/{courseId}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "courseId",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "courseId",
-                  "name": "courseId",
-                  "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.LookUp.LookupDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.LookUp.LookupDto>"
               },
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Chapters.ChapterAppService"
@@ -2363,6 +2363,222 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Courses.CourseAppService"
+            }
+          }
+        },
+        "Dev.Acadmy.Courses.CourseCertificateAppService": {
+          "controllerName": "CourseCertificate",
+          "controllerGroupName": "CourseCertificate",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Dev.Acadmy.Courses.CourseCertificateAppService",
+          "interfaces": [
+            {
+              "type": "Dev.Acadmy.Interfaces.ICourseCertificateAppService",
+              "name": "ICourseCertificateAppService",
+              "methods": [
+                {
+                  "name": "CreateOrUpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto, Dev.Acadmy.Application.Contracts",
+                      "type": "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto",
+                      "typeSimple": "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DownloadCertificateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "courseId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "GetByCourseIdAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "courseId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Dev.Acadmy.Dtos.Response.Courses.CourseCertificateDto",
+                    "typeSimple": "Dev.Acadmy.Dtos.Response.Courses.CourseCertificateDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateOrUpdateAsyncByInput": {
+              "uniqueName": "CreateOrUpdateAsyncByInput",
+              "name": "CreateOrUpdateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/course-certificate/or-update",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto, Dev.Acadmy.Application.Contracts",
+                  "type": "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto",
+                  "typeSimple": "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "CourseId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "TemplateFile",
+                  "jsonName": null,
+                  "type": "Microsoft.AspNetCore.Http.IFormFile",
+                  "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "NameXPosition",
+                  "jsonName": null,
+                  "type": "System.Double",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "NameYPosition",
+                  "jsonName": null,
+                  "type": "System.Double",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Form",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.ICourseCertificateAppService"
+            },
+            "DownloadCertificateAsyncByCourseId": {
+              "uniqueName": "DownloadCertificateAsyncByCourseId",
+              "name": "DownloadCertificateAsync",
+              "httpMethod": "GET",
+              "url": "api/app/course-certificate/download-certificate/{courseId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "courseId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "courseId",
+                  "name": "courseId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.ICourseCertificateAppService"
+            },
+            "GetByCourseIdAsyncByCourseId": {
+              "uniqueName": "GetByCourseIdAsyncByCourseId",
+              "name": "GetByCourseIdAsync",
+              "httpMethod": "GET",
+              "url": "api/app/course-certificate/by-course-id/{courseId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "courseId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "courseId",
+                  "name": "courseId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Dtos.Response.Courses.CourseCertificateDto",
+                "typeSimple": "Dev.Acadmy.Dtos.Response.Courses.CourseCertificateDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Interfaces.ICourseCertificateAppService"
             }
           }
         },
@@ -3379,8 +3595,8 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Exams.ExamAppService"
             },
-            "GetListAsyncByPageNumberAndPageSizeAndSearch": {
-              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearch",
+            "GetListAsyncByPageNumberAndPageSizeAndSearchAndCourseId": {
+              "uniqueName": "GetListAsyncByPageNumberAndPageSizeAndSearchAndCourseId",
               "name": "GetListAsync",
               "httpMethod": "GET",
               "url": "api/app/exam",
@@ -3406,6 +3622,14 @@
                   "name": "search",
                   "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "courseId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null
@@ -3441,6 +3665,18 @@
                   "name": "search",
                   "jsonName": null,
                   "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "courseId",
+                  "name": "courseId",
+                  "jsonName": null,
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
@@ -3677,6 +3913,197 @@
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Exams.ExamQuestionsDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Exams.ExamQuestionsDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Exams.ExamAppService"
+            },
+            "GetStudentExamResultAsyncByExamIdAndUserId": {
+              "uniqueName": "GetStudentExamResultAsyncByExamIdAndUserId",
+              "name": "GetStudentExamResultAsync",
+              "httpMethod": "GET",
+              "url": "api/app/exam/student-exam-result",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "examId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "userId",
+                  "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": true,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "examId",
+                  "name": "examId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "userId",
+                  "name": "userId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Exams.ExamStudentResultDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Dtos.Response.Exams.ExamStudentResultDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Exams.ExamAppService"
+            },
+            "GetExamStudentStatusAsyncByExamId": {
+              "uniqueName": "GetExamStudentStatusAsyncByExamId",
+              "name": "GetExamStudentStatusAsync",
+              "httpMethod": "GET",
+              "url": "api/app/exam/exam-student-status/{examId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "examId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "examId",
+                  "name": "examId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Dev.Acadmy.Dtos.Response.Exams.ExamStudentStatusDto",
+                "typeSimple": "Dev.Acadmy.Dtos.Response.Exams.ExamStudentStatusDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Dev.Acadmy.Exams.ExamAppService"
+            },
+            "GetExamParticipantsAsyncByPageNumberAndPageSizeAndSearchAndExamId": {
+              "uniqueName": "GetExamParticipantsAsyncByPageNumberAndPageSizeAndSearchAndExamId",
+              "name": "GetExamParticipantsAsync",
+              "httpMethod": "GET",
+              "url": "api/app/exam/exam-participants/{examId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "pageNumber",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "pageSize",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "search",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "examId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "pageNumber",
+                  "name": "pageNumber",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "pageSize",
+                  "name": "pageSize",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "search",
+                  "name": "search",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "examId",
+                  "name": "examId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Exams.ExamStudentDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Dev.Acadmy.Dtos.Response.Exams.ExamStudentDto>"
               },
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Exams.ExamAppService"
@@ -4020,26 +4447,34 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Lectures.LectureAppService"
             },
-            "GetQuizDetailsAsyncByQuizId": {
-              "uniqueName": "GetQuizDetailsAsyncByQuizId",
+            "GetQuizDetailsAsyncByRefIdAndIsExam": {
+              "uniqueName": "GetQuizDetailsAsyncByRefIdAndIsExam",
               "name": "GetQuizDetailsAsync",
               "httpMethod": "GET",
-              "url": "api/app/lecture/quiz-details/{quizId}",
+              "url": "api/app/lecture/quiz-details/{refId}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "quizId",
+                  "name": "refId",
                   "typeAsString": "System.Guid, System.Private.CoreLib",
                   "type": "System.Guid",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "isExam",
+                  "typeAsString": "System.Boolean, System.Private.CoreLib",
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "quizId",
-                  "name": "quizId",
+                  "nameOnMethod": "refId",
+                  "name": "refId",
                   "jsonName": null,
                   "type": "System.Guid",
                   "typeSimple": "string",
@@ -4047,6 +4482,18 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "isExam",
+                  "name": "isExam",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
                   "descriptorName": ""
                 }
               ],
@@ -4057,8 +4504,8 @@
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Lectures.LectureAppService"
             },
-            "CorrectQuizAsyncByInput": {
-              "uniqueName": "CorrectQuizAsyncByInput",
+            "CorrectQuizAsyncByInputAndIsExam": {
+              "uniqueName": "CorrectQuizAsyncByInputAndIsExam",
               "name": "CorrectQuizAsync",
               "httpMethod": "POST",
               "url": "api/app/lecture/correct-quiz",
@@ -4069,6 +4516,14 @@
                   "typeAsString": "Dev.Acadmy.Quizzes.QuizAnswerDto, Dev.Acadmy.Application.Contracts",
                   "type": "Dev.Acadmy.Quizzes.QuizAnswerDto",
                   "typeSimple": "Dev.Acadmy.Quizzes.QuizAnswerDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "isExam",
+                  "typeAsString": "System.Boolean, System.Private.CoreLib",
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -4085,58 +4540,13 @@
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
                   "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Quizzes.QuizResultDto>",
-                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Quizzes.QuizResultDto>"
-              },
-              "allowAnonymous": false,
-              "implementFrom": "Dev.Acadmy.Lectures.LectureAppService"
-            },
-            "MarkQuizAsyncByQuizIdAndScore": {
-              "uniqueName": "MarkQuizAsyncByQuizIdAndScore",
-              "name": "MarkQuizAsync",
-              "httpMethod": "POST",
-              "url": "api/app/lecture/mark-quiz/{quizId}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "quizId",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
                 },
                 {
-                  "name": "score",
-                  "typeAsString": "System.Int32, System.Private.CoreLib",
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "quizId",
-                  "name": "quizId",
+                  "nameOnMethod": "isExam",
+                  "name": "isExam",
                   "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "score",
-                  "name": "score",
-                  "jsonName": null,
-                  "type": "System.Int32",
-                  "typeSimple": "number",
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -4145,8 +4555,8 @@
                 }
               ],
               "returnValue": {
-                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Quizzes.QuizStudentDto>",
-                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Quizzes.QuizStudentDto>"
+                "type": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Quizzes.QuizResultDto>",
+                "typeSimple": "Dev.Acadmy.Response.ResponseApi<Dev.Acadmy.Quizzes.QuizResultDto>"
               },
               "allowAnonymous": false,
               "implementFrom": "Dev.Acadmy.Lectures.LectureAppService"
@@ -12887,6 +13297,18 @@
           "regex": null
         },
         {
+          "name": "ExamId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "UserName",
           "jsonName": null,
           "type": "System.String",
@@ -13353,6 +13775,18 @@
           "jsonName": null,
           "type": "System.Int32",
           "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "YoutubeVideoResultDto",
+          "jsonName": null,
+          "type": "Dev.Acadmy.Dtos.Response.YoutubeQualities.YoutubeVideoResultDto",
+          "typeSimple": "Dev.Acadmy.Dtos.Response.YoutubeQualities.YoutubeVideoResultDto",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -14481,6 +14915,63 @@
         }
       ]
     },
+    "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseCertificateDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "CourseId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TemplateFile",
+          "jsonName": null,
+          "type": "Microsoft.AspNetCore.Http.IFormFile",
+          "typeSimple": "Microsoft.AspNetCore.Http.IFormFile",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NameXPosition",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NameYPosition",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
     "Dev.Acadmy.Dtos.Request.Courses.CreateUpdateCourseFeedbackDto": {
       "baseType": null,
       "isEnum": false,
@@ -14750,10 +15241,46 @@
           "regex": null
         },
         {
-          "name": "TargetUrl",
+          "name": "YouTubeVideoUrl",
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DriveVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasYouTubeVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasDriveVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -14892,6 +15419,63 @@
         }
       ]
     },
+    "Dev.Acadmy.Dtos.Response.Courses.CourseCertificateDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "CourseId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TemplateUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NameXPosition",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NameYPosition",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
     "Dev.Acadmy.Dtos.Response.Courses.FeedbackDto": {
       "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
       "isEnum": false,
@@ -14952,6 +15536,459 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Exams.ExamAnswerDetailDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "QuestionId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "QuestionText",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "QuestionType",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "StudentTextAnswer",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "StudentSelectedAnswerId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CorrectTextAnswer",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CorrectSelectedAnswerId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "AllOptions",
+          "jsonName": null,
+          "type": "[Dev.Acadmy.Dtos.Response.Exams.ExamQuestionAnswerDto]",
+          "typeSimple": "[Dev.Acadmy.Dtos.Response.Exams.ExamQuestionAnswerDto]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ScoreObtained",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsCorrect",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Exams.ExamQuestionAnswerDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Id",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "AnswerText",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsCorrect",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Exams.ExamStudentDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "ExamId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FullName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "LogoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Score",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TryCount",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsPassed",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FinishedAt",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsCertificateIssued",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Exams.ExamStudentResultDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "ExamId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ExamTitle",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "StudentScore",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsPassed",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FinishedAt",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Answers",
+          "jsonName": null,
+          "type": "[Dev.Acadmy.Dtos.Response.Exams.ExamAnswerDetailDto]",
+          "typeSimple": "[Dev.Acadmy.Dtos.Response.Exams.ExamAnswerDetailDto]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.Exams.ExamStudentStatusDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "ExamId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsPassed",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Score",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsCertificateIssued",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CanRequestNow",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NextAvailableDate",
+          "jsonName": null,
+          "type": "System.DateTime?",
+          "typeSimple": "string?",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -15264,6 +16301,108 @@
           "jsonName": null,
           "type": "System.Guid?",
           "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.YoutubeQualities.YoutubeQualityDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Label",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Resolution",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "VideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "AudioUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsAdaptive",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Dev.Acadmy.Dtos.Response.YoutubeQualities.YoutubeVideoResultDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Title",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Qualities",
+          "jsonName": null,
+          "type": "[Dev.Acadmy.Dtos.Response.YoutubeQualities.YoutubeQualityDto]",
+          "typeSimple": "[Dev.Acadmy.Dtos.Response.YoutubeQualities.YoutubeQualityDto]",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -16158,6 +17297,18 @@
           "regex": null
         },
         {
+          "name": "TelegramVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "PdfUrls",
           "jsonName": null,
           "type": "[System.String]",
@@ -16219,6 +17370,30 @@
           "jsonName": null,
           "type": "System.Boolean",
           "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasTelegramVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TelegramVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -16456,6 +17631,30 @@
           "jsonName": null,
           "type": "System.Boolean",
           "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "HasTelegramVideo",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TelegramVideoUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -17335,6 +18534,18 @@
           "minimum": null,
           "maximum": null,
           "regex": null
+        },
+        {
+          "name": "IsSelectedByStudent",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
         }
       ]
     },
@@ -17689,6 +18900,42 @@
           "jsonName": null,
           "type": "[Dev.Acadmy.Questions.QuestionAnswerPanelDto]",
           "typeSimple": "[Dev.Acadmy.Questions.QuestionAnswerPanelDto]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "StudentTextAnswer",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "IsStudentAnswerCorrect",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ScoreObtained",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -18415,63 +19662,6 @@
           "jsonName": null,
           "type": "System.Boolean",
           "typeSimple": "boolean",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        }
-      ]
-    },
-    "Dev.Acadmy.Quizzes.QuizStudentDto": {
-      "baseType": null,
-      "isEnum": false,
-      "enumNames": null,
-      "enumValues": null,
-      "genericArguments": null,
-      "properties": [
-        {
-          "name": "LectureId",
-          "jsonName": null,
-          "type": "System.Guid?",
-          "typeSimple": "string?",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "UserId",
-          "jsonName": null,
-          "type": "System.Guid",
-          "typeSimple": "string",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "QuizId",
-          "jsonName": null,
-          "type": "System.Guid",
-          "typeSimple": "string",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "Score",
-          "jsonName": null,
-          "type": "System.Int32",
-          "typeSimple": "number",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -22518,6 +23708,51 @@
           "jsonName": null,
           "type": "System.Boolean",
           "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "Volo.Abp.Content.IRemoteStreamContent": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "FileName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ContentType",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ContentLength",
+          "jsonName": null,
+          "type": "System.Int64?",
+          "typeSimple": "number?",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,

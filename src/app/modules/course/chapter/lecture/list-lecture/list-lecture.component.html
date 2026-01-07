@@ -59,6 +59,11 @@
                         <input type="text" formControlName="driveVideoUrl" class="form-control"
                             placeholder="YouTube or Vimeo link">
                     </div>
+                     <div class="form-group">
+                        <label>Video URL (Telegram)</label>
+                        <input type="text" formControlName="telegramVideoUrl" class="form-control"
+                            placeholder="YouTube or Vimeo link">
+                    </div>
                     <div class="form-group">
                         <label>Success Rate (%)</label>
                         <input type="number" formControlName="successQuizRate" class="form-control">
@@ -164,6 +169,24 @@
                     @if (lecture.isFree) {
                     <span class="custom-badge free">Free</span>
                     }
+                    @if(lecture.hasYouTubeVideo && lecture.youTubeVideoUrl) {
+                    <a [href]="lecture.youTubeVideoUrl" target="_blank" class="custom-badge bg-danger text-white"
+                        (click)="$event.stopPropagation()">
+                        <i class="bi bi-youtube"></i> YouTube
+                    </a>
+                    }
+                    @if(lecture.hasDriveVideo && lecture.driveVideoUrl) {
+                    <a [href]="lecture.driveVideoUrl" target="_blank" class="custom-badge bg-primary text-white"
+                        (click)="$event.stopPropagation()">
+                        <i class="bi bi-google-drive"></i> Drive
+                    </a>
+                    }
+                    @if(lecture.hasTelegramVideo && lecture.telegramVideoUrl) {
+                    <a [href]="lecture.telegramVideoUrl" target="_blank" class="custom-badge bg-info text-white"
+                        (click)="$event.stopPropagation()">
+                        <i class="bi bi-telegram"></i> Telegram
+                    </a>
+                    }
                 </div>
 
                 <h3 class="course-name">{{ lecture.title }}</h3>
@@ -201,12 +224,6 @@
                         <i [class]="lecture.isVisible ? 'bi bi-eye text-success' : 'bi bi-eye-slash text-muted'"></i>
                         {{ lecture.isVisible ? 'Visible' : 'Hidden' }}
                     </div>
-                </div>
-
-                <div class="footer-actions">
-                    <a [href]="lecture.videoUrl" target="_blank" class="btn-action-primary">
-                        <i class="bi bi-play-btn"></i> Watch Video
-                    </a>
                 </div>
             </div>
         </div>

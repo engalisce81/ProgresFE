@@ -8,14 +8,13 @@
         </div>
       </div>
       <div class="details">
-        <h3>المحادثة</h3>
-        <span class="status">متصل الآن</span>
+        <h3>Chat Room</h3>
       </div>
     </div>
   </header>
 
   <div class="messages-container" #scrollContainer>
-    <div *ngIf="loading" class="loader-spinner">جاري تحميل الرسائل...</div>
+    <div *ngIf="loading" class="loader-spinner">Loading messages...</div>
 
     <div *ngFor="let msg of messages" 
          [ngClass]="{
@@ -30,8 +29,8 @@
       
       <div class="message-bubble">
         <span class="sender-name" *ngIf="msg.senderId !== currentUserId">
-          {{ msg.senderName || 'الطرف الآخر' }}
-          <span *ngIf="msg.isInstructor" class="badge">Instructor</span>
+          {{ msg.senderName || 'Other User' }}
+          <span *ngIf="msg.isInstructor" class="instructor-badge">Instructor</span>
         </span>
         
         <p>{{ msg.message }}</p>
@@ -46,7 +45,7 @@
 
   <footer class="chat-footer">
     <div class="input-area">
-      <input type="text" [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="اكتب رسالتك هنا...">
+      <input type="text" [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="Type your message here...">
       <button class="send-btn" (click)="send()" [disabled]="!newMessage.trim() || sending">
         <i class="fa fa-paper-plane" *ngIf="!sending"></i>
         <i class="fa fa-spinner fa-spin" *ngIf="sending"></i>
