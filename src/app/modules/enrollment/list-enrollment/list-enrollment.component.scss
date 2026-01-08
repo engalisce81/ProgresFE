@@ -492,3 +492,37 @@
   100% { transform: rotate(360deg); }
 }
 
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap; /* للسماح للأزرار بالنزول لسطر جديد في الموبايل */
+  width: 100%;
+}
+
+.btn-filter, .btn-delete-all {
+  /* جعل الأزرار مرنة تأخذ مساحة متساوية */
+  flex: 1 1 calc(33.333% - 8px); 
+  min-width: fit-content; /* الحفاظ على عرض النص */
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap; /* منع انكسار النص داخل الزر */
+}
+
+/* تعديلات خاصة بالموبايل (شاشات أقل من 500px) */
+@media (max-width: 500px) {
+  .btn-filter {
+    /* زرين بجانب بعض في السطر الأول */
+    flex: 1 1 calc(50% - 8px); 
+    padding: 12px 8px; /* تكبير منطقة اللمس */
+    font-size: 14px;
+  }
+
+  .btn-delete-all {
+    /* زر حذف الكل يأخذ سطر كامل وحده في الأسفل لسهولة الضغط */
+    flex: 1 1 100%;
+    padding: 12px;
+  }
+}

@@ -1,0 +1,145 @@
+/* ================================================= */
+/* 1. الحاوية الرئيسية (Card Container) */
+/* ================================================= */
+.course-card {
+  background: var(--bg-user);
+  border-radius: var(--radius);
+  border: 1px solid var(--surface-variant);
+  position: relative; /* ضروري لعمل الـ absolute بداخلها */
+  transition: all 0.3s ease;
+  overflow: visible !important; /* للسماح للقائمة بالخروج من الكارت */
+  z-index: 1;
+}
+
+/* رفع الكارت فوق جيرانه فقط عند فتح القائمة */
+.course-card:has(.actions-menu) {
+  z-index: 1000 !important;
+}
+
+/* ================================================= */
+/* 2. زر الثلاث نقط (Positioning Fix) */
+/* ================================================= */
+.dropdown-actions {
+  position: absolute; /* تغيير من relative لضمان عدم حجز مساحة تغطي الكارت */
+  top: 5px;
+  left: 230px; /* تم التثبيت في اليمين بدلاً من left 230px */
+  z-index: 10; /* أعلى من محتوى الكارت */
+  line-height: 0; /* لضمان عدم وجود هوامش إضافية */
+}
+
+.dots-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--surface-variant);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  padding: 0;
+}
+
+.dots-btn:hover {
+  background: var(--purple-600);
+  color: white;
+  box-shadow: var(--shadow-1);
+}
+
+/* ================================================= */
+/* 3. القائمة والشبكة (Actions Grid) */
+/* ================================================= */
+.actions-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: var(--dialog);
+  border-radius: var(--radius);
+  border: 1px solid var(--surface-variant);
+  min-width: 300px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* تقسيم لعمودين */
+  gap: 8px;
+  padding: 10px;
+  box-shadow: var(--shadow-2);
+  backdrop-filter: blur(15px);
+  z-index: 1001; /* فوق الـ backdrop */
+  animation: menuFadeIn 0.2s ease-out;
+}
+
+/* الأزرار داخل القائمة */
+.btn-action {
+  background: var(--surface-variant);
+  color: var(--text);
+  border: 1px solid transparent;
+  padding: 10px 5px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.btn-action i {
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.btn-action:hover {
+  background: var(--bg-btn);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-action:hover i {
+  color: white;
+}
+
+/* زر الحذف العريض */
+.btn-action.text-danger {
+  grid-column: span 2;
+  flex-direction: row;
+  gap: 8px;
+  background: color-mix(in oklab, #dc2626 10%, var(--card));
+  color: #ff6b6b;
+}
+
+.btn-action.text-danger:hover {
+  background: #dc2626;
+}
+
+/* ================================================= */
+/* 4. طبقة الحماية والإغلاق (Backdrop Fix) */
+/* ================================================= */
+.menu-backdrop {
+  position: fixed; /* يغطي الشاشة فقط عند الحاجة */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000; /* تحت القائمة ولكن فوق الكارت */
+  background: transparent;
+  pointer-events: auto; /* يمسك الضغطة لإغلاق المنيو فقط */
+}
+
+/* ================================================= */
+/* 5. الأنيميشن والاستجابة */
+/* ================================================= */
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .actions-menu {
+    min-width: 260px;
+    right: -10px; /* لضمان عدم الخروج من الشاشة في الموبايل */
+  }
+}

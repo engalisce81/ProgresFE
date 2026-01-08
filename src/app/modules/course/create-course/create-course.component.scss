@@ -349,3 +349,53 @@ textarea.form-control {
     .btn-confirm { order: 1; }
   }
 }
+.btn-filter {
+  /* استخدام الألوان والحدود من الروت */
+  background: var(--surface-variant);
+  color: var(--text);
+  border: 1px solid var(--surface-variant);
+  
+  /* المسافات والحواف */
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius); /* 18px كما في الروت */
+  
+  /* الخط والتنسيق الداخلي */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  
+  /* الأنيميشن والظل */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-1);
+}
+
+.btn-filter i {
+  /* لون الأيقونة من الـ sky-300 أو المmuted */
+  color: var(--sky-300);
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+/* تأثير التمرير (Hover) */
+.btn-filter:hover {
+  /* استخدام تدرج الـ Purple/Blue من الروت */
+  background: var(--bg-btn);
+  color: #ffffff;
+  border-color: var(--bell-300);
+  transform: translateX(-5px); /* حركة لليسار تعبيرية عن الرجوع */
+  box-shadow: var(--shadow-2);
+}
+
+.btn-filter:hover i {
+  color: #ffffff;
+  transform: translateX(-3px); /* تحريك السهم لزيادة الإيحاء بالرجوع */
+}
+
+/* تأثير الضغط (Active) */
+.btn-filter:active {
+  transform: scale(0.95) translateX(-5px);
+}

@@ -1,85 +1,85 @@
 <div class="list-container">
-  
+
   @if (showFormModal) {
-    <div class="modal-overlay">
-      <div class="form-card modern-modal">
-        <div class="modal-header">
-          <h3>{{ isEditMode ? 'Edit Advertisement' : 'Add New Advertisement' }}</h3>
-        </div>
-        
-        <form [formGroup]="adForm" (ngSubmit)="submitForm()">
-          <div class="form-group">
-            <label>Ad Title *</label>
-            <input type="text" formControlName="title" class="form-control" placeholder="Enter ad title">
-          </div>
-
-          <div class="form-group">
-            <label>Ad Image *</label>
-            <div class="image-upload-preview">
-              <img *ngIf="adForm.get('imageUrl')?.value" [src]="adForm.get('imageUrl')?.value" alt="Preview">
-              <div class="upload-btn-wrapper">
-                <button type="button" class="btn-upload">
-                   <i class="bi" [class.bi-cloud-arrow-up]="!uploading" [class.bi-hourglass-split]="uploading"></i>
-                   {{ uploading ? 'Uploading...' : 'Choose Image' }}
-                </button>
-                <input type="file" (change)="onFileSelected($event)" accept="image/*" [disabled]="uploading" />
-              </div>
-            </div>
-            <input type="hidden" formControlName="imageUrl">
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Start Date</label>
-              <input type="date" formControlName="startDate" class="form-control">
-            </div>
-            <div class="form-group">
-              <label>End Date</label>
-              <input type="date" formControlName="endDate" class="form-control">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Video (Youtube)</label>
-            <input type="text" formControlName="youTubeVideoUrl" class="form-control" placeholder="https://example.com">
-          </div>
-
-          <div class="form-group">
-            <label>Video (Drive)</label>
-            <input type="text" formControlName="driveVideoUrl" class="form-control" placeholder="https://example.com">
-          </div>
-
-          <div class="form-group checkbox-group">
-            <label class="switch">
-              <input type="checkbox" formControlName="isActive">
-              <span class="slider round"></span>
-              <span class="label-text">Active Advertisement</span>
-            </label>
-          </div>
-
-          <div class="modal-actions">
-            <button type="button" class="btn-cancel" (click)="showFormModal = false">Cancel</button>
-            <button type="submit" class="btn-confirm" [disabled]="adForm.invalid || loading || uploading">
-              {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Save') }}
-            </button>
-          </div>
-        </form>
+  <div class="modal-overlay">
+    <div class="form-card modern-modal">
+      <div class="modal-header">
+        <h3>{{ isEditMode ? 'Edit Advertisement' : 'Add New Advertisement' }}</h3>
       </div>
+
+      <form [formGroup]="adForm" (ngSubmit)="submitForm()">
+        <div class="form-group">
+          <label>Ad Title *</label>
+          <input type="text" formControlName="title" class="form-control" placeholder="Enter ad title">
+        </div>
+
+        <div class="form-group">
+          <label>Ad Image *</label>
+          <div class="image-upload-preview">
+            <img *ngIf="adForm.get('imageUrl')?.value" [src]="adForm.get('imageUrl')?.value" alt="Preview">
+            <div class="upload-btn-wrapper">
+              <button type="button" class="btn-upload">
+                <i class="bi" [class.bi-cloud-arrow-up]="!uploading" [class.bi-hourglass-split]="uploading"></i>
+                {{ uploading ? 'Uploading...' : 'Choose Image' }}
+              </button>
+              <input type="file" (change)="onFileSelected($event)" accept="image/*" [disabled]="uploading" />
+            </div>
+          </div>
+          <input type="hidden" formControlName="imageUrl">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" formControlName="startDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="date" formControlName="endDate" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Video (Youtube)</label>
+          <input type="text" formControlName="youTubeVideoUrl" class="form-control" placeholder="https://example.com">
+        </div>
+
+        <div class="form-group">
+          <label>Video (Drive)</label>
+          <input type="text" formControlName="driveVideoUrl" class="form-control" placeholder="https://example.com">
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="switch">
+            <input type="checkbox" formControlName="isActive">
+            <span class="slider round"></span>
+            <span class="label-text">Active Advertisement</span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="showFormModal = false">Cancel</button>
+          <button type="submit" class="btn-confirm" [disabled]="adForm.invalid || loading || uploading">
+            {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Save') }}
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
   }
 
   @if (showDeleteConfirm) {
-    <div class="modal-overlay">
-      <div class="delete-card">
-        <i class="bi bi-trash3 text-danger delete-icon"></i>
-        <h3>Delete Advertisement?</h3>
-        <p>Are you sure you want to delete "{{ adToDelete.title }}"?</p>
-        <div class="modal-actions">
-          <button class="btn-cancel" (click)="showDeleteConfirm = false">Back</button>
-          <button class="btn-confirm bg-danger" (click)="deleteAd()">Yes, Delete</button>
-        </div>
+  <div class="modal-overlay">
+    <div class="delete-card">
+      <i class="bi bi-trash3 text-danger delete-icon"></i>
+      <h3>Delete Advertisement?</h3>
+      <p>Are you sure you want to delete "{{ adToDelete.title }}"?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="showDeleteConfirm = false">Back</button>
+        <button class="btn-confirm bg-danger" (click)="deleteAd()">Yes, Delete</button>
       </div>
     </div>
+  </div>
   }
 
   <div class="toolbar">
@@ -90,45 +90,63 @@
   </div>
 
   @if (loading && !ads.length) {
-    
+
   }
 
   <div class="cards-grid">
     @for (ad of ads; track ad.id) {
-      <div class="ad-card" [class.inactive]="!ad.isActive">
-        <div class="card-image">
-          <img [src]="ad.imageUrl" alt="Ad Image">
-          <div class="ad-status-badge" [class.active]="ad.isActive">
-             {{ ad.isActive ? 'Active' : 'Inactive' }}
-          </div>
-          
-          <div class="dropdown-actions">
-            <button class="dots-btn" (click)="$event.stopPropagation(); ad.showMenu = !ad.showMenu">
-              <i class="bi bi-three-dots-vertical"></i>
-            </button>
-            @if (ad.showMenu) {
-              <div class="actions-menu" (mouseleave)="ad.showMenu = false">
-                <button (click)="openEditModal(ad)"><i class="bi bi-pencil"></i> Edit</button>
-                <button class="text-danger" (click)="confirmDelete(ad)"><i class="bi bi-trash3"></i> Delete</button>
-              </div>
-            }
-          </div>
+    <div class="ad-card" [class.inactive]="!ad.isActive">
+      <div class="card-image">
+        <img [src]="ad.imageUrl" alt="Ad Image">
+        <div class="ad-status-badge" [class.active]="ad.isActive">
+          {{ ad.isActive ? 'Active' : 'Inactive' }}
         </div>
-        
-        <div class="card-body">
-          <h3 class="course-name">{{ ad.title }}</h3>
-          <div class="ad-dates">
-            <small><i class="bi bi-calendar-event"></i> {{ ad.startDate | date:'dd MMM' }} - {{ ad.endDate | date:'dd MMM yyyy' }}</small>
+
+        <div class="dropdown-actions">
+          <button class="dots-btn" (click)="$event.stopPropagation(); ad.showMenu = !ad.showMenu">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          @if (ad.showMenu) {
+          <div class="actions-menu" (mouseleave)="ad.showMenu = false">
+            <button (click)="openEditModal(ad)"><i class="bi bi-pencil"></i> Edit</button>
+            <button class="text-danger" (click)="confirmDelete(ad)"><i class="bi bi-trash3"></i> Delete</button>
           </div>
+          }
         </div>
       </div>
+
+      <div class="card-body">
+        <h3 class="course-name">{{ ad.title }}</h3>
+        <div class="ad-dates">
+          <small><i class="bi bi-calendar-event"></i> {{ ad.startDate | date:'dd MMM' }} - {{ ad.endDate | date:'dd MMM
+            yyyy' }}</small>
+        </div>
+        <div class="video-links-wrapper">
+          @if(ad.hasYouTubeVideo && ad.youTubeVideoUrl) {
+          <a [href]="ad.youTubeVideoUrl" target="_blank" class="video-link-btn btn-youtube"
+            (click)="$event.stopPropagation()">
+            <i class="bi bi-youtube"></i>
+            <span>YouTube</span>
+          </a>
+          }
+
+          @if(ad.hasDriveVideo && ad.driveVideoUrl) {
+          <a [href]="ad.driveVideoUrl" target="_blank" class="video-link-btn btn-drive"
+            (click)="$event.stopPropagation()">
+            <i class="bi bi-google-drive"></i>
+            <span>Drive</span>
+          </a>
+          }
+        </div>
+      </div>
+    </div>
     }
   </div>
 
   @if (!loading && ads.length === 0) {
-    <div class="empty-state">
-      <i class="bi bi-megaphone"></i>
-      <p>No advertisements found.</p>
-    </div>
+  <div class="empty-state">
+    <i class="bi bi-megaphone"></i>
+    <p>No advertisements found.</p>
+  </div>
   }
 </div>

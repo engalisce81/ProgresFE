@@ -52,14 +52,16 @@
         <img [src]="course.logoUrl || '/assets/default-course.png'"
           style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 1px solid var(--sky-300);" />
 
-        <div class="dropdown-actions">
+        <div class="dropdown-actions" style="position: relative;">
           <button class="dots-btn" (click)="$event.stopPropagation(); course.showMenu = !course.showMenu">
             <i class="bi bi-three-dots-vertical"></i>
           </button>
 
           @if (course.showMenu) {
+          <div class="menu-backdrop" (click)="course.showMenu = false">
+          </div>
 
-          <div class="actions-menu" (mouseleave)="course.showMenu = false" style="z-index: 9999; top: -30px;">
+          <div class="actions-menu">
             <button [routerLink]="['/courses', course.id, 'chapters']" class="btn-action">
               <i class="bi bi-layers"></i> Chapters
             </button>
@@ -79,11 +81,11 @@
             </button>
 
             <button *ngIf="isAdmin" [routerLink]="['subscriber', course.id]" class="btn-action">
-              <i class="bi bi-people-fill"></i> Subscribers
+              <i class="bi bi-people-fill"></i> Students
             </button>
 
             <button *ngIf="isAdmin" [routerLink]="['requestjoin', course.id]" class="btn-action">
-              <i class="bi bi-person-check"></i> Join Requests
+              <i class="bi bi-person-check"></i> Requests
             </button>
 
             <button [routerLink]="['certificate', course.id]" class="btn-action">
@@ -93,12 +95,17 @@
             <button [routerLink]="['/courses/update', course.id]" class="btn-action">
               <i class="bi bi-pencil-square"></i> Edit
             </button>
-            <button (click)="duplicate(course.id)" class="btn-action" title="Duplicate Course">
-              <i class="bi bi-layers-half"></i> Duplicate
+
+            <button [routerLink]="[course.id, 'feedbacks']" class="btn-action">
+              <i class="bi bi-star"></i> Reviews
+            </button>
+
+            <button (click)="duplicate(course.id)" class="btn-action">
+              <i class="bi bi-layers-half"></i> Copy
             </button>
 
             <button *ngIf="isAdmin" class="btn-action text-danger" (click)="confirmDelete(course)">
-              <i class="bi bi-trash3-fill"></i> Delete
+              <i class="bi bi-trash3-fill"></i> Delete Course
             </button>
           </div>
           }
@@ -108,19 +115,6 @@
         <div class="badge-group">
           <span class="custom-badge">{{ course.collegeName }}</span>
           <span class="custom-badge bg-info" style="margin-left: 5px;">{{ course.subjectName }}</span>
-          @if(course.hasYouTubeVideo && course.youTubeVideoUrl) {
-          <a [href]="course.youTubeVideoUrl" target="_blank" class="custom-badge bg-danger text-decoration-none"
-            style="margin-left: 5px; cursor: pointer;" (click)="$event.stopPropagation()">
-            <i class="bi bi-youtube"></i> YouTube
-          </a>
-          }
-
-          @if(course.hasDriveVideo && course.driveVideoUrl) {
-          <a [href]="course.driveVideoUrl" target="_blank" class="custom-badge bg-primary text-decoration-none"
-            style="margin-left: 5px; cursor: pointer;" (click)="$event.stopPropagation()">
-            <i class="bi bi-google-drive"></i> Drive
-          </a>
-          }
           @if(course.isPdf) { <span class="custom-badge bg-success" style="margin-left: 5px;">PDF</span> }
           @if(course.isQuiz) { <span class="custom-badge bg-warning" style="margin-left: 5px;">Quiz</span> }
         </div>
@@ -134,7 +128,7 @@
           <span><i class="bi bi-play-circle"></i> {{ course.lectureCount }} Lectures</span>
 
           <span class="text-primary"><i class="bi bi-people"></i> {{ course.subscriberCount }} Students</span>
-          
+
         </div>
 
         <div class="social-bar" style="border-top: 1px solid #eee; ">
@@ -153,6 +147,23 @@
           <i class="bi bi-geo-alt"></i> {{ course.unvirsityName }} - {{ course.gradeLevelName }}
         </p>
         }
+        <div class="video-links-wrapper">
+          @if(course.hasYouTubeVideo && course.youTubeVideoUrl) {
+          <a [href]="course.youTubeVideoUrl" target="_blank" class="video-link-btn btn-youtube"
+            (click)="$event.stopPropagation()">
+            <i class="bi bi-youtube"></i>
+            <span>YouTube</span>
+          </a>
+          }
+
+          @if(course.hasDriveVideo && course.driveVideoUrl) {
+          <a [href]="course.driveVideoUrl" target="_blank" class="video-link-btn btn-drive"
+            (click)="$event.stopPropagation()">
+            <i class="bi bi-google-drive"></i>
+            <span>Drive</span>
+          </a>
+          }
+        </div>
       </div>
     </div>
     }
