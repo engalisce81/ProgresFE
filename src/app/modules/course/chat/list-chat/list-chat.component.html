@@ -9,6 +9,7 @@
       </div>
       <div class="details">
         <h3>Chat Room</h3>
+        <span class="status">Online</span>
       </div>
     </div>
   </header>
@@ -17,10 +18,7 @@
     <div *ngIf="loading" class="loader-spinner">Loading messages...</div>
 
     <div *ngFor="let msg of messages" 
-         [ngClass]="{
-           'msg-me': msg.senderId === currentUserId, 
-           'msg-them': msg.senderId !== currentUserId
-         }" 
+         [ngClass]="{'msg-me': msg.senderId === currentUserId, 'msg-them': msg.senderId !== currentUserId}" 
          class="message-wrapper">
       
       <img *ngIf="msg.senderId !== currentUserId" 
@@ -28,14 +26,19 @@
            class="msg-avatar">
       
       <div class="message-bubble">
+        <div class="msg-actions" *ngIf="msg.senderId === currentUserId">
+          <button (click)="startEdit(msg)" class="edit-btn" title="Edit"><i class="fa fa-pen"></i></button>
+          <button (click)="deleteMsg(msg.id)" class="delete-btn" title="Delete"><i class="fa fa-trash"></i></button>
+        </div>
+
         <span class="sender-name" *ngIf="msg.senderId !== currentUserId">
-          {{ msg.senderName || 'Other User' }}
-          <span *ngIf="msg.isInstructor" class="instructor-badge">Instructor</span>
+          {{ msg.senderName || 'User' }}
         </span>
         
         <p>{{ msg.message }}</p>
         
         <div class="meta">
+          <span class="edited-mark" *ngIf="msg.isEdited">(edited)</span>
           <span class="time">{{ msg.creationTime | date:'shortTime' }}</span>
           <i class="fa fa-check-double read-icon" *ngIf="msg.senderId === currentUserId"></i>
         </div>
@@ -44,10 +47,17 @@
   </div>
 
   <footer class="chat-footer">
+    <div class="edit-banner" *ngIf="editingMessageId">
+      <span><i class="fa fa-edit"></i> Editing message...</span>
+      <button (click)="cancelEdit()">Cancel</button>
+    </div>
+
     <div class="input-area">
-      <input type="text" [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="Type your message here...">
+      <input type="text" [(ngModel)]="newMessage" (keyup.enter)="send()" 
+             [placeholder]="editingMessageId ? 'Update your message...' : 'Type a message...'">
+      
       <button class="send-btn" (click)="send()" [disabled]="!newMessage.trim() || sending">
-        <i class="fa fa-paper-plane" *ngIf="!sending"></i>
+        <i class="fa" [ngClass]="editingMessageId ? 'fa-check' : 'fa-paper-plane'" *ngIf="!sending"></i>
         <i class="fa fa-spinner fa-spin" *ngIf="sending"></i>
       </button>
     </div>

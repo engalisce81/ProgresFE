@@ -19,8 +19,7 @@ export interface TokenResponse {
 export class LoginService {
 
      private apiUrl = 'https://localhost:44318'; // 🔹 عدل URL حسب API بتاعك
-  errorMessage$ = new BehaviorSubject<string>(''); // ⬅️ observable
-
+      errorMessage = '';
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -49,8 +48,6 @@ export class LoginService {
         localStorage.setItem('refresh_token', token.refresh_token);
         localStorage.setItem('expires_in', token.expires_in);
       }
-
-      this.errorMessage$.next('');
               window.location.reload();
       // ✅ روح للهوم واعمل refresh للـ layout
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -60,9 +57,8 @@ export class LoginService {
     })
     .catch(err => {
       console.error('❌ Login failed', err);
-      this.errorMessage$.next(
-        err.error?.error_description || 'Login failed, please try again'
-      );
+      this.errorMessage = err.error?.error_description || 'Login failed, please try again'
+      
     });
   }
 
