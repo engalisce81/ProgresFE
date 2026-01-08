@@ -927,3 +927,70 @@ a{
   100% { transform: rotate(360deg); }
 }
 
+
+
+/* التنسيق العام لزر الرابط */
+.video-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius); /* 18px من الروت */
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-1);
+  border: 1px solid transparent;
+}
+
+/* تنسيق زر YouTube (أحمر داكن متناسق مع الروت) */
+.btn-youtube {
+  background: color-mix(in oklab, #ff0000 15%, var(--card));
+  color: #ff4d4d;
+  border-color: color-mix(in oklab, #ff0000 20%, transparent);
+}
+
+.btn-youtube:hover {
+  background: #ff0000;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+/* تنسيق زر Drive (أزرق داكن متناسق مع الروت) */
+.btn-drive {
+  background: color-mix(in oklab, #4285f4 15%, var(--card));
+  color: #74a6f7;
+  border-color: color-mix(in oklab, #4285f4 20%, transparent);
+}
+
+.btn-drive:hover {
+  background: #4285f4;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+}
+
+/* تأثير الأيقونات */
+.video-link-btn i {
+  font-size: 1rem;
+}
+.video-links-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+/* تنسيق زر Telegram (أزرق سماوي متناسق مع الروت) */
+.btn-telegram {
+  background: color-mix(in oklab, #24A1DE 15%, var(--card));
+  color: #54b4e6;
+  border-color: color-mix(in oklab, #24A1DE 20%, transparent);
+}
+
+.btn-telegram:hover {
+  background: #24A1DE;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
+}

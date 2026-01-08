@@ -1,6 +1,6 @@
 import { ConfigStateService } from '@abp/ng.core';
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CourseDto, CourseService } from '@proxy/dev/acadmy/courses'; // تأكد من المسار
@@ -96,4 +96,12 @@ get isAdmin(): boolean {
   duplicate(id: string): void {
     this.courseService.duplicateCourse(id).subscribe(() => this.loadCourses());
   }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    // نقوم بإغلاق القائمة لجميع العناصر
+    this.courses.forEach(ad => ad.showMenu = false);
+  }
 }
+
+

@@ -59,7 +59,7 @@
                         <input type="text" formControlName="driveVideoUrl" class="form-control"
                             placeholder="YouTube or Vimeo link">
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label>Video URL (Telegram)</label>
                         <input type="text" formControlName="telegramVideoUrl" class="form-control"
                             placeholder="YouTube or Vimeo link">
@@ -169,24 +169,7 @@
                     @if (lecture.isFree) {
                     <span class="custom-badge free">Free</span>
                     }
-                    @if(lecture.hasYouTubeVideo && lecture.youTubeVideoUrl) {
-                    <a [href]="lecture.youTubeVideoUrl" target="_blank" class="custom-badge bg-danger text-white"
-                        (click)="$event.stopPropagation()">
-                        <i class="bi bi-youtube"></i> YouTube
-                    </a>
-                    }
-                    @if(lecture.hasDriveVideo && lecture.driveVideoUrl) {
-                    <a [href]="lecture.driveVideoUrl" target="_blank" class="custom-badge bg-primary text-white"
-                        (click)="$event.stopPropagation()">
-                        <i class="bi bi-google-drive"></i> Drive
-                    </a>
-                    }
-                    @if(lecture.hasTelegramVideo && lecture.telegramVideoUrl) {
-                    <a [href]="lecture.telegramVideoUrl" target="_blank" class="custom-badge bg-info text-white"
-                        (click)="$event.stopPropagation()">
-                        <i class="bi bi-telegram"></i> Telegram
-                    </a>
-                    }
+                
                 </div>
 
                 <h3 class="course-name">{{ lecture.title }}</h3>
@@ -224,7 +207,34 @@
                         <i [class]="lecture.isVisible ? 'bi bi-eye text-success' : 'bi bi-eye-slash text-muted'"></i>
                         {{ lecture.isVisible ? 'Visible' : 'Hidden' }}
                     </div>
+
+                    
                 </div>
+                <div class="video-links-wrapper">
+                        @if(lecture.hasYouTubeVideo && lecture.youTubeVideoUrl) {
+                        <a [href]="lecture.youTubeVideoUrl" target="_blank" class="video-link-btn btn-youtube"
+                            (click)="$event.stopPropagation()">
+                            <i class="bi bi-youtube"></i>
+                            <span>YouTube</span>
+                        </a>
+                        }
+
+                        @if(lecture.hasDriveVideo && lecture.driveVideoUrl) {
+                        <a [href]="lecture.driveVideoUrl" target="_blank" class="video-link-btn btn-drive"
+                            (click)="$event.stopPropagation()">
+                            <i class="bi bi-google-drive"></i>
+                            <span>Drive</span>
+                        </a>
+                        }
+
+                        @if(lecture.hasTelegramVideo && lecture.telegramVideoUrl) {
+                        <a [href]="lecture.telegramVideoUrl" target="_blank" class="video-link-btn btn-telegram"
+                            (click)="$event.stopPropagation()">
+                            <i class="bi bi-telegram"></i>
+                            <span>Telegram</span>
+                        </a>
+                        }
+                    </div>
             </div>
         </div>
         }
