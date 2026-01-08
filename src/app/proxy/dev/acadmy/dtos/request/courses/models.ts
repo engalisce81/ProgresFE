@@ -2,7 +2,7 @@ import type { IFormFile } from '../../../../../microsoft/asp-net-core/http/model
 
 export interface CreateUpdateCourseCertificateDto {
   courseId?: string;
-  templateFile: IFormFile;
+  templateFile: File;
   nameXPosition: number;
   nameYPosition: number;
 }

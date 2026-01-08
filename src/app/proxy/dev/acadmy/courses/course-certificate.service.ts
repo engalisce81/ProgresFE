@@ -10,14 +10,26 @@ export class CourseCertificateService {
   apiName = 'Default';
   
 
-  createOrUpdate = (input: CreateUpdateCourseCertificateDto, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'POST',
-      url: '/api/app/course-certificate/or-update',
-      body: input.templateFile,
-    },
-    { apiName: this.apiName,...config });
+  createOrUpdate = (input: CreateUpdateCourseCertificateDto, config?: Partial<Rest.Config>) => {
+  const formData = new FormData();
   
+  // إضافة الملف
+  if (input.templateFile) {
+    formData.append('templateFile', input.templateFile);
+  }
+
+  // إضافة بقية البيانات (التي سيستقبلها الـ Backend من الـ Form)
+  if (input.courseId) formData.append('courseId', input.courseId);
+  formData.append('nameXPosition', input.nameXPosition.toString());
+  formData.append('nameYPosition', input.nameYPosition.toString());
+
+  return this.restService.request<any, void>({
+    method: 'POST',
+    url: '/api/app/course-certificate/or-update',
+    body: formData, // نرسل الـ FormData هنا
+  },
+  { apiName: this.apiName, ...config });
+};
 
   downloadCertificate = (courseId: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, Blob>({

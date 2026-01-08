@@ -1,7 +1,7 @@
 import { CoreModule, ConfigStateService } from '@abp/ng.core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // مهم عشان الـ ngModel
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '@proxy/dev/acadmy/chats';
 import { CreateUpdateChatMessageDto } from '@proxy/dev/acadmy/dtos/request/chats';
@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-chat',
-  standalone: true, // لو بتستخدم Standalone Components
+  standalone: true,
   imports: [CoreModule, CommonModule, NgIf, NgFor, FormsModule],
   templateUrl: './list-chat.component.html',
   styleUrl: './list-chat.component.scss'
@@ -25,12 +25,14 @@ export class ListChatComponent implements OnInit, AfterViewChecked {
   loading = false;
   sending = false;
 
+  // متغيرات خاصة بالتعديل
+  editingMessageId: string | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private chatService: ChatService,
-    private configState: ConfigStateService // عشان نجيب بيانات المستخدم الحالي
+    private configState: ConfigStateService
   ) {
-    // جلب الـ ID الخاص بك من الـ Store بتاع ABP
     this.currentUserId = this.configState.getOne("currentUser").id;
   }
 
@@ -54,6 +56,7 @@ export class ListChatComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  // دالة الإرسال الرئيسية (تتعامل مع الإرسال الجديد والتعديل)
   send() {
     if (!this.newMessage.trim() || this.sending) return;
 
@@ -63,14 +66,49 @@ export class ListChatComponent implements OnInit, AfterViewChecked {
     };
 
     this.sending = true;
-    this.chatService.sendMessage(input)
-      .pipe(finalize(() => this.sending = false))
-      .subscribe(msg => {
-        // بنضيف الرسالة فوراً في الـ Array عشان تظهر للمستخدم
-        this.messages.push(msg);
-        this.newMessage = '';
-        this.scrollToBottom();
+
+    if (this.editingMessageId) {
+      // حالة التعديل (Update)
+      this.chatService.updateMessage(this.editingMessageId, input)
+        .pipe(finalize(() => {
+          this.sending = false;
+          this.editingMessageId = null;
+        }))
+        .subscribe(updatedMsg => {
+          const index = this.messages.findIndex(m => m.id === this.editingMessageId);
+          if (index !== -1) this.messages[index] = updatedMsg;
+          this.newMessage = '';
+        });
+    } else {
+      // حالة الإرسال الجديد (Create)
+      this.chatService.sendMessage(input)
+        .pipe(finalize(() => this.sending = false))
+        .subscribe(msg => {
+          this.messages.push(msg);
+          this.newMessage = '';
+          this.scrollToBottom();
+        });
+    }
+  }
+
+  // تحضير الرسالة للتعديل
+  startEdit(msg: ChatMessageDto) {
+    this.editingMessageId = msg.id;
+    this.newMessage = msg.message;
+  }
+
+  cancelEdit() {
+    this.editingMessageId = null;
+    this.newMessage = '';
+  }
+
+  // حذف الرسالة
+  deleteMsg(id: string) {
+    if (confirm('هل أنت متأكد من حذف هذه الرسالة؟')) {
+      this.chatService.deleteMessage(id).subscribe(() => {
+        this.messages = this.messages.filter(m => m.id !== id);
       });
+    }
   }
 
   private scrollToBottom(): void {
