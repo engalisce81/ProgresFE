@@ -30,9 +30,7 @@
 
       <div class="card-body">
         <h3 class="course-name">{{ student.fullName }}</h3>
-        <a [routerLink]="[student.id, 'result']" class="btn-review">
-          <i class="bi bi-eye"></i> View Result
-        </a>
+        
         <div class="exam-details" style="margin: 15px 0;">
           <div class="detail-row">
             <i class="bi bi-star-fill text-warning"></i>
@@ -61,7 +59,7 @@
 
           <div style="flex: 1;"></div>
 
-          <button class="btn-action-sm" title="View Details">
+          <button class="btn btn-secondary" title="View Details" [routerLink]="[student.userId,'result']">
             <i class="bi bi-eye"></i>
           </button>
         </div>

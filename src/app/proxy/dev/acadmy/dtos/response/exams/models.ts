@@ -10,6 +10,7 @@ export interface ExamAnswerDetailDto {
   allOptions: ExamQuestionAnswerDto[];
   scoreObtained: number;
   isCorrect: boolean;
+  logoUrl:string;
 }
 
 export interface ExamQuestionAnswerDto {
@@ -36,6 +37,9 @@ export interface ExamStudentResultDto {
   studentScore: number;
   isPassed: boolean;
   finishedAt?: string;
+  examScore:number;
+  passScore:number;
+  totalQuestions:number;
   answers: ExamAnswerDetailDto[];
 }
 

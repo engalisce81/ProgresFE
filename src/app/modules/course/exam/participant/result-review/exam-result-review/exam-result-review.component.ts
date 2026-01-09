@@ -1,3 +1,5 @@
+import { CoreModule } from '@abp/ng.core';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExamStudentResultDto } from '@proxy/dev/acadmy/dtos/response/exams';
@@ -6,7 +8,8 @@ import { ExamService } from '@proxy/dev/acadmy/exams';
 @Component({
   selector: 'app-exam-result-review',
   templateUrl: './exam-result-review.component.html',
-  styleUrls: ['./exam-result-review.component.scss']
+  styleUrls: ['./exam-result-review.component.scss'],
+  imports:[CoreModule,CommonModule]
 })
 export class ExamResultReviewComponent implements OnInit {
   result: ExamStudentResultDto;
