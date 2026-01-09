@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ExamStudentDto } from '@proxy/dev/acadmy/dtos/response/exams';
 import { ExamService } from '@proxy/dev/acadmy/exams';
 
@@ -9,7 +9,7 @@ import { ExamService } from '@proxy/dev/acadmy/exams';
   selector: 'app-exam-participants',
   templateUrl: './exam-participants.component.html',
   styleUrls: ['./exam-participants.component.scss'],
-  imports:[CommonModule ,FormsModule]
+  imports:[CommonModule ,FormsModule,RouterLink]
 })
 export class ExamParticipantsComponent implements OnInit {
   participants: ExamStudentDto[] = [];
