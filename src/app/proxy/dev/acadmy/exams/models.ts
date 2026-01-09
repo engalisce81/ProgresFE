@@ -6,6 +6,7 @@ export interface CreateUpdateExamDto {
   score: number;
   isActive: boolean;
   courseId?: string;
+  passScore:number;
 }
 
 export interface CreateUpdateExamQuestionDto {
@@ -21,6 +22,7 @@ export interface ExamDto extends EntityDto<string> {
   isActive: boolean;
   courseId?: string;
   courseName?: string;
+  passScore:number;
 }
 
 export interface ExamQuestionAnswerDto {

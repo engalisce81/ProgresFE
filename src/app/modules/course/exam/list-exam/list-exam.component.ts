@@ -93,7 +93,8 @@ export class ListExamComponent implements OnInit {
       timeExam: [0, [Validators.required, Validators.min(1)]],
       score: [0, [Validators.required, Validators.min(1)]],
       isActive: [true],
-      courseId: [this.courseId]
+      courseId: [this.courseId],
+      passScore:[0],
     });
   }
 

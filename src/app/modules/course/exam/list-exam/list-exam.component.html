@@ -46,6 +46,7 @@
         <div class="exam-info">
           <span><i class="bi bi-stopwatch"></i> {{ exam.timeExam }}m</span>
           <span><i class="bi bi-star"></i> {{ exam.score }} pts</span>
+          <span><i class="bi bi-star"></i> {{ exam.passScore }} %</span>
         </div>
       </div>
 
@@ -183,6 +184,13 @@
             <div class="form-group">
               <label>Total Score</label>
               <input type="number" formControlName="score" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-row-dual">
+            <div class="form-group">
+              <label>Passing Score</label>
+              <input type="number" formControlName="passScore" class="form-control">
             </div>
           </div>
 
