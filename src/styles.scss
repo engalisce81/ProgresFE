@@ -994,3 +994,458 @@ a{
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
 }
+
+
+
+
+/* ========================================= */
+/* Mobile Responsive Styles - استايل الموبايل */
+/* ========================================= */
+
+@media (max-width: 768px) {
+  /* Body & Containers */
+  body, .lpx-content-container {
+    padding: 8px !important;
+    background: var(--bg-body) !important;
+  }
+
+  .list-container {
+    padding: 12px !important;
+    min-height: auto;
+    overflow-x: hidden;
+  }
+
+  /* إخفاء السايدبار بشكل كامل في الموبايل */
+  .lpx-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    position: fixed;
+    z-index: 1000;
+    height: 100vh;
+    width: 250px;
+    top: 0;
+    left: 0;
+  }
+
+  .lpx-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* زر فتح/إغلاق القائمة في الموبايل */
+  .mobile-menu-toggle {
+    display: block !important;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 999;
+    width: 40px;
+    height: 40px;
+    background: var(--purple-600);
+    border-radius: 10px;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  /* شريط العنوان في الموبايل */
+  .mobile-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-1);
+  }
+
+  /* Toolbar في الموبايل */
+  .toolbar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .search-wrapper {
+    width: 100%;
+    max-width: 100% !important;
+  }
+
+  .search-input-modern {
+    padding: 12px 12px 12px 45px !important;
+    font-size: 14px;
+  }
+
+  .search-icon {
+    left: 12px !important;
+  }
+
+  /* أزرار الموبايل */
+  .btn-create-modern, .btn-create {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .btn-create-modern i, .btn-create i {
+    font-size: 16px;
+  }
+
+  /* شبكة البطاقات في الموبايل */
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  .course-card {
+    margin-bottom: 8px;
+  }
+
+  .course-card:hover {
+    transform: none; /* إزالة التحريك في الموبايل */
+  }
+
+  /* كروت المحتوى */
+  .card-body {
+    padding: 16px;
+  }
+
+  .course-name {
+    font-size: 16px !important;
+    line-height: 1.4;
+  }
+
+  .course-title {
+    font-size: 13px !important;
+  }
+
+  /* Badges في الموبايل */
+  .custom-badge {
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+  }
+
+  /* روابط الفيديو في الموبايل */
+  .video-links-wrapper {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .video-link-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  /* Social bar في الموبايل */
+  .social-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Modal في الموبايل */
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+
+  .form-card, .delete-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .form-card h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .form-control {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* Pagination في الموبايل */
+  .pagination-modern {
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 24px;
+  }
+
+  .page-nav, .page-num {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  /* Dropdown actions في الموبايل */
+  .dropdown-actions {
+    top: 10px;
+    right: 10px;
+  }
+
+  .actions-menu {
+    width: 150px;
+    right: 40px;
+  }
+
+  /* Table في الموبايل (إن وجد) */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Filter buttons في الموبايل */
+  .filter-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn-filter, .btn-delete-all {
+    flex: 1;
+    min-width: calc(50% - 8px);
+    justify-content: center;
+    padding: 10px;
+  }
+
+  /* Loading spinner في الموبايل */
+  .loading-container {
+    height: 40vh;
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border-width: 4px;
+  }
+
+  .loading-text {
+    font-size: 14px;
+  }
+
+  /* إضافة overlay عند فتح القائمة */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    backdrop-filter: blur(3px);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  /* تعديل الـ Footer إذا كان موجودًا */
+  .footer {
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
+/* ========================================= */
+/* Small Phones - شاشات الموبايل الصغيرة جدًا */
+/* ========================================= */
+@media (max-width: 480px) {
+  .mobile-header {
+    padding: 10px 12px;
+  }
+
+  .list-container {
+    padding: 8px !important;
+  }
+
+  .toolbar {
+    padding: 10px;
+  }
+
+  .btn-create-modern {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .search-input-modern {
+    padding: 10px 10px 10px 40px !important;
+    font-size: 13px;
+  }
+
+  .card-body {
+    padding: 14px;
+  }
+
+  .course-name {
+    font-size: 15px !important;
+  }
+
+  .badge-group {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+
+  .form-card {
+    padding: 16px;
+  }
+
+  .filter-buttons .btn-filter,
+  .filter-buttons .btn-delete-all {
+    min-width: 100%;
+  }
+
+  /* تعديل حجم الخطوط للأجهزة الصغيرة */
+  body {
+    font-size: 14px;
+  }
+
+  h1 { font-size: 22px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 18px; }
+  h4 { font-size: 16px; }
+  h5 { font-size: 14px; }
+  h6 { font-size: 13px; }
+}
+
+/* ========================================= */
+/* Tablet - تنسيقات للتابلت */
+/* ========================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .list-container {
+    padding: 20px;
+  }
+
+  .toolbar {
+    flex-wrap: nowrap;
+  }
+
+  .search-wrapper {
+    max-width: 60%;
+  }
+}
+
+/* ========================================= */
+/* Landscape Mobile - الموبايل في الوضع الأفقي */
+/* ========================================= */
+@media (max-height: 600px) and (orientation: landscape) {
+  .modal-overlay {
+    padding-top: 20px;
+  }
+
+  .form-card, .delete-card {
+    max-height: 75vh;
+  }
+
+  .course-card {
+    max-height: 200px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    height: 70px !important;
+  }
+
+  .chapter-icon-placeholder {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* ========================================= */
+/* Accessibility - تحسينات للنقر */
+/* ========================================= */
+@media (pointer: coarse) {
+  /* زيادة حجم مناطق النقر للشاشات التي تعمل باللمس */
+  button, 
+  .btn, 
+  .btn-filter,
+  .page-nav,
+  .page-num,
+  .dots-btn,
+  .video-link-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .menu-item,
+  .lpx-menu-item-link {
+    padding: 12px 16px;
+    min-height: 50px;
+  }
+
+  /* زيادة المسافة بين العناصر */
+  .cards-grid {
+    gap: 20px;
+  }
+
+  /* تحسين أشكال الأزرار */
+  .btn-create-modern {
+    border-radius: 12px;
+  }
+}
+
+/* ========================================= */
+/* Dark Mode Adjustments - تحسينات للوضع الداكن */
+/* ========================================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #1A272D;
+    --card: #1F2C32;
+    --surface-variant: #243138;
+  }
+}
+
+/* ========================================= */
+/* Print Styles - تنسيقات الطباعة */
+/* ========================================= */
+@media print {
+  .toolbar,
+  .btn-create-modern,
+  .dropdown-actions,
+  .mobile-menu-toggle,
+  .lpx-sidebar,
+  .mobile-header {
+    display: none !important;
+  }
+
+  .list-container {
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .course-card {
+    break-inside: avoid;
+    border: 1px solid #ddd;
+    box-shadow: none !important;
+  }
+}

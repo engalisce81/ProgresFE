@@ -40,6 +40,7 @@ export interface ExamStudentResultDto {
   examScore:number;
   passScore:number;
   totalQuestions:number;
+  scoreTotal:number;
   answers: ExamAnswerDetailDto[];
 }
 

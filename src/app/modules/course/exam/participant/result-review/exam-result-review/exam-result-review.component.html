@@ -41,7 +41,10 @@
           <div class="badges">
             <span class="type">Type: {{ q.questionType }}</span>
             <span class="score" [class.text-danger]="!q.isCorrect">
-              Points: {{ q.scoreObtained }}
+              Student Points: {{ q.scoreObtained }}
+            </span>
+            <span class="score" [class.text-danger]="!q.isCorrect">
+              Points: {{ q.scoreTotal }}
             </span>
           </div>
         </div>
